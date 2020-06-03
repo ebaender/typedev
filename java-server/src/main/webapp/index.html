@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
     <script>
         $(document).ready(function () {
-            $.get("6502.txt", function (file) {
+            $.get("samples/ini.c", function (file) {
 
                 var output = "#pretty-pre";
                 var mistakes = 0;
@@ -25,6 +25,7 @@
                         const element = splitFile[i];
                         currentFile += element;
                     }
+                    // fuck this is gonna make typing html impossible
                     $(output).html(PR.prettyPrintOne(currentFile));
                 }
 
@@ -51,6 +52,12 @@
                     $("#status-div").text("'" + splitFile[index] + "' '" + e.key + "'");
                 });
 
+            });
+
+            $(document).keydown(function (e) {
+                if (e.which == 32) {
+                    return false;
+                }
             });
 
         });
