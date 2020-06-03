@@ -1,3 +1,4 @@
+nana
 /* Make an extra command line under given key word */
 static char * __init xbc_make_cmdline(const char *key)
 {

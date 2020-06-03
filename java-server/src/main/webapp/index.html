@@ -13,7 +13,8 @@
 
                 var output = "#pretty-pre";
                 var mistakes = 0;
-                var splitFile = file.toLowerCase().replace(/\n/g, ' ').replace(/\s+/g, ' ').split("");
+                // var splitFile = file.replace(/\n/g, ' ').replace(/\s+/g, ' ').split("");
+                var splitFile = file.split("");
                 var currentFile;
                 var index = 0;
 
@@ -23,8 +24,7 @@
                         const element = splitFile[i];
                         currentFile += element;
                     }
-                    $(output).html(PR.prettyPrintOne(currentFile,"c"));
-                    // $(output).text(currentFile);
+                    $(output).html(PR.prettyPrintOne(currentFile));
                 }
 
                 renderOutput();
@@ -32,11 +32,19 @@
                 $(document).keydown(function (e) {
                     if (e.key === splitFile[index]) {
                         index++;
-                        renderOutput();
                     } else {
                         mistakes++;
-                        // $("#status-div").text("\"" + e.key + "\" != \"" + splitFile[index] + "\" mistakes: " + mistakes);
                     }
+                    if (e.key === ' ') {
+                        while (splitFile[index] === ' ') {
+                            index++;
+                        }
+                    }
+                    while (splitFile[index] === '\n' || splitFile[index] === '\t') {
+                        index++;
+                    }
+                    renderOutput();
+                    // $("#status-div").text("'" + splitFile[index] + "'");
                 });
 
             });
@@ -49,7 +57,7 @@
 
     <code id=pretty-pre class="prettyprint lang-c"></a></code>
     <div id=status-div></div>
-</pre>
+    </pre>
 
 </body>
 
