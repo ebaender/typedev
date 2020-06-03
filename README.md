@@ -1,8 +1,6 @@
 # typedev
  das Spiel für flinke coder
 
-## Idee
-
 ### Spielprinzip
 
 Spieler treten gegeneinander in einem Wettrennen des tippens an. Ab Start der Runde muss der anzeigte Text fehler frei eingetippt werden. Der Schnellste tipper gewinnt. Die Besonderheit: bei dem Text handelt es sich um Code-Snippets mit all ihren Klammern, Kommata und verrückten Syntax. Sobald der Sieger feststeht ist die Runde vorbei.
