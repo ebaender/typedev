@@ -1,0 +1,28 @@
+plugins {
+    id 'war'
+    id 'org.gretty' version '3.0.2'
+}
+
+gretty {
+    integrationTestTask = 'test'
+    // Hosting
+    host = 'localhost'
+    httpPort = 8080
+
+    // Debug
+    debugPort = 5005
+    debugSuspend = true  
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.7.19'
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+    implementation 'com.google.code.gson:gson:2.8.6'
+}
+

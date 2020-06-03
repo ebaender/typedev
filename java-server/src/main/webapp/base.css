@@ -1,0 +1,32 @@
+        footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #131313;
+            color: white;
+            text-align: center;
+        }
+
+        body {
+            background-color: #131313;
+            color: #eaf2f1;
+            font-family: "montserrat", sans-serif;
+        }
+        #submit-button {
+            background-color: #363537;
+            color: white;
+        }
+        #submit-button:hover {
+            background-color: #ffd76d;
+            transition: 0.3s;
+        }
+
+        #input-div {
+            background-color: #131313;
+            padding: 20px;
+        }
+        #outputdiv {
+            padding-top: 16px;
+        }
+        
