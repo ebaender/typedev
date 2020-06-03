@@ -1,4 +1,14 @@
+body {
+    background-color: black;
+    color: white;
+}
+
 div {
     white-space: pre-wrap;
     font-family: monospace, monospace;
+}
+
+code {
+    white-space: pre-wrap;
+    font-size: x-large;
 }

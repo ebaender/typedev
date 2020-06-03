@@ -4,21 +4,27 @@
 <head>
 
     <link rel="stylesheet" href="base.css" media="screen" />
+    <link rel="stylesheet" href="desert.css" media="screen" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
     <script>
         $(document).ready(function () {
-            $.get("lipsum.txt", function (file) {
+            $.get("c.txt", function (file) {
 
-                var output = "#text-div";
+                var output = "#pretty-pre";
+                var mistakes = 0;
                 var splitFile = file.toLowerCase().replace(/\n/g, ' ').replace(/\s+/g, ' ').split("");
+                var currentFile;
                 var index = 0;
 
                 function renderOutput() {
-                    $(output).text('');
+                    currentFile = "";
                     for (let i = index; i < splitFile.length; i++) {
                         const element = splitFile[i];
-                        $(output).append(element + "");
+                        currentFile += element;
                     }
+                    $(output).html(PR.prettyPrintOne(currentFile,"c"));
+                    // $(output).text(currentFile);
                 }
 
                 renderOutput();
@@ -28,8 +34,8 @@
                         index++;
                         renderOutput();
                     } else {
-                        $("#status-div").text("\"" + e.key + "\" != \"" + splitFile[index] + "\"");
-                        // alert("\"" + typed + "\" != \"" + splitFile[index] + "\"");
+                        mistakes++;
+                        // $("#status-div").text("\"" + e.key + "\" != \"" + splitFile[index] + "\" mistakes: " + mistakes);
                     }
                 });
 
@@ -41,8 +47,9 @@
 
 <body>
 
-    <div id=text-div></div>
+    <code id=pretty-pre class="prettyprint lang-c"></a></code>
     <div id=status-div></div>
+</pre>
 
 </body>
 
