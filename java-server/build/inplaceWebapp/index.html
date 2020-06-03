@@ -9,7 +9,7 @@
     <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
     <script>
         $(document).ready(function () {
-            $.get("c.txt", function (file) {
+            $.get("6502.txt", function (file) {
 
                 var output = "#pretty-pre";
                 var mistakes = 0;
@@ -17,6 +17,7 @@
                 var splitFile = file.split("");
                 var currentFile;
                 var index = 0;
+                var ezMode = true;
 
                 function renderOutput() {
                     currentFile = "";
@@ -30,21 +31,24 @@
                 renderOutput();
 
                 $(document).keydown(function (e) {
-                    if (e.key === splitFile[index]) {
+                    typedKey = e.key;
+                    actualKey = splitFile[index];
+                    if (ezMode) {
+                        typedKey = typedKey.toLowerCase();
+                        actualKey = actualKey.toLowerCase();
+                    }
+                    if (typedKey === actualKey) {
                         index++;
                     } else {
                         mistakes++;
                     }
-                    if (e.key === ' ') {
-                        while (splitFile[index] === ' ') {
+                    if (e.key === ' ' || splitFile[index] === '\n' || splitFile[index] === '\t') {
+                        while (splitFile[index] === ' ' || splitFile[index] === '\n' || splitFile[index] === '\t') {
                             index++;
                         }
                     }
-                    while (splitFile[index] === '\n' || splitFile[index] === '\t') {
-                        index++;
-                    }
                     renderOutput();
-                    // $("#status-div").text("'" + splitFile[index] + "'");
+                    $("#status-div").text("'" + splitFile[index] + "' '" + e.key + "'");
                 });
 
             });

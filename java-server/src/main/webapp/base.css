@@ -6,6 +6,7 @@ body {
 div {
     white-space: pre-wrap;
     font-family: monospace, monospace;
+    font-size: x-large;
 }
 
 code {
