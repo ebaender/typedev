@@ -3,42 +3,33 @@
 
 <head>
 
+    <link rel="stylesheet" href="base.css" media="screen" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
         $(document).ready(function () {
             $.get("lipsum.txt", function (file) {
 
-                var input = "#text-input";
                 var output = "#text-div";
-                var splitFile = file.toLowerCase().replace(/\./g,'').split(" ");
+                var splitFile = file.toLowerCase().replace(/\n/g, ' ').replace(/\s+/g, ' ').split("");
                 var index = 0;
 
                 function renderOutput() {
                     $(output).text('');
                     for (let i = index; i < splitFile.length; i++) {
                         const element = splitFile[i];
-                        $(output).append(element + " ");
+                        $(output).append(element + "");
                     }
                 }
 
-                function setup() {
-                    renderOutput();
-                    $(input).focus();
-                }
-
-                setup();
+                renderOutput();
 
                 $(document).keydown(function (e) {
-                    if (e.keyCode == 32) {
-                        var typed = $(input).val();
-                        if (typed === splitFile[index]) {
-                            index++;
-                            renderOutput();
-                        } else {
-                            // alert("\"" + typed + "\" != \"" + splitFile[index] + "\"");
-                        }
-                        $(input).val('');
-                        return false;
+                    if (e.key === splitFile[index]) {
+                        index++;
+                        renderOutput();
+                    } else {
+                        $("#status-div").text("\"" + e.key + "\" != \"" + splitFile[index] + "\"");
+                        // alert("\"" + typed + "\" != \"" + splitFile[index] + "\"");
                     }
                 });
 
@@ -51,7 +42,7 @@
 <body>
 
     <div id=text-div></div>
-    <input id=text-input type=text>
+    <div id=status-div></div>
 
 </body>
 
