@@ -30,10 +30,10 @@ oder
 **example:** `curl -X POST -d username="foo" -d password="foo" -d request="register"`
 
 **return:**
-statuscode | Bedeutung
-:---: | :---:
-201        | Nutzer wurde erfolgreich registriert
-406        | Nutzer ist bereits registriert
+| statuscode | Bedeutung |
+| :---: | :---: |
+| 201 | Nutzer wurde erfolgreich registriert |
+| 406 | Nutzer ist bereits registriert |
 
 ### authentifizierung eines Nutzers
 **Methode:** POST
@@ -42,11 +42,11 @@ statuscode | Bedeutung
 **example:** `curl -X POST -d username="foo" -d password="foo" -d request="authentificate"`
 
 **return:**
-statuscode | Bedeutung
-:---: | :---:
-202 | Nutzer erfolgreich authentifiziert
-401 | falsches password
-404 | Nutzer nicht gefunden
+| statuscode | Bedeutung |
+| :---: | :---: |
+| 202 | Nutzer erfolgreich authentifiziert |
+| 401 | falsches password |
+| 404 | Nutzer nicht gefunden |
 
 ### abfrage der Daten eines Nutzers
 **Methode:** POST
@@ -55,11 +55,11 @@ statuscode | Bedeutung
 **example:** `curl -X POST -d username="foo" -d password="foo" -d request="request"`
 
 **return:**
-statuscode | Bedeutung
-:---: | :---:
-200 | OK
-401 | falsches password
-404 | Nutzer nicht gefunden
+| statuscode | Bedeutung |
+| :---: | :---: |
+| 200 | OK |
+| 401 | falsches password |
+| 404 | Nutzer nicht gefunden |
 
 ### update der Daten eines Nutzers
 **Methode:** POST
@@ -68,11 +68,11 @@ statuscode | Bedeutung
 **example:** `curl -X POST -d username="foo" -d password="foo" -d request="update" -d games_played=15 -d games_won=8 -d wpm=46`
 
 **return:**
-statuscode | Bedeutung |
-:---: | :---: |
-201 | daten überschrieben |
-401 | falsched password |
-404 | Nutzer nicht gefunden |
+| statuscode | Bedeutung |
+| :---: | :---: |
+| 201 | daten überschrieben |
+| 401 | falsched password |
+| 404 | Nutzer nicht gefunden |
 
 ### fehlerhafter request
 
