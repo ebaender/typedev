@@ -23,6 +23,12 @@ import user.User;
 public class CommandServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
+    private HashMap<String, User> users;
+
+    @Override
+    public void init() throws ServletException {
+        users = (HashMap<String, User>) getServletContext().getAttribute("users");
+    }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -43,7 +49,9 @@ public class CommandServlet extends HttpServlet {
             case "logout":
                 jsonResp = logout(key);
                 break;
-
+            case "list":
+                jsonResp = getUsers();
+                break;
             case "whoami":
                 jsonResp = getName(key);
                 break;
@@ -56,9 +64,18 @@ public class CommandServlet extends HttpServlet {
         System.out.println(this + " responded with " + jsonResp);
     }
 
+    private JsonObject getUsers() {
+        StringBuilder messageBuilder = new StringBuilder();
+        users.entrySet().forEach(user -> {
+            messageBuilder.append(user.getValue().getName() + "\n");
+        });
+        JsonObject jsonResp = new JsonObject();
+        jsonResp.addProperty(Standard.MSG, messageBuilder.toString());
+        return jsonResp;
+    }
+
     private JsonObject getName(String key) {
         String message = null;
-        HashMap<String, User> users = (HashMap<String, User>) getServletContext().getAttribute("users");
         if (key == null || key.equals("") || users.get(key) == null) {
             message = "You are nobody.\n";
         } else {
@@ -70,7 +87,6 @@ public class CommandServlet extends HttpServlet {
     }
 
     private JsonObject logout(String key) {
-        HashMap<String, User> users = (HashMap<String, User>) getServletContext().getAttribute("users");
         String message = null;
         if (key == null || key.equals("") || users.get(key) == null) {
             message = "You are logged out already.\n";
@@ -91,7 +107,6 @@ public class CommandServlet extends HttpServlet {
         if (args.length > 1) {
             String name = args[1];
             if (name != null) {
-                HashMap<String, User> users = (HashMap<String, User>) getServletContext().getAttribute("users");
                 if (userExsists(name, users)) {
                     message = "User " + name + " exists already, try again. \n";
                 } else {
