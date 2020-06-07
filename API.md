@@ -76,6 +76,6 @@ oder
 
 ### fehlerhafter request
 
-statuscode | Bedeutung
-:---:| :---:
-400 | fehlerhafter request
+| statuscode | Bedeutung |
+| :---:| :---: |
+| 400 | fehlerhafter request |
