@@ -30,10 +30,10 @@ oder
 **example:** `curl -X POST -d username="foo" -d password="foo" -d request="register"`
 
 **return:**
-| statuscode | Bedeutung                            |
-| :--------: | :----------------------------------: |
-| 201        | Nutzer wurde erfolgreich registriert |
-| 406        | Nutzer ist bereits registriert       |
+| statuscode | Bedeutung                            | 
+| :--------: | :----------------------------------: | 
+| 201        | Nutzer wurde erfolgreich registriert | 
+| 406        | Nutzer ist bereits registriert       | 
 
 ### authentifizierung eines Nutzers
 **Methode:** POST
