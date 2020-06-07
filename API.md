@@ -44,15 +44,15 @@ oder
 **return:**
 | statuscode | Bedeutung                          |
 | :--------: | :--------------------------------: |
-| 202        | Nutzer erfolgreich authentifiziert |
+| 202        | Nutzer erfolgreich authentifiziert, daten werden übermittelt |
 | 401        | falsches password                  |
 | 404        | Nutzer nicht gefunden              |
 
 ### abfrage der Daten eines Nutzers
 **Methode:** POST
-**parameter:** username, password, request
+**parameter:** username, password, request, requested_user
 
-**example:** `curl -X POST -d username="foo" -d password="foo" -d request="request"`
+**example:** `curl -X POST -d username="foo" -d password="foo" -d request="request" -d requested_user="foogirl"`
 
 **return:**
 | statuscode | Bedeutung             |
@@ -60,6 +60,7 @@ oder
 | 200        | OK                    |
 | 401        | falsches password     |
 | 404        | Nutzer nicht gefunden |
+| 500        | requested_user nicht gefunden |
 
 ### update der Daten eines Nutzers
 **Methode:** POST
