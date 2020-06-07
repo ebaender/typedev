@@ -4,12 +4,11 @@ body {
 }
 
 div {
-    white-space: pre-wrap;
-    font-family: monospace, monospace;
-    font-size: x-large;
+    width: 50%;
 }
 
 code {
-    white-space: pre-wrap;
+    white-space: break-spaces;
+    word-wrap: break-word;
     font-size: x-large;
 }
