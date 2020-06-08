@@ -4,11 +4,15 @@
 <head>
 
     <link rel="stylesheet" href="base.css" media="screen" />
+    <link rel="stylesheet" href="desert.css" media="screen" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
     <script>
         $(document).ready(function () {
 
-            var commandServlet = "command";
+            var comServlet = "command";
+            var conServlet = "connection";
+            var codServlet = "code"
             var output = "#terminal";
             var line = "";
             var buffer = "";
@@ -16,24 +20,33 @@
             var prompt = "> ";
             var keyPressExclude = ["Delete", "Enter"];
             var authKey = "";
+            var states = { default: "default", session: "session", live_session: "live_session" };
+            var state = "secret";
+
+            var ezMode = true;
+            var codeBuffer = "";
+            var codeArray = [];
+            var index = 0;
+            var mistakes = 0;
 
             function renderText() {
                 $(output).text(buffer + prompt + line + cursor);
             }
 
-            renderText();
+            function renderStatus() {
+                $("#status").text(state + " " + authKey + " " + codeBuffer.substring(0,16));
+            }
 
-            $(document).keypress(function (e) {
-                for (let i = 0; i < keyPressExclude.length; i++) {
-                    if (e.code === keyPressExclude[i]) {
-                        return;
-                    }
+            function renderCode() {
+                codeBuffer = "";
+                for (let i = index; i < codeArray.length; i++) {
+                    const element = codeArray[i];
+                    codeBuffer += element;
                 }
-                line += e.key;
-                renderText();
-            });
+                $(output).html(PR.prettyPrintOne(codeBuffer));
+            }
 
-            $(document).keydown(function (e) {
+            function keyDownDefault(e) {
                 switch (e.code) {
                     case "Delete":
                     case "Backspace":
@@ -43,7 +56,7 @@
                         line += e.key;
                         break;
                     case "Enter":
-                        $.post(commandServlet, {
+                        $.post(comServlet, {
                             command: line,
                             key: authKey
                         }, function (resp) {
@@ -58,15 +71,97 @@
                                 authKey = "";
                             }
                             buffer += resp.message;
-                            $("#status").text(e.key + " " + e.which + " " + authKey);
                             renderText();
                         });
                         break;
                     default:
                         break;
                 }
-                $("#status").text(e.key + " " + e.which + " " + authKey);
                 renderText();
+            }
+
+            function sessionKeyHandler(e) {
+                var typedKey = e.key;
+                var actualKey = codeArray[index];
+                if (ezMode) {
+                    typedKey = typedKey.toLowerCase();
+                    actualKey = actualKey.toLowerCase();
+                }
+                if (typedKey === actualKey) {
+                    index++;
+                } else {
+                    mistakes++;
+                }
+                if (e.key === ' ' || codeArray[index] === '\n' || codeArray[index] === '\t') {
+                    while (codeArray[index] === ' ' || codeArray[index] === '\n' || codeArray[index] === '\t') {
+                        index++;
+                    }
+                }
+                renderCode();
+            }
+
+            function changeState(nextState) {
+                var prevState = state;
+                state = nextState;
+                switch (state) {
+                    case states.default:
+                        break;
+                    case states.session:
+                        break;
+                    case states.live_session:
+                        renderCode();
+                        break;
+                    default:
+                        // prevent undefined states.
+                        state = prevState;
+                        break;
+                }
+            }
+
+            function keepAlive() {
+                if (authKey !== "") {
+                    $.post(conServlet, { key: authKey }, function (resp) {
+                        resp = JSON.parse(resp);
+                        // update to state from server.
+                        if (state !== resp.state) {
+                            changeState(resp.state);
+                        }
+                        // get code if you are in a session lobby and don't have any code yet.
+                        if (state === states.session && codeBuffer === "") {
+                            $.post(codServlet, { key: authKey }, function (resp) {
+                                resp = JSON.parse(resp);
+                                codeArray = resp.code.split("");
+                            });
+                        }
+                    });
+                }
+            }
+
+            setInterval(() => {
+                keepAlive();
+                renderStatus();
+            }, 1000);
+
+            renderText();
+
+            $(document).keypress(function (e) {
+                if (state !== states.live_session) {
+                    for (let i = 0; i < keyPressExclude.length; i++) {
+                        if (e.code === keyPressExclude[i]) {
+                            return;
+                        }
+                    }
+                    line += e.key;
+                    renderText();
+                }
+            });
+
+            $(document).keydown(function (e) {
+                if (state === states.live_session) {
+                    sessionKeyHandler(e);
+                } else {
+                    keyDownDefault(e);
+                }
             });
 
         });

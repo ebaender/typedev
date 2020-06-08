@@ -81,6 +81,9 @@ public class CommandServlet extends HttpServlet {
             case "leave":
                 jsonResp = leaveSession(key);
                 break;
+            case "start":
+                jsonResp = startSession(key);
+                break;
             default:
                 jsonResp = new JsonObject();
                 jsonResp.addProperty(Standard.MSG, "");
@@ -88,6 +91,25 @@ public class CommandServlet extends HttpServlet {
         }
         resp.getWriter().print(jsonResp);
         System.out.println(getClass() + " responded with " + jsonResp);
+    }
+    
+    private JsonObject startSession(String key) {
+        String message = null;
+        User user = users.get(key);
+        if (user != null) {
+            Session session = user.getSession();
+            if (session != null) {
+                session.start();
+                message = "Starting session...\n";
+            } else {
+                message = "You need to have a session to start it.\n";
+            }
+        } else {
+            message = "You need to be logged in to start a session.\n";
+        }
+        JsonObject jsonResp = new JsonObject();
+        jsonResp.addProperty(Standard.MSG, message);
+        return jsonResp;
     }
 
     private JsonObject leaveSession(String key) {
@@ -98,7 +120,7 @@ public class CommandServlet extends HttpServlet {
             if ((session = user.getSession()) != null) {
                 String sessionLanguage = session.getLanguage();
                 user.setSession(null);
-                session.removeUser(user);
+                session.leave(user);
                 message = "Left " + sessionLanguage.toUpperCase() + " session.\n";
             } else {
                 message = "You already have no session.\n";

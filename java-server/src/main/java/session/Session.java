@@ -6,40 +6,57 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import user.User;
+import user.UserState;
 
 public class Session {
 
-    private List<String> file;
-    private HashMap<User, Integer> progressByUser;
-    private int total = 0;
-    private String language;
+    private StringBuilder code = new StringBuilder();
+    private Set<User> users = new HashSet<>();
+    private int totalChars = 0;
+    private String language = null;
+    private boolean live = false;
 
     public Session(String language) throws EmptyLanguageException, IOException {
         this.language = language;
-        progressByUser = new HashMap<>();
         Stream<Path> paths = Files.walk(Paths.get("resource/language"));
         List<String> filePaths = paths.filter(Files::isRegularFile).map(e -> e.toString())
-        .filter(e -> e.split("\\.")[1].equals(language)).collect(Collectors.toCollection(ArrayList::new));
+                .filter(e -> e.split("\\.")[1].equals(language)).collect(Collectors.toCollection(ArrayList::new));
         paths.close();
         if (filePaths.size() == 0) {
             throw new EmptyLanguageException(language);
         }
         int randomIndex = (int) (Math.random() * filePaths.size());
         String randomFilePath = filePaths.get(randomIndex);
-        file = Files.readAllLines(Paths.get(randomFilePath));
-        for (String string : file) {
-            total += string.length();
+        List<String> codeLines = Files.readAllLines(Paths.get(randomFilePath));
+        for (String line : codeLines) {
+            totalChars += line.length();
+            code.append(line).append("\n");
+        }
+    }
+
+    public boolean isLive() {
+        return live;
+    }
+
+    public void start() {
+        if (!live) {
+            live = true;
+            for (User user : users) {
+                user.setState(UserState.LIVE_SESSION);
+            }
         }
     }
 
     public void join(User user) {
-        progressByUser.put(user, 0);
+        users.add(user);
     }
 
     public String getLanguage() {
@@ -47,11 +64,15 @@ public class Session {
     }
 
     public Set<User> getUsers() {
-        return progressByUser.keySet();
+        return users;
     }
 
-    public void removeUser(User user) {
-        progressByUser.remove(user);
+    public void leave(User user) {
+        users.remove(user);
+    }
+
+    public String getCode() {
+        return code.toString();
     }
 
 }
