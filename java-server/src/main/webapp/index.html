@@ -18,39 +18,56 @@
 
             // general.
             var output = "#terminal";
-            var state = states.default;
             var states = { default: "default", session: "session", live_session: "live_session" };
+            var state = states.default;
             var authKey = "";
 
             // default state.
             var line = "";
-            var buffer = "";
+            var textBuffer = "";
             var cursor = '\u2588';
             var prompt = "> ";
             var keyPressExclude = ["Delete", "Enter"];
 
             // live session state.
             var ezMode = true;
+            var sessionProgress = null;
             var codeBuffer = "";
-            var codeArray = [];
+            var codeArray = null;
             var codeIndex = 0;
             var mistakes = 0;
 
             function renderText() {
-                $(output).text(buffer + prompt + line + cursor);
+                $(output).text(textBuffer + prompt + line + cursor);
             }
 
             function renderStatus() {
                 $("#status").text(state + " " + authKey + " " + codeBuffer.substring(0, 16));
             }
 
-            function renderCode() {
-                codeBuffer = "";
+            function buildCode(buffer) {
                 for (let i = codeIndex; i < codeArray.length; i++) {
-                    const element = codeArray[i];
-                    codeBuffer += element;
+                    const char = codeArray[i];
+                    buffer += char;
                 }
-                $(output).html(PR.prettyPrintOne(codeBuffer));
+                return buffer;
+            }
+
+            function buildProgressBar() {
+                let buffer = "";
+                if (sessionProgress != null) {
+                    for (let i = 0; i < sessionProgress.length; i++) {
+                        const user = sessionProgress[i];
+                        buffer += user.name + " " + user.progress + "\n";
+                    }
+                }
+                return buffer;
+            }
+
+            function renderLiveSession(output) {
+                var buffer = buildProgressBar("") + "\n";
+                buffer = buildCode(buffer);
+                $(output).html(PR.prettyPrintOne(buffer));
             }
 
             function defaultKeyHandler(e) {
@@ -67,7 +84,7 @@
                             command: line,
                             key: authKey
                         }, function (resp) {
-                            buffer += prompt + line + '\n';
+                            textBuffer += prompt + line + '\n';
                             line = "";
                             resp = JSON.parse(resp);
                             if (authKey === "" && typeof resp.key !== "undefined") {
@@ -77,7 +94,7 @@
                                 // drop the key when receiving logout signal
                                 authKey = "";
                             }
-                            buffer += resp.message;
+                            textBuffer += resp.message;
                             renderText();
                         });
                         break;
@@ -104,7 +121,7 @@
                         codeIndex++;
                     }
                 }
-                renderCode();
+                renderLiveSession(output);
             }
 
             function changeState(nextState) {
@@ -124,7 +141,6 @@
                         }
                         break;
                     case states.live_session:
-                        renderCode();
                         break;
                     default:
                         // prevent undefined states.
@@ -148,7 +164,13 @@
             function syncProgress() {
                 if (state === states.live_session) {
                     $.post(synServlet, { key: authKey, progress: codeIndex }, function (resp) {
-
+                        resp = JSON.parse(resp);
+                        if (!jQuery.isEmptyObject(resp)) {
+                            sessionProgress = resp.sessionProgress;
+                            renderLiveSession(output);
+                        } else {
+                            alert("sync failed.");
+                        }
                     });
                 }
             }
