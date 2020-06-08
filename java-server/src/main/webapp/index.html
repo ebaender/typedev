@@ -10,23 +10,30 @@
     <script>
         $(document).ready(function () {
 
+            // servlets.
             var comServlet = "command";
             var conServlet = "connection";
-            var codServlet = "code"
+            var codServlet = "code";
+            var synServlet = "sync";
+
+            // general.
             var output = "#terminal";
+            var state = states.default;
+            var states = { default: "default", session: "session", live_session: "live_session" };
+            var authKey = "";
+
+            // default state.
             var line = "";
             var buffer = "";
             var cursor = '\u2588';
             var prompt = "> ";
             var keyPressExclude = ["Delete", "Enter"];
-            var authKey = "";
-            var states = { default: "default", session: "session", live_session: "live_session" };
-            var state = "secret";
 
+            // live session state.
             var ezMode = true;
             var codeBuffer = "";
             var codeArray = [];
-            var index = 0;
+            var codeIndex = 0;
             var mistakes = 0;
 
             function renderText() {
@@ -34,19 +41,19 @@
             }
 
             function renderStatus() {
-                $("#status").text(state + " " + authKey + " " + codeBuffer.substring(0,16));
+                $("#status").text(state + " " + authKey + " " + codeBuffer.substring(0, 16));
             }
 
             function renderCode() {
                 codeBuffer = "";
-                for (let i = index; i < codeArray.length; i++) {
+                for (let i = codeIndex; i < codeArray.length; i++) {
                     const element = codeArray[i];
                     codeBuffer += element;
                 }
                 $(output).html(PR.prettyPrintOne(codeBuffer));
             }
 
-            function keyDownDefault(e) {
+            function defaultKeyHandler(e) {
                 switch (e.code) {
                     case "Delete":
                     case "Backspace":
@@ -82,19 +89,19 @@
 
             function sessionKeyHandler(e) {
                 var typedKey = e.key;
-                var actualKey = codeArray[index];
+                var actualKey = codeArray[codeIndex];
                 if (ezMode) {
                     typedKey = typedKey.toLowerCase();
                     actualKey = actualKey.toLowerCase();
                 }
                 if (typedKey === actualKey) {
-                    index++;
+                    codeIndex++;
                 } else {
                     mistakes++;
                 }
-                if (e.key === ' ' || codeArray[index] === '\n' || codeArray[index] === '\t') {
-                    while (codeArray[index] === ' ' || codeArray[index] === '\n' || codeArray[index] === '\t') {
-                        index++;
+                if (e.key === ' ' || codeArray[codeIndex] === '\n' || codeArray[codeIndex] === '\t') {
+                    while (codeArray[codeIndex] === ' ' || codeArray[codeIndex] === '\n' || codeArray[codeIndex] === '\t') {
+                        codeIndex++;
                     }
                 }
                 renderCode();
@@ -105,8 +112,16 @@
                 state = nextState;
                 switch (state) {
                     case states.default:
+                        renderText();
                         break;
                     case states.session:
+                        // get code if you are in a session lobby and don't have any code yet.
+                        if (state === states.session && codeBuffer === "") {
+                            $.post(codServlet, { key: authKey }, function (resp) {
+                                resp = JSON.parse(resp);
+                                codeArray = resp.code.split("");
+                            });
+                        }
                         break;
                     case states.live_session:
                         renderCode();
@@ -126,23 +141,17 @@
                         if (state !== resp.state) {
                             changeState(resp.state);
                         }
-                        // get code if you are in a session lobby and don't have any code yet.
-                        if (state === states.session && codeBuffer === "") {
-                            $.post(codServlet, { key: authKey }, function (resp) {
-                                resp = JSON.parse(resp);
-                                codeArray = resp.code.split("");
-                            });
-                        }
                     });
                 }
             }
 
-            setInterval(() => {
-                keepAlive();
-                renderStatus();
-            }, 1000);
+            function syncProgress() {
+                if (state === states.live_session) {
+                    $.post(synServlet, { key: authKey, progress: codeIndex }, function (resp) {
 
-            renderText();
+                    });
+                }
+            }
 
             $(document).keypress(function (e) {
                 if (state !== states.live_session) {
@@ -160,9 +169,18 @@
                 if (state === states.live_session) {
                     sessionKeyHandler(e);
                 } else {
-                    keyDownDefault(e);
+                    defaultKeyHandler(e);
                 }
             });
+
+            setInterval(() => {
+                keepAlive();
+                syncProgress();
+                renderStatus();
+            }, 1000);
+
+            renderText();
+            renderStatus();
 
         });
 

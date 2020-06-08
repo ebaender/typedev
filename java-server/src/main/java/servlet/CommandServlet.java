@@ -92,7 +92,7 @@ public class CommandServlet extends HttpServlet {
         resp.getWriter().print(jsonResp);
         System.out.println(getClass() + " responded with " + jsonResp);
     }
-    
+
     private JsonObject startSession(String key) {
         String message = null;
         User user = users.get(key);
@@ -143,18 +143,22 @@ public class CommandServlet extends HttpServlet {
                     if (client.getSession() == null) {
                         Session session = null;
                         if ((session = host.getSession()) != null) {
-                            session.join(client);
-                            client.setSession(session);
-                            message = "Joined " + host.getName() + "'s " + session.getLanguage().toUpperCase()
-                                    + " session.\n";
+                            if (!session.isLive()) {
+                                session.join(client);
+                                client.setSession(session);
+                                message = "Joined " + host.getName() + "'s " + session.getLanguage().toUpperCase()
+                                        + " session.\n";
+                            } else {
+                                message = host.getName() +"'s session is already live.\n";
+                            }
                         } else {
-                            message = "User " + host.getName() + " is not part of a session.\n";
+                            message = host.getName() + " has not joined any session.\n";
                         }
                     } else {
                         message = "You are in a session already.\n";
                     }
                 } else {
-                    message = "User " + args[1] + " is not logged in.\n";
+                    message = args[1] + " is not logged in.\n";
                 }
             } else {
                 message = "No host specified, try again.\n";
@@ -204,7 +208,8 @@ public class CommandServlet extends HttpServlet {
         users.entrySet().forEach(user -> {
             Session session = user.getValue().getSession();
             if (session != null && !knownSessions.contains(session)) {
-                messageBuilder.append(session.getLanguage().toUpperCase() + " session (");
+                String live = session.isLive() ? "live " : "";
+                messageBuilder.append(live + session.getLanguage().toUpperCase() + " session (");
                 session.getUsers().forEach(sessionUser -> messageBuilder.append(sessionUser.getName() + ", "));
                 messageBuilder.setLength(messageBuilder.length() - 2);
                 messageBuilder.append(")\n");
