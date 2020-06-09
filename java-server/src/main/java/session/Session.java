@@ -24,6 +24,7 @@ public class Session {
     private int totalChars = 0;
     private String language = null;
     private boolean live = false;
+    private boolean stopped = false;
     private JsonObject result = null;
 
     public Session(String language) throws EmptyLanguageException, IOException {
@@ -39,7 +40,7 @@ public class Session {
         String randomFilePath = filePaths.get(randomIndex);
         List<String> codeLines = Files.readAllLines(Paths.get(randomFilePath));
         for (String line : codeLines) {
-            totalChars += line.replaceAll("\\s+","").length();
+            totalChars += line.replaceAll("\\s+", "").length();
             code.append(line).append("\n");
         }
     }
@@ -51,7 +52,7 @@ public class Session {
     private void buildResult() {
         AtomicInteger place = new AtomicInteger(1);
         result = new JsonObject();
-        users.stream().sorted((a,b) -> Integer.compare(b.getProgress(), a.getProgress())).forEach(user -> {
+        users.stream().sorted((a, b) -> Integer.compare(b.getProgress(), a.getProgress())).forEach(user -> {
             JsonObject userResult = new JsonObject();
             userResult.addProperty("name", user.getName());
             userResult.addProperty("progress", user.getProgress());
@@ -79,8 +80,11 @@ public class Session {
     }
 
     public void stop() {
-        for (User user : users) {
-            user.setState(UserState.FINISHED);
+        if (!stopped) {
+            stopped = true;
+            for (User user : users) {
+                user.setState(UserState.FINISHED);
+            }
         }
         // System.out.println(getClass() + " stopped");
     }
