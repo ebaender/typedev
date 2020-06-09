@@ -15,10 +15,11 @@
             var conServlet = "connection";
             var codServlet = "code";
             var synServlet = "sync";
+            var resServlet = "result";
 
             // general.
             var output = "#terminal";
-            var states = { default: "default", session: "session", live_session: "live_session" };
+            var states = { default: "default", session: "session", live_session: "live_session", finished: "finished" };
             var state = states.default;
             var authKey = "";
 
@@ -32,17 +33,24 @@
             // live session state.
             var ezMode = true;
             var sessionProgress = null;
-            var codeBuffer = "";
             var codeArray = null;
             var codeIndex = 0;
             var mistakes = 0;
+            var progress = 0;
+
+            function resetSessionValues() {
+                codeArray = null;
+                codeIndex = 0;
+                mistakes = 0;
+                progress = 0;
+            }
 
             function renderText() {
                 $(output).text(textBuffer + prompt + line + cursor);
             }
 
             function renderStatus() {
-                $("#status").text(state + " " + authKey + " " + codeBuffer.substring(0, 16));
+                $("#status").text(state + " " + authKey + " " + (codeArray === null ? null : codeArray.toString().replace(/,|\n/g, "").substring(0, 16)));
             }
 
             function buildCode(buffer) {
@@ -58,7 +66,7 @@
                 if (sessionProgress != null) {
                     for (let i = 0; i < sessionProgress.length; i++) {
                         const user = sessionProgress[i];
-                        buffer += user.name + " " + user.progress + "\n";
+                        buffer += user.name + " " + user.progress + " " + user.mistakes + "\n";
                     }
                 }
                 return buffer;
@@ -112,8 +120,11 @@
                     actualKey = actualKey.toLowerCase();
                 }
                 if (typedKey === actualKey) {
+                    if (typedKey !== ' ') {
+                        progress++;
+                    }
                     codeIndex++;
-                } else {
+                } else if (typedKey.length === 1){
                     mistakes++;
                 }
                 if (e.key === ' ' || codeArray[codeIndex] === '\n' || codeArray[codeIndex] === '\t') {
@@ -122,6 +133,15 @@
                     }
                 }
                 renderLiveSession(output);
+            }
+
+            function buildResult(result) {
+                var resultBuffer = "";
+                for (let place in result) {
+                    const entry = result[place];
+                    resultBuffer += place + ". " + entry.name + " | " + entry.progress + " characters " + entry.mistakes + " mistakes\n";
+                }
+                return resultBuffer;
             }
 
             function changeState(nextState) {
@@ -133,7 +153,7 @@
                         break;
                     case states.session:
                         // get code if you are in a session lobby and don't have any code yet.
-                        if (state === states.session && codeBuffer === "") {
+                        if (codeArray === null) {
                             $.post(codServlet, { key: authKey }, function (resp) {
                                 resp = JSON.parse(resp);
                                 codeArray = resp.code.split("");
@@ -141,6 +161,19 @@
                         }
                         break;
                     case states.live_session:
+                        break;
+                    case states.finished:
+                        $.post(resServlet, { key: authKey }, function (resp) {
+                            resp = JSON.parse(resp);
+                            if (!jQuery.isEmptyObject(resp)) {
+                                textBuffer += "Finished session.\n";
+                                textBuffer += buildResult(resp.result);
+                                resetSessionValues();
+                            } else {
+                                alert("finishing session failed.");
+                                changeState(states.default);
+                            }
+                        });
                         break;
                     default:
                         // prevent undefined states.
@@ -163,13 +196,14 @@
 
             function syncProgress() {
                 if (state === states.live_session) {
-                    $.post(synServlet, { key: authKey, progress: codeIndex }, function (resp) {
+                    $.post(synServlet, { key: authKey, progress: progress, mistakes: mistakes }, function (resp) {
                         resp = JSON.parse(resp);
                         if (!jQuery.isEmptyObject(resp)) {
                             sessionProgress = resp.sessionProgress;
                             renderLiveSession(output);
                         } else {
                             alert("sync failed.");
+                            changeState(states.default);
                         }
                     });
                 }
@@ -198,11 +232,10 @@
             setInterval(() => {
                 keepAlive();
                 syncProgress();
-                renderStatus();
+                // renderStatus();
             }, 1000);
 
             renderText();
-            renderStatus();
 
         });
 

@@ -1,18 +1,33 @@
 package user;
 
+import java.time.Instant;
+
 import session.Session;
 
 public class User {
 
     private String name;
-    private Session session;
-    private UserState state;
-    private Integer progress;
+    private Session session = null;
+    private UserState state = UserState.DEFAULT;
+    private Integer progress = 0;
+    private Integer mistakes = 0;
+    private Instant lastContact;
 
     public User(String name) {
-        this.setName(name);
-        this.setSession(null);
-        this.setState(UserState.DEFAULT);
+        this.name = name;
+        lastContact = Instant.now();
+    }
+
+    public Instant getLastContact() {
+        return lastContact;
+    }
+
+    public void setLastContact(Instant lastContact) {
+        this.lastContact = lastContact;
+    }
+
+    public void setMistakes(Integer mistakes) {
+        this.mistakes = mistakes;
     }
 
     public Integer getProgress() {
@@ -51,5 +66,9 @@ public class User {
     public void setName(String name) {
         this.name = name;
     }
+
+	public Integer getMistakes() {
+		return mistakes;
+	}
 
 }

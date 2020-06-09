@@ -81,6 +81,7 @@ public class CommandServlet extends HttpServlet {
             case "leave":
                 jsonResp = leaveSession(key);
                 break;
+            case "st":
             case "start":
                 jsonResp = startSession(key);
                 break;

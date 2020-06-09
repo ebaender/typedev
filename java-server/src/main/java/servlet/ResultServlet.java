@@ -13,9 +13,10 @@ import com.google.gson.JsonObject;
 
 import extra.Standard;
 import user.User;
+import user.UserState;
 
-@WebServlet(name = "CodeServlet", urlPatterns = { "code" }, loadOnStartup = 1)
-public class CodeServlet extends HttpServlet {
+@WebServlet(name = "ResultServlet", urlPatterns = { "result" }, loadOnStartup = 1)
+public class ResultServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private HashMap<String, User> users;
@@ -30,11 +31,14 @@ public class CodeServlet extends HttpServlet {
         String key = req.getParameter("key");
         User user = users.get(key);
         JsonObject jsonResp = new JsonObject();
-        if (user != null && user.getSession() != null) {
-            jsonResp.addProperty(Standard.COD, user.getSession().getCode());
+        if (user != null && user.getState() == UserState.FINISHED) {
+            jsonResp.add(Standard.RES, user.getSession().getResult());
+            // user.getSession().leave(user);
+            user.setSession(null);
+            user.setState(UserState.DEFAULT);
         }
         resp.getWriter().print(jsonResp);
-        // System.out.println(getClass() + " responded with " + jsonResp);
+        System.out.println(getClass() + " responded with " + jsonResp);
     }
 
 }

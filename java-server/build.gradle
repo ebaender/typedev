@@ -6,7 +6,7 @@ plugins {
 gretty {
     integrationTestTask = 'test'
     // Hosting
-    host = 'localhost'
+    host = '0.0.0.0'
     httpPort = 8080
 
     // Debug

@@ -7,5 +7,6 @@ public class Standard {
     public static final String STA = "state";
     public static final String COD = "code";
     public static final String PRG = "sessionProgress";
+    public static final String RES = "result";
     
 }
