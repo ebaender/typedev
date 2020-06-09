@@ -3,7 +3,7 @@ package servlet;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -27,13 +27,11 @@ import user.User;
 public class CommandServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private HashMap<String, User> users;
-    private HashMap<String, User> usersName;
+    private ConcurrentHashMap<String, User> users;
 
     @Override
     public void init() throws ServletException {
-        users = (HashMap<String, User>) getServletContext().getAttribute("usersByKey");
-        usersName = (HashMap<String, User>) getServletContext().getAttribute("usersByName");
+        users = (ConcurrentHashMap<String, User>) getServletContext().getAttribute("usersByKey");
     }
 
     @Override
@@ -140,7 +138,13 @@ public class CommandServlet extends HttpServlet {
         if (key != null && (client = users.get(key)) != null) {
             if (args.length > 1) {
                 User host = null;
-                if ((host = usersName.get(args[1])) != null) {
+                for (User user : users.values()) {
+                    if (user.getName().equals(args[1])) {
+                        host = user;
+                        break;
+                    }
+                }
+                if (host != null) {
                     if (client.getSession() == null) {
                         Session session = null;
                         if ((session = host.getSession()) != null) {
@@ -252,7 +256,6 @@ public class CommandServlet extends HttpServlet {
             leaveSession(key);
             String name = users.get(key).getName();
             users.remove(key);
-            usersName.remove(name);
             message = "Logged out as " + name + ".\n";
         }
         JsonObject jsonResp = new JsonObject();
@@ -275,7 +278,6 @@ public class CommandServlet extends HttpServlet {
                         if (users.get(encodedKey) == null) {
                             User user = new User(name);
                             users.put(encodedKey, user);
-                            usersName.put(name, user);
                             message = "Logged in as " + name + ".\n";
                         } else {
                             encodedKey = null;
@@ -305,7 +307,7 @@ public class CommandServlet extends HttpServlet {
         return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 
-    private boolean userExsists(String name, HashMap<String, User> users) {
+    private boolean userExsists(String name, ConcurrentHashMap<String, User> users) {
         if (name == null || users == null) {
             return false;
         }

@@ -2,7 +2,7 @@ package servlet;
 
 import java.io.IOException;
 import java.time.Instant;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -19,11 +19,11 @@ import user.User;
 public class ConnectionServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
-    private HashMap<String, User> users;
+    private ConcurrentHashMap<String, User> users;
     
     @Override
     public void init() throws ServletException {
-        users = (HashMap<String, User>) getServletContext().getAttribute("usersByKey");
+        users = (ConcurrentHashMap<String, User>) getServletContext().getAttribute("usersByKey");
     }
 
     @Override

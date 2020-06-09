@@ -6,7 +6,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;

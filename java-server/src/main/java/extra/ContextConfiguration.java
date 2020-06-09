@@ -1,6 +1,6 @@
 package extra;
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -20,11 +20,10 @@ public class ContextConfiguration implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        HashMap<String, User> users = new HashMap<>();
+        ConcurrentHashMap<String, User> users = new ConcurrentHashMap<>();
         sce.getServletContext().setAttribute("usersByKey", users);
-        sce.getServletContext().setAttribute("usersByName", new HashMap<String, User>());
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        // scheduler.scheduleAtFixedRate(new UserTimeout(users.values(), timeout), 0, timeout, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(new UserTimeout(users.values(), timeout), 0, timeout, TimeUnit.SECONDS);
     }
 
     @Override

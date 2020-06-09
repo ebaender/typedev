@@ -12,14 +12,20 @@ public class UserTimeout implements Runnable {
         this.users = users;
         this.timeout = timeout;
     }
-    
+
     @Override
     public void run() {
-        System.out.println(getClass() + " timeout");
+        checkUsers();
+    }
+
+    private synchronized void checkUsers() {
         for (User user : users) {
             if (user.getLastContact().getEpochSecond() + timeout < Instant.now().getEpochSecond()) {
+                System.out.println(getClass() + " removing " + user.getName() + " after " + timeout + " seconds of contact loss");
+                if (user.getSession() != null) {
+                    user.getSession().getUsers().remove(user);
+                }
                 users.remove(user);
-                System.out.println(getClass() + " removed " + user.getName());
             }
         }
     }

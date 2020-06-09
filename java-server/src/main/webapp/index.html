@@ -124,7 +124,7 @@
                         progress++;
                     }
                     codeIndex++;
-                } else if (typedKey.length === 1){
+                } else if (typedKey.length === 1) {
                     mistakes++;
                 }
                 if (e.key === ' ' || codeArray[codeIndex] === '\n' || codeArray[codeIndex] === '\t') {
@@ -149,6 +149,7 @@
                 state = nextState;
                 switch (state) {
                     case states.default:
+                        // TODO: make reset work here
                         renderText();
                         break;
                     case states.session:
@@ -185,10 +186,15 @@
             function keepAlive() {
                 if (authKey !== "") {
                     $.post(conServlet, { key: authKey }, function (resp) {
-                        resp = JSON.parse(resp);
-                        // update to state from server.
-                        if (state !== resp.state) {
-                            changeState(resp.state);
+                        if (!jQuery.isEmptyObject(resp)) {
+                            resp = JSON.parse(resp);
+                            // update to state from server.
+                            if (state !== resp.state) {
+                                changeState(resp.state);
+                            }
+                        } else {
+                            alert("connection failed.");
+                            changeState(states.default);
                         }
                     });
                 }
