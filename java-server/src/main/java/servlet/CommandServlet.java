@@ -44,12 +44,7 @@ public class CommandServlet extends HttpServlet {
         switch (args[0]) {
             case "li":
             case "login":
-                if (key.equals("")) {
-                    jsonResp = login(args);
-                } else {
-                    jsonResp = new JsonObject();
-                    jsonResp.addProperty(Standard.MSG, "You are logged in already.\n");
-                }
+                jsonResp = login(args, key);
                 break;
             case "lo":
             case "logout":
@@ -154,7 +149,7 @@ public class CommandServlet extends HttpServlet {
                                 message = "Joined " + host.getName() + "'s " + session.getLanguage().toUpperCase()
                                         + " session.\n";
                             } else {
-                                message = host.getName() +"'s session is already live.\n";
+                                message = host.getName() + "'s session is already live.\n";
                             }
                         } else {
                             message = host.getName() + " has not joined any session.\n";
@@ -249,6 +244,7 @@ public class CommandServlet extends HttpServlet {
     }
 
     private JsonObject logout(String key) {
+        JsonObject jsonResp = new JsonObject();
         String message = null;
         if (key == null || key.equals("") || users.get(key) == null) {
             message = "You are logged out already.\n";
@@ -257,46 +253,49 @@ public class CommandServlet extends HttpServlet {
             String name = users.get(key).getName();
             users.remove(key);
             message = "Logged out as " + name + ".\n";
+            jsonResp.addProperty(Standard.KEY, "");
         }
-        JsonObject jsonResp = new JsonObject();
         jsonResp.addProperty(Standard.MSG, message);
-        jsonResp.addProperty(Standard.KEY, "");
         return jsonResp;
     }
 
-    private JsonObject login(String[] args) {
+    private JsonObject login(String[] args, String key) {
+        JsonObject jsonResp = new JsonObject();
         String encodedKey = "";
         String message = null;
-        if (args.length > 1) {
-            String name = args[1];
-            if (name != null) {
-                if (userExsists(name, users)) {
-                    message = "User " + name + " exists already, try again. \n";
-                } else {
-                    try {
-                        encodedKey = generateKey();
-                        if (users.get(encodedKey) == null) {
-                            User user = new User(name);
-                            users.put(encodedKey, user);
-                            message = "Logged in as " + name + ".\n";
-                        } else {
-                            encodedKey = null;
-                            message = "You are one unlucky bastard, try again.\n";
+        if (users.get(key) == null) {
+            if (args.length > 1) {
+                String name = args[1];
+                if (name != null) {
+                    if (userExsists(name, users)) {
+                        message = name + " is logged in already.\n";
+                    } else {
+                        try {
+                            encodedKey = generateKey();
+                            if (users.get(encodedKey) == null) {
+                                User user = new User(name);
+                                users.put(encodedKey, user);
+                                message = "Logged in as " + name + ".\n";
+                                jsonResp.addProperty(Standard.KEY, encodedKey);
+                            } else {
+                                encodedKey = null;
+                                message = "You are one unlucky bastard, try again.\n";
+                            }
+                        } catch (NoSuchAlgorithmException e) {
+                            e.printStackTrace();
+                            message = "Your key could not be generated. Sorry about that.\n";
                         }
-                    } catch (NoSuchAlgorithmException e) {
-                        e.printStackTrace();
-                        message = "Your key could not be generated. Sorry about that.\n";
                     }
+                } else {
+                    message = "Could not read name, try again.\n";
                 }
             } else {
-                message = "Could not read name, try again.\n";
+                message = "Usage: login [name]\n";
             }
         } else {
-            message = "Usage: login [name]\n";
+            message = "You are logged in as " + users.get(key).getName() + " already.\n";
         }
-        JsonObject jsonResp = new JsonObject();
         jsonResp.addProperty(Standard.MSG, message);
-        jsonResp.addProperty(Standard.KEY, encodedKey);
         return jsonResp;
     }
 
