@@ -2,8 +2,7 @@ package extra;
 
 public enum HttpsHost {
 
-    PI("2550a6e5.ngrok.io"),
-    LOCAL("localhost:8080/java-server");
+    PI("2550a6e5.ngrok.io");
 
     private final String url;
 

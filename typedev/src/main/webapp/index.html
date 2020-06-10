@@ -22,6 +22,7 @@
             var states = { default: "default", session: "session", live_session: "live_session", finished: "finished" };
             var state = states.default;
             var authKey = "";
+            var ctrl = false;
 
             // default state.
             var line = "";
@@ -88,10 +89,7 @@
                         line += e.key;
                         break;
                     case "Enter":
-                        $.post(comServlet, {
-                            command: line,
-                            key: authKey
-                        }, function (resp) {
+                        $.post(comServlet, { command: line, key: authKey }, function (resp) {
                             textBuffer += prompt + line + '\n';
                             line = "";
                             resp = JSON.parse(resp);
@@ -115,6 +113,10 @@
             function sessionKeyHandler(e) {
                 var typedKey = e.key;
                 var actualKey = codeArray[codeIndex];
+                if (ctrl && typedKey == 'c') {
+                    alert();
+                    $.post(comServlet, { command: "leave", key: authKey }, function (resp) {});
+                }
                 if (ezMode) {
                     typedKey = typedKey.toLowerCase();
                     actualKey = actualKey.toLowerCase();
@@ -233,6 +235,17 @@
                 } else {
                     defaultKeyHandler(e);
                 }
+                if (e.keyCode == 32) {
+                    return false;
+                } else if (e.keyCode == 17) {
+                    ctrl = true;
+                }
+            });
+
+            $(document).keyup(function (e) {
+                if (e.keyCode == 17) {
+                    ctrl = false;
+                }
             });
 
             setInterval(() => {
@@ -243,13 +256,6 @@
 
             renderText();
 
-        });
-
-        // space bar has been defused
-        $(document).keydown(function (e) {
-            if (e.which == 32) {
-                return false;
-            }
         });
 
     </script>
