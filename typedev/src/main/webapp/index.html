@@ -123,8 +123,12 @@
                 var typedKey = e.key;
                 var actualKey = codeArray[codeIndex];
                 if (ctrl && typedKey == 'c') {
-                    $.post(comServlet, { command: "leave", key: authKey }, function (resp) { 
+                    $.post(comServlet, { command: "leave", key: authKey }, function (resp) {
                         updateState();
+                        resetSessionValues();
+                        resp = JSON.parse(resp);
+                        textBuffer += resp.message;
+                        renderText();
                     });
                 }
                 if (ezMode) {

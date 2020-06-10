@@ -14,6 +14,7 @@ join (jn) [USERNAME]
     join the session of the specified user.
 leave (lv)
     leave the session you are currently in.
+    can be invoked by pressing CTRL+C in a live session.
 start (st)
     start the session you are currently in.
 clear (cl)
