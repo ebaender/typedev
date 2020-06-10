@@ -1,22 +1,23 @@
 login (li) [USERNAME]
-    login into typdev specified user.
+    Log in as specified user.
 logout (lo)
-    logout as current user.
+    Log out as current user.
 whoami (wh)
-    print as which user you are logged in.
+    Show which user you are logged in as.
 users (lu)
-    list users that are currently online.
+    List users that are currently online.
 sessions (ls)
-    list sessions, and which users have joined them.
+    List sessions and the users that have joined them.
 create (cr) [LANGUAGE]
-    create a new session for a specified programming language.
+    Create a new session for a specified programming language.
 join (jn) [USERNAME]
-    join the session of the specified user.
+    Join the session of the specified user.
 leave (lv)
-    leave the session you are currently in.
+    Leave the session you are currently in.
+    Can be invoked by pressing CTRL-C in a live session.
 start (st)
-    start the session you are currently in.
+    Start the session you are currently in.
 clear (cl)
-    clear your screen.
+    Clear your screen.
 help (?)
-    print this message.
+    Show this message.
