@@ -89,20 +89,29 @@
                         line += e.key;
                         break;
                     case "Enter":
-                        $.post(comServlet, { command: line, key: authKey }, function (resp) {
-                            textBuffer += prompt + line + '\n';
-                            line = "";
-                            resp = JSON.parse(resp);
-                            if (authKey === "" && typeof resp.key !== "undefined") {
-                                // try to get a key if you dont have one yet
-                                authKey = resp.key;
-                            } else if (resp.key === "") {
-                                // drop the key when receiving logout signal
-                                authKey = "";
-                            }
-                            textBuffer += resp.message;
-                            renderText();
-                        });
+                        switch (line) {
+                            case "cl":
+                            case "clear":
+                                textBuffer = "";
+                                line = "";
+                                break;
+                            default:
+                                $.post(comServlet, { command: line, key: authKey }, function (resp) {
+                                    textBuffer += prompt + line + '\n';
+                                    line = "";
+                                    resp = JSON.parse(resp);
+                                    if (authKey === "" && typeof resp.key !== "undefined") {
+                                        // try to get a key if you dont have one yet
+                                        authKey = resp.key;
+                                    } else if (resp.key === "") {
+                                        // drop the key when receiving logout signal
+                                        authKey = "";
+                                    }
+                                    textBuffer += resp.message;
+                                    renderText();
+                                });
+                                break;
+                        }
                         break;
                     default:
                         break;
@@ -114,7 +123,7 @@
                 var typedKey = e.key;
                 var actualKey = codeArray[codeIndex];
                 if (ctrl && typedKey == 'c') {
-                    $.post(comServlet, { command: "leave", key: authKey }, function (resp) {});
+                    $.post(comServlet, { command: "leave", key: authKey }, function (resp) { });
                     updateState();
                 }
                 if (ezMode) {
@@ -192,18 +201,18 @@
             }
 
             function updateState() {
-                    $.post(conServlet, { key: authKey }, function (resp) {
-                        if (!jQuery.isEmptyObject(resp)) {
-                            resp = JSON.parse(resp);
-                            // update to state from server.
-                            if (state !== resp.state) {
-                                changeState(resp.state);
-                            }
-                        } else {
-                            alert("connection failed.");
-                            changeState(states.default);
+                $.post(conServlet, { key: authKey }, function (resp) {
+                    if (!jQuery.isEmptyObject(resp)) {
+                        resp = JSON.parse(resp);
+                        // update to state from server.
+                        if (state !== resp.state) {
+                            changeState(resp.state);
                         }
-                    });
+                    } else {
+                        alert("connection failed.");
+                        changeState(states.default);
+                    }
+                });
             }
 
             function syncProgress() {

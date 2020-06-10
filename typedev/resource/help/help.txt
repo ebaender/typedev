@@ -1,0 +1,22 @@
+login (li) [USERNAME]
+    login into typdev specified user.
+logout (lo)
+    logout as current user.
+whoami (wh)
+    print as which user you are logged in.
+users (lu)
+    list users that are currently online.
+sessions (ls)
+    list sessions, and which users have joined them.
+create (cr) [LANGUAGE]
+    create a new session for a specified programming language.
+join (jn) [USERNAME]
+    join the session of the specified user.
+leave (lv)
+    leave the session you are currently in.
+start (st)
+    start the session you are currently in.
+clear (cl)
+    clear your screen.
+help (?)
+    print this message.

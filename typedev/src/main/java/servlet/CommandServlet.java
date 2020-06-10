@@ -1,6 +1,8 @@
 package servlet;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.concurrent.ConcurrentHashMap;
@@ -78,6 +80,10 @@ public class CommandServlet extends HttpServlet {
             case "start":
                 jsonResp = startSession(key);
                 break;
+            case "?":
+            case "help":
+                jsonResp = getHelp();
+                break;
             default:
                 jsonResp = new JsonObject();
                 jsonResp.addProperty(Standard.MSG, "");
@@ -85,6 +91,22 @@ public class CommandServlet extends HttpServlet {
         }
         resp.getWriter().print(jsonResp);
         System.out.println(getClass() + " responded with " + jsonResp);
+    }
+
+    private JsonObject getHelp() {
+        StringBuilder message = new StringBuilder();
+        JsonObject jsonResp = new JsonObject();
+        List<String> helpLines;
+        try {
+            helpLines = Files.readAllLines(Paths.get("resource/help/help.txt"));
+            for (String line : helpLines) {
+                message.append(line).append("\n");
+            }
+        } catch (IOException e) {
+            message.append("There is no help. May god have mercy on your soul.\n");
+        }
+        jsonResp.addProperty(Standard.MSG, message.toString());
+        return jsonResp;
     }
 
     private JsonObject startSession(String key) {
