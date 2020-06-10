@@ -1,0 +1,23 @@
+// determines whether or not a nfa accepts a word
+nfa := procedure(N, w) {
+  msg(N);
+  // turn the nfa's start state into a singleton set
+  qs := {N[4]};
+  // update the current state set by applying the nfa's function to each character of the word
+  for (c in w) {
+    // initialize a temporary, new state set
+    nqs := {};
+    // apply nfa's function to each state in the state set seperately and collect all resulting
+    // states in the new state set
+    for (q in qs) {
+      nqs := nqs + N[3](q, c);
+      // follow all epsilon arrows after each state set update
+      nqs := E(N[3], nqs);
+    }
+    print("d(" + qs + "," + c + ") = " + nqs);
+    // update the actual state set
+    qs := nqs;
+  }
+  // check that the intersection of the final state set and the accepted state set is not empty
+  return qs * N[5] != {};
+}; 

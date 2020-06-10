@@ -114,8 +114,8 @@
                 var typedKey = e.key;
                 var actualKey = codeArray[codeIndex];
                 if (ctrl && typedKey == 'c') {
-                    alert();
                     $.post(comServlet, { command: "leave", key: authKey }, function (resp) {});
+                    updateState();
                 }
                 if (ezMode) {
                     typedKey = typedKey.toLowerCase();
@@ -187,6 +187,11 @@
 
             function keepAlive() {
                 if (authKey !== "") {
+                    updateState();
+                }
+            }
+
+            function updateState() {
                     $.post(conServlet, { key: authKey }, function (resp) {
                         if (!jQuery.isEmptyObject(resp)) {
                             resp = JSON.parse(resp);
@@ -199,7 +204,6 @@
                             changeState(states.default);
                         }
                     });
-                }
             }
 
             function syncProgress() {
