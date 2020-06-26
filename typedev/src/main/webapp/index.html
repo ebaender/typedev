@@ -183,6 +183,16 @@
                 return resultBuffer;
             }
 
+            // get code if you are in a session lobby and don't have any code yet.
+            function getCode() {
+                if (codeArray === null) {
+                    $.post(codServlet, { key: authKey }, function (resp) {
+                        resp = JSON.parse(resp);
+                        codeArray = resp.code.split("");
+                    });
+                }
+            }
+
             function changeState(nextState) {
                 var prevState = state;
                 state = nextState;
@@ -192,15 +202,13 @@
                         renderText();
                         break;
                     case states.session:
-                        // get code if you are in a session lobby and don't have any code yet.
-                        if (codeArray === null) {
-                            $.post(codServlet, { key: authKey }, function (resp) {
-                                resp = JSON.parse(resp);
-                                codeArray = resp.code.split("");
-                            });
-                        }
+                        getCode();
                         break;
                     case states.live_session:
+                        // prevent hyperactive users from screwing themselves
+                        if (prevState === states.default) {
+                            getCode();
+                        }
                         break;
                     case states.finished:
                         $.post(resServlet, { key: authKey }, function (resp) {
