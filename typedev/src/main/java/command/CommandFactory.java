@@ -1,19 +1,38 @@
 package command;
 
-import command.session.*;
-import command.user.*;
-import user.User;
-
 import java.util.concurrent.ConcurrentHashMap;
 
-import command.help.*;
+import command.help.GetHelp;
+import command.session.CreateSession;
+import command.session.GetSessions;
+import command.session.JoinSession;
+import command.session.LeaveSession;
+import command.session.StartSession;
+import command.user.GetName;
+import command.user.GetUsers;
+import command.user.LogIn;
+import command.user.LogOut;
+import user.User;
 
 public class CommandFactory {
 
+    private static CommandFactory instance = null;
     private ConcurrentHashMap<String, User> users;
 
-    public CommandFactory(ConcurrentHashMap<String, User> users) {
+
+    private CommandFactory(ConcurrentHashMap<String, User> users) {
         this.users = users;
+    }
+
+    public static CommandFactory getInstance(ConcurrentHashMap<String, User> users) {
+        if (instance == null) {
+            instance = new CommandFactory(users);
+        }
+        return instance;
+    }
+
+    public static void removeInstance() {
+        instance = null;
     }
 
     public Command create(String commandString, String key) {
@@ -66,6 +85,7 @@ public class CommandFactory {
         return command;
     }
 
+    @Deprecated
     public Command create(Class<? extends Command> commandType) {
         Command command = null;
         try {

@@ -23,7 +23,7 @@ public class ContextConfiguration implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         ConcurrentHashMap<String, User> users = new ConcurrentHashMap<>();
         sce.getServletContext().setAttribute(ContextAttribute.USERS.name(), users);
-        CommandFactory commandFactory = new CommandFactory(users);
+        CommandFactory commandFactory = CommandFactory.getInstance(users);
         sce.getServletContext().setAttribute(ContextAttribute.COMMAND_FACTORY.name(), commandFactory);
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(new UserTimeout(users.values(), timeout), 0, timeout, TimeUnit.SECONDS);
