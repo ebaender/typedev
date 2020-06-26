@@ -4,7 +4,7 @@
 <head>
 
     <link rel="stylesheet" href="base.css" media="screen" />
-    <link rel="stylesheet" href="desert.css" media="screen" />
+    <link id="theme" rel="stylesheet" href="theme/dark.css" media="screen" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js"></script>
     <script>
@@ -40,6 +40,9 @@
             var mistakes = 0;
             var progress = 0;
 
+            // theme.
+            var themes = ["dark", "light"];
+
             function resetSessionValues() {
                 codeArray = null;
                 codeIndex = 0;
@@ -48,7 +51,7 @@
             }
 
             function renderMOTD() {
-                textBuffer= logo + "\nWelcome! to list all commands, type help.\n";
+                textBuffer = logo + "\nWelcome! to list all commands, type help.\n";
                 renderText();
             }
 
@@ -95,10 +98,24 @@
                         line += e.key;
                         break;
                     case "Enter":
-                        switch (line) {
+                        var argv = line.split(' ');
+                        switch (argv[0]) {
                             case "cl":
                             case "clear":
                                 textBuffer = "";
+                                line = "";
+                                break;
+                            case "th":
+                            case "theme":
+                                $('#theme').each(function () {
+                                    if (themes.includes(argv[1])) {
+                                        this.href = "theme/" + argv[1] + ".css";
+                                        feedback = "Set theme to " + argv[1] + ".";
+                                    } else {
+                                        feedback = "\"" + argv[1] + "\" is not a valid theme.";
+                                    }
+                                });
+                                textBuffer += prompt + line + '\n' + feedback + '\n';
                                 line = "";
                                 break;
                             default:

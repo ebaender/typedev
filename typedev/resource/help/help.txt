@@ -19,5 +19,7 @@ start (st)
     Start the session you are currently in.
 clear (cl)
     Clear your screen.
+theme (th) [THEME]
+    Set the terminal colors to those of the specified theme.
 help (?)
     Show this message.
