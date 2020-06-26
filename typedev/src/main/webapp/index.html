@@ -26,6 +26,7 @@
 
             // default state.
             var line = "";
+            var renderLine = "";
             var textBuffer = "";
             var cursor = '\u2588';
             var prompt = "> ";
@@ -43,6 +44,12 @@
             // theme.
             var themes = ["dark", "light"];
 
+            // authentication.
+            var password_mode = false;
+            var password_entered = false;
+            var password = "";
+            var name = "";
+
             function resetSessionValues() {
                 codeArray = null;
                 codeIndex = 0;
@@ -56,7 +63,26 @@
             }
 
             function renderText() {
-                $(output).text(textBuffer + prompt + line + cursor);
+                let renderBuffer;
+                if (password_mode) {
+                    renderBuffer = textBuffer + getCensoredLine() + cursor;
+                } else {
+                    renderBuffer = textBuffer + prompt + line + cursor;
+                }
+                $(output).text(renderBuffer);
+            }
+
+            function getCensoredLine() {
+                let passwordLine = "";
+                for (let i = 0; i < line.length; i++) {
+                    passwordLine += '*';
+                }
+                return passwordLine;
+            }
+
+            function fuseLine(anyLine) {
+                textBuffer += anyLine + '\n';
+                line = "";
             }
 
             function renderStatus() {
@@ -98,44 +124,80 @@
                         line += e.key;
                         break;
                     case "Enter":
-                        var argv = line.split(' ');
-                        switch (argv[0]) {
-                            case "cl":
-                            case "clear":
-                                textBuffer = "";
-                                line = "";
-                                break;
-                            case "th":
-                            case "theme":
-                                $('#theme').each(function () {
-                                    if (themes.includes(argv[1])) {
-                                        this.href = "theme/" + argv[1] + ".css";
-                                        feedback = "Set theme to " + argv[1] + ".";
-                                    } else {
-                                        feedback = "\"" + argv[1] + "\" is not a valid theme.";
-                                    }
-                                });
-                                textBuffer += prompt + line + '\n' + feedback + '\n';
-                                line = "";
-                                break;
-                            default:
-                                $.post(comServlet, { command: line, key: authKey }, function (resp) {
-                                    textBuffer += prompt + line + '\n';
+                        if (password_mode) {
+                            let feedback = "";
+                            if (password_entered) {
+                                password_mode = false;
+                                if (line === password) {
+                                    fuseLine(getCensoredLine());
+                                    var registration = "register " + name + " " + password;
+                                    $.post(comServlet, { command: registration, key: authKey }, function (resp) {
+                                        resp = JSON.parse(resp);
+                                        textBuffer += resp.message;
+                                        renderText();
+                                    });
+                                } else {
+                                    fuseLine(getCensoredLine() + "\nPassword did not match confirmation, try again.");
+                                }
+                            } else {
+                                password = line;
+                                password_entered = true;
+                                fuseLine(getCensoredLine());
+                            }
+                        } else {
+                            var argv = line.split(' ');
+                            switch (argv[0]) {
+                                case "cl":
+                                case "clear":
+                                    textBuffer = "";
                                     line = "";
-                                    resp = JSON.parse(resp);
-                                    if (authKey === "" && typeof resp.key !== "undefined") {
-                                        // try to get a key if you dont have one yet
-                                        authKey = resp.key;
-                                    } else if (resp.key === "") {
-                                        // drop the key when receiving logout signal
-                                        authKey = "";
+                                    break;
+                                case "th":
+                                case "theme":
+                                    $('#theme').each(function () {
+                                        if (themes.includes(argv[1])) {
+                                            this.href = "theme/" + argv[1] + ".css";
+                                            let feedback = "Set theme to " + argv[1] + ".";
+                                        } else {
+                                            feedback = "\"" + argv[1] + "\" is not a valid theme.";
+                                        }
+                                    });
+                                    textBuffer += prompt + line + '\n' + feedback + '\n';
+                                    line = "";
+                                    break;
+                                case "rg":
+                                case "register":
+                                    let feedback;
+                                    if (argv.length === 2 && argv[1].length > 0) {
+                                        name = argv[1];
+                                        password_mode = true;
+                                        password_entered = false;
+                                        feedback = "Enter and confirm password:"
+                                    } else {
+                                        feedback = "Usage: register [NAME]"
                                     }
-                                    textBuffer += resp.message;
-                                    renderText();
-                                });
-                                break;
+                                    textBuffer += prompt + line + '\n' + feedback + '\n';
+                                    line = "";
+                                    break;
+                                default:
+                                    $.post(comServlet, { command: line, key: authKey }, function (resp) {
+                                        textBuffer += prompt + line + '\n';
+                                        line = "";
+                                        resp = JSON.parse(resp);
+                                        if (authKey === "" && typeof resp.key !== "undefined") {
+                                            // try to get a key if you dont have one yet
+                                            authKey = resp.key;
+                                        } else if (resp.key === "") {
+                                            // drop the key when receiving logout signal
+                                            authKey = "";
+                                        }
+                                        textBuffer += resp.message;
+                                        renderText();
+                                    });
+                                    break;
+                            }
+                            break;
                         }
-                        break;
                     default:
                         break;
                 }
@@ -147,6 +209,7 @@
                 var actualKey = codeArray[codeIndex];
                 if (ctrl && typedKey == 'c') {
                     $.post(comServlet, { command: "leave", key: authKey }, function (resp) {
+                        alert();
                         updateState();
                         resetSessionValues();
                         resp = JSON.parse(resp);

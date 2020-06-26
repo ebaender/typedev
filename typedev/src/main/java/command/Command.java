@@ -30,6 +30,10 @@ public abstract class Command {
         this(key, null, null);
     }
 
+    public Command(String[] args) {
+        this(null, args, null);
+    }
+
     public Command(ConcurrentHashMap<String, User> users) {
         this(null, null, users);
     }

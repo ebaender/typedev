@@ -1,12 +1,12 @@
 package extra;
 
-public enum HttpsHost {
+public enum HttpHost {
 
-    PI("2550a6e5.ngrok.io");
+    PI("a3dfe915bae2.ngrok.io");
 
     private final String url;
 
-    HttpsHost(final String url) {
+    HttpHost(final String url) {
         this.url = url;
     }
 

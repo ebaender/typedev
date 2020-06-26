@@ -2,8 +2,7 @@ package extra;
 
 public enum HttpEndpoint {
 
-    ROOM_LIVE("raum", null),
-    ROOM_WEEK("raum_week", null);
+    USER_DB("typedev_user", null);
 
 
     private final String subdomain;

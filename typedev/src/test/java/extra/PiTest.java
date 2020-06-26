@@ -18,7 +18,7 @@ public class PiTest {
         // go through all known endpoints and make sure a valid request returns a response
         // with code 200
         for (HttpEndpoint endpoint : HttpEndpoint.values()) {
-            URL piWithEndpoint = new URL(HttpsHost.PI + endpoint.getSubdomain());
+            URL piWithEndpoint = new URL(HttpHost.PI + endpoint.getSubdomain());
 
             // if there is no parameter specified, assume this is a get endpoint
             if (endpoint.getParamExample() == null) {

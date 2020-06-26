@@ -52,7 +52,7 @@ public class LogIn extends Command {
                     message = "Could not read name, try again.\n";
                 }
             } else {
-                message = "Usage: login [name]\n";
+                message = "Usage: login [NAME]\n";
             }
         } else {
             message = "You are logged in as " + users.get(key).getName() + " already.\n";

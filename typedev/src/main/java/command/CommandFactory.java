@@ -12,6 +12,7 @@ import command.user.GetName;
 import command.user.GetUsers;
 import command.user.LogIn;
 import command.user.LogOut;
+import command.user.Register;
 import user.User;
 
 public class CommandFactory {
@@ -39,6 +40,10 @@ public class CommandFactory {
         Command command = null;
         String[] args = commandString.replaceAll("\\s+", " ").split(" ");
         switch (args[0]) {
+            case "rg":
+            case "register":
+                command = new Register(args);
+                break;
             case "li":
             case "login":
                 command = new LogIn(key, args, users);
