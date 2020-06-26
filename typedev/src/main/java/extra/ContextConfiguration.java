@@ -9,6 +9,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
+import command.CommandFactory;
 import user.User;
 import user.UserTimeout;
 
@@ -21,15 +22,17 @@ public class ContextConfiguration implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ConcurrentHashMap<String, User> users = new ConcurrentHashMap<>();
-        sce.getServletContext().setAttribute("usersByKey", users);
+        sce.getServletContext().setAttribute(ContextAttribute.USERS.name(), users);
+        CommandFactory commandFactory = new CommandFactory(users);
+        sce.getServletContext().setAttribute(ContextAttribute.COMMAND_FACTORY.name(), commandFactory);
         scheduler = Executors.newSingleThreadScheduledExecutor();
         scheduler.scheduleAtFixedRate(new UserTimeout(users.values(), timeout), 0, timeout, TimeUnit.SECONDS);
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        sce.getServletContext().removeAttribute("usersByKey");
-        sce.getServletContext().removeAttribute("usersByName");
+        sce.getServletContext().removeAttribute(ContextAttribute.USERS.name());
+        sce.getServletContext().removeAttribute(ContextAttribute.COMMAND_FACTORY.name());
         scheduler.shutdownNow();
     }
 

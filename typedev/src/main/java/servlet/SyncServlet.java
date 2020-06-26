@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
+import extra.ContextAttribute;
 import extra.Standard;
 import user.User;
 
@@ -23,7 +24,7 @@ public class SyncServlet extends HttpServlet {
     
     @Override
     public void init() throws ServletException {
-        users = (ConcurrentHashMap<String, User>) getServletContext().getAttribute("usersByKey");
+        users = (ConcurrentHashMap<String, User>) getServletContext().getAttribute(ContextAttribute.USERS.name());
     }
 
     @Override

@@ -1,6 +1,5 @@
 package command.user;
 
-import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.gson.JsonObject;
