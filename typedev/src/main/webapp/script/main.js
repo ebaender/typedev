@@ -40,8 +40,11 @@ var password_entered = false;
 var password = "";
 var name = "";
 
+// debug.
+var manual_leave = "no_manual_leave";
+
 $.when(
-    $.getScript("functions.js"),
+    $.getScript("script/functions.js"),
     $.Deferred(function (deferred) {
         $(deferred.resolve);
     })
@@ -92,3 +95,4 @@ $.when(
     });
 
 });
+

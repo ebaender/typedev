@@ -100,6 +100,8 @@ public class Session {
     }
 
     public void join(User user) {
+        user.setProgress(0);
+        user.setMistakes(0);
         users.add(user);
     }
 

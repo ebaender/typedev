@@ -34,7 +34,7 @@ function fuseLine(anyLine) {
 }
 
 function renderStatus() {
-    $("#status").text(state + " " + authKey + " " + (codeArray === null ? null : codeArray.toString().replace(/,|\n/g, "").substring(0, 16)));
+    $("#status").text(state + " " + authKey + " " + (codeArray === null ? null : codeArray.toString().replace(/,|\n/g, "").substring(0, 16)) + " " + manual_leave + " " + progress);
 }
 
 function buildCode(buffer) {
@@ -178,8 +178,8 @@ function sessionKeyHandler(e) {
     var typedKey = e.key;
     var actualKey = codeArray[codeIndex];
     if (ctrl && typedKey == 'c') {
+        manual_leave = "MANUAL_LEAVE";
         $.post(comServlet, { command: "leave", key: authKey }, function (resp) {
-            alert();
             updateState();
             resetSessionValues();
             resp = JSON.parse(resp);
@@ -244,12 +244,12 @@ function changeState(nextState) {
             }
             break;
         case states.finished:
+            resetSessionValues();
             $.post(resServlet, { key: authKey }, function (resp) {
                 resp = JSON.parse(resp);
                 if (!jQuery.isEmptyObject(resp)) {
                     textBuffer += "Finished session.\n";
                     textBuffer += buildResult(resp.result);
-                    resetSessionValues();
                 } else {
                     alert("finishing session failed.");
                     changeState(states.default);

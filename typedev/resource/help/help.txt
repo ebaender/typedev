@@ -1,4 +1,6 @@
-login (li) [USERNAME]
+register (rg) [NAME]
+    Create a new user of specified name.
+login (li) [NAME]
     Log in as specified user.
 logout (lo)
     Log out as current user.
@@ -10,7 +12,7 @@ sessions (ls)
     List sessions and the users that have joined them.
 create (cr) [LANGUAGE]
     Create a new session for a specified programming language.
-join (jn) [USERNAME]
+join (jn) [NAME]
     Join the session of the specified user.
 leave (lv)
     Leave the session you are currently in.
