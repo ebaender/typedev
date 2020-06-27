@@ -26,7 +26,6 @@ public class LogOut extends Command {
             String name = users.get(key).getName();
             users.remove(key);
             message = "Logged out as " + name + ".\n";
-            jsonResp.addProperty(Standard.KEY, "");
         }
         jsonResp.addProperty(Standard.MSG, message);
         return jsonResp;
