@@ -26,10 +26,10 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 }
 
-sourceSets {
-    main {
-        resources {
-            srcDirs "resource"
-        }
-    }
-}
+// sourceSets {
+//     main {
+//         resources {
+//             srcDirs "resource"
+//         }
+//     }
+// }

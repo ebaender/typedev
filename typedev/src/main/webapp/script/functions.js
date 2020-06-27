@@ -179,9 +179,9 @@ function sessionKeyHandler(e) {
     var actualKey = codeArray[codeIndex];
     if (ctrl && typedKey == 'c') {
         manual_leave = "MANUAL_LEAVE";
+        resetSessionValues();
         $.post(comServlet, { command: "leave", key: authKey }, function (resp) {
             updateState();
-            resetSessionValues();
             resp = JSON.parse(resp);
             textBuffer += resp.message;
             renderText();
@@ -211,7 +211,7 @@ function buildResult(result) {
     var resultBuffer = "";
     for (let place in result) {
         const entry = result[place];
-        resultBuffer += place + ". " + entry.name + " | " + entry.progress + " characters " + entry.mistakes + " mistakes\n";
+        resultBuffer += place + ". " + entry.name + " | " + entry.progress + " characters " + entry.mistakes + " mistakes " + entry.cpm + " cpm\n";
     }
     return resultBuffer;
 }
@@ -232,6 +232,9 @@ function changeState(nextState) {
     switch (state) {
         case states.default:
             // TODO: make reset work here
+            if (prevState === states.session) {
+                resetSessionValues();
+            }
             renderText();
             break;
         case states.session:

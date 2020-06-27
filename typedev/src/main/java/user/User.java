@@ -2,6 +2,7 @@ package user;
 
 import java.time.Instant;
 
+import extra.DBMan;
 import session.Session;
 
 public class User {
@@ -13,11 +14,17 @@ public class User {
     private Integer progress = 0;
     private Integer mistakes = 0;
     private Instant lastContact;
+    private DBMan manager;
 
     public User(String name, String password) {
         this.name = name;
         this.password = password;
         lastContact = Instant.now();
+        manager = new DBMan(this);
+    }
+
+    public DBMan getManager() {
+        return manager;
     }
 
     public String getPassword() {
@@ -79,6 +86,6 @@ public class User {
 
 	public Integer getMistakes() {
 		return mistakes;
-	}
+    }
 
 }

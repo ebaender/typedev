@@ -24,8 +24,9 @@ public class GetLanguages extends Command {
             languages.add(file.getName().split("\\.")[1]);
         }
         for (String language : languages) {
-            message.append(language.toUpperCase() + '\n');
+            message.append(language.toUpperCase() + ' ');
         }
+        message.append('\n');
         JsonObject jsonResp = new JsonObject();
         jsonResp.addProperty(Standard.MSG, message.toString());
         return jsonResp;

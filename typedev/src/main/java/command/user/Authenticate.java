@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.google.gson.JsonObject;
 
 import command.Command;
-import extra.DatabaseStandard;
+import extra.DBStandard;
 import extra.HttpEndpoint;
 import extra.HttpHost;
 import extra.HttpMan;
@@ -26,21 +26,22 @@ public class Authenticate extends Command {
             String name = args[1];
             String password = args[2];
             HashMap<String, String> params = new HashMap<>();
-            params.put(DatabaseStandard.NAME, name);
-            params.put(DatabaseStandard.PASSWORD, password);
-            params.put(DatabaseStandard.REQUEST, DatabaseStandard.REQUEST_AUTHENTICATE);
+            params.put(DBStandard.NAME, name);
+            params.put(DBStandard.PASSWORD, password);
+            params.put(DBStandard.REQUEST, DBStandard.REQUEST_AUTHENTICATE);
             JsonObject databaseResp = HttpMan.post(HttpHost.PI, HttpEndpoint.USER_DB, params);
             if (databaseResp != null) {
                 // received response from database
-                int code = databaseResp.get(DatabaseStandard.CODE).getAsInt();
+                int code = databaseResp.get(DBStandard.CODE).getAsInt();
                 switch (code) {
-                    case DatabaseStandard.CODE_AUTHENTICATE_SUCCESS:
+                    case 200:
+                    case DBStandard.CODE_AUTHENTICATE_SUCCESS:
                         jsonResp = databaseResp;
                         break;
-                    case DatabaseStandard.CODE_WRONGPASSWORD:
+                    case DBStandard.CODE_WRONGPASSWORD:
                         message = "Wrong password, try again.\n";
                         break;
-                    case DatabaseStandard.CODE_NOTFOUND:
+                    case DBStandard.CODE_NOTFOUND:
                         message = "User \"" + name + "\" does not exist.\n";
                         break;
                     default:

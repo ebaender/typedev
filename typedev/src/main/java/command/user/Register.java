@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 import com.google.gson.JsonObject;
 
 import command.Command;
-import extra.DatabaseStandard;
+import extra.DBStandard;
 import extra.HttpEndpoint;
 import extra.HttpHost;
 import extra.HttpMan;
@@ -37,18 +37,18 @@ public class Register extends Command {
                     if ((password = args[2]) != null && password.length() >= MIN_PASSWORD_LENGTH) {
                         // password is long enough
                         LinkedHashMap<String, String> params = new LinkedHashMap<>();
-                        params.put(DatabaseStandard.NAME, name);
-                        params.put(DatabaseStandard.PASSWORD, password);
-                        params.put(DatabaseStandard.REQUEST, DatabaseStandard.REQUEST_REGISTER);
+                        params.put(DBStandard.NAME, name);
+                        params.put(DBStandard.PASSWORD, password);
+                        params.put(DBStandard.REQUEST, DBStandard.REQUEST_REGISTER);
                         JsonObject databaseResp = HttpMan.post(HttpHost.PI, HttpEndpoint.USER_DB, params);
                         if (databaseResp != null) {
                             // database request succeeded
-                            int code = databaseResp.get(DatabaseStandard.CODE.toString()).getAsInt();
+                            int code = databaseResp.get(DBStandard.CODE.toString()).getAsInt();
                             switch (code) {
-                                case DatabaseStandard.CODE_REGISTER_SUCCESS:
+                                case DBStandard.CODE_REGISTER_SUCCESS:
                                     message = "Registered user " + name + ".\n";
                                     break;
-                                case DatabaseStandard.CODE_REGISTERED_DUPLICATE:
+                                case DBStandard.CODE_REGISTERED_DUPLICATE:
                                     message = "User \"" + name + "\" is registered already.\n";
                                     break;
                                 default:
