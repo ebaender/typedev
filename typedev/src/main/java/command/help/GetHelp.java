@@ -18,7 +18,6 @@ public class GetHelp extends Command {
     }
 
     public JsonObject execute() {
-        // Pattern grep = args.length > 1 ? Pattern.compile(args[1]) : null;
         String grep = args.length > 1 ? args[1] : null;
         StringBuilder message = new StringBuilder();
         JsonObject jsonResp = new JsonObject();
