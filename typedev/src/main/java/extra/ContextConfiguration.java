@@ -1,5 +1,7 @@
 package extra;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -10,6 +12,8 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import command.CommandFactory;
+import session.EmptyLanguageException;
+import session.Session;
 import user.User;
 import user.UserTimeout;
 
@@ -21,6 +25,15 @@ public class ContextConfiguration implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+        System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
+        try {
+            new Session("javaas");
+        } catch (EmptyLanguageException e) {
+            System.out.println("EL");
+        } catch (IOException e) {
+            System.out.println("IO");
+        }
+        System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
         ConcurrentHashMap<String, User> users = new ConcurrentHashMap<>();
         sce.getServletContext().setAttribute(ContextAttribute.USERS.name(), users);
         CommandFactory commandFactory = CommandFactory.getInstance(users);

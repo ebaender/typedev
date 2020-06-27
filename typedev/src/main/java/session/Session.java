@@ -1,16 +1,17 @@
 package session;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import com.google.gson.JsonObject;
 
@@ -29,20 +30,31 @@ public class Session {
 
     public Session(String language) throws EmptyLanguageException, IOException {
         this.language = language;
-        Stream<Path> paths = Files.walk(Paths.get("resource/language"));
-        List<String> filePaths = paths.filter(Files::isRegularFile).map(e -> e.toString())
-                .filter(e -> e.split("\\.")[1].equals(language)).collect(Collectors.toCollection(ArrayList::new));
-        paths.close();
+        File dirPath = new File("resource/language");
+        File[] contents = dirPath.listFiles();
+        List<File> filePaths = Arrays.asList(contents);
+        // for (int i = 0; i < contents.length; i++) {
+        //     System.out.println(contents[i]);
+        // }
+        filePaths = filePaths.stream().filter(e -> e.getName().split("\\.")[1].equals(language))
+                .collect(Collectors.toCollection(ArrayList::new));
         if (filePaths.size() == 0) {
             throw new EmptyLanguageException(language);
         }
         int randomIndex = (int) (Math.random() * filePaths.size());
-        String randomFilePath = filePaths.get(randomIndex);
-        List<String> codeLines = Files.readAllLines(Paths.get(randomFilePath));
+        File randomFilePath = filePaths.get(randomIndex);
+        List<String> codeLines = new LinkedList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader(randomFilePath))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                codeLines.add(line);
+            }
+        }
         for (String line : codeLines) {
             totalChars += line.replaceAll("\\s+", "").length();
             code.append(line).append("\n");
         }
+        // System.out.println(code.toString());
     }
 
     public JsonObject getResult() {
