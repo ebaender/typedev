@@ -3,6 +3,7 @@ package command;
 import java.util.concurrent.ConcurrentHashMap;
 
 import command.help.GetHelp;
+import command.language.GetLanguages;
 import command.session.CreateSession;
 import command.session.GetSessions;
 import command.session.JoinSession;
@@ -55,6 +56,10 @@ public class CommandFactory {
             case "ls":
             case "sessions":
                 command = new GetSessions(users);
+                break;
+            case "ll":
+            case "languages":
+                command = new GetLanguages();
                 break;
             case "lu":
             case "users":
