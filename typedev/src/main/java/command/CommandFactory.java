@@ -82,7 +82,7 @@ public class CommandFactory {
                 break;
             case "?":
             case "help":
-                command = new GetHelp();
+                command = new GetHelp(args);
                 break;
             default:
                 break;

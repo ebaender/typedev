@@ -25,15 +25,6 @@ public class ContextConfiguration implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
-        try {
-            new Session("javaas");
-        } catch (EmptyLanguageException e) {
-            System.out.println("EL");
-        } catch (IOException e) {
-            System.out.println("IO");
-        }
-        System.out.println("////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
         ConcurrentHashMap<String, User> users = new ConcurrentHashMap<>();
         sce.getServletContext().setAttribute(ContextAttribute.USERS.name(), users);
         CommandFactory commandFactory = CommandFactory.getInstance(users);
