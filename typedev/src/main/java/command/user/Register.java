@@ -45,14 +45,14 @@ public class Register extends Command {
                             // database request succeeded
                             int code = databaseResp.get(DatabaseStandard.CODE.toString()).getAsInt();
                             switch (code) {
-                                case DatabaseStandard.CODE_REGISTERED_SUCCESS:
+                                case DatabaseStandard.CODE_REGISTER_SUCCESS:
                                     message = "Registered user " + name + ".\n";
                                     break;
                                 case DatabaseStandard.CODE_REGISTERED_DUPLICATE:
                                     message = "User \"" + name + "\" is registered already.\n";
                                     break;
                                 default:
-                                    message = "Unknown error " + code + "occured.\n";
+                                    message = "Unknown error " + code + " occured.\n";
                                     break;
                             }
                         } else {
@@ -68,7 +68,7 @@ public class Register extends Command {
                 message = "User name must be at least " + MIN_NAME_LENGTH + " characters long, try again.\n";
             }
         } else {
-            message = "Usage: register [NAME] [PASSWORD] [PASSWORD CONFIRMATION]\n";
+            message = "Did not receive name and password.\n";
         }
         JsonObject jsonResp = new JsonObject();
         jsonResp.addProperty(Standard.MSG, message);

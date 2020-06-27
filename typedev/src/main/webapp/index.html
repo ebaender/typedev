@@ -21,6 +21,8 @@
             var output = "#terminal";
             var states = { default: "default", session: "session", live_session: "live_session", finished: "finished" };
             var state = states.default;
+            var commands = { login: "login", register: "register", clear: "clear", theme: "theme" };
+            var command = null;
             var authKey = "";
             var ctrl = false;
 
@@ -127,11 +129,14 @@
                         if (password_mode) {
                             if (password_entered) {
                                 password_mode = false;
-                                if (line === password) {
+                                if (line === password || password == null) {
+                                    var registration = command + " " + name + " " + line;
                                     fuseLine(getCensoredLine());
-                                    var registration = "register " + name + " " + password;
                                     $.post(comServlet, { command: registration, key: authKey }, function (resp) {
                                         resp = JSON.parse(resp);
+                                        if (command === commands.login) {
+                                            updateAuthKey(resp);
+                                        }
                                         textBuffer += resp.message;
                                         renderText();
                                     });
@@ -139,9 +144,14 @@
                                     fuseLine(getCensoredLine() + "\nPassword did not match confirmation, try again.");
                                 }
                             } else {
-                                password = line;
-                                password_entered = true;
-                                fuseLine(getCensoredLine());
+                                if (line.length === 0) {
+                                    fuseLine("\nPassword can not be empty, try again.");
+                                    password_mode = false;
+                                } else {
+                                    password = line;
+                                    password_entered = true;
+                                    fuseLine(getCensoredLine());
+                                }
                             }
                         } else {
                             var argv = line.split(' ');
@@ -165,31 +175,19 @@
                                     textBuffer += prompt + line + '\n' + feedback + '\n';
                                     line = "";
                                     break;
+                                case "li":
+                                case "login":
+                                    passwordMode(argv, false);
+                                    break;
                                 case "rg":
                                 case "register":
-                                    if (argv.length === 2 && argv[1].length > 0) {
-                                        name = argv[1];
-                                        password_mode = true;
-                                        password_entered = false;
-                                        feedback = "Enter and confirm password:"
-                                    } else {
-                                        feedback = "Usage: register [NAME]"
-                                    }
-                                    textBuffer += prompt + line + '\n' + feedback + '\n';
-                                    line = "";
+                                    passwordMode(argv, true);
                                     break;
                                 default:
                                     $.post(comServlet, { command: line, key: authKey }, function (resp) {
                                         textBuffer += prompt + line + '\n';
                                         line = "";
                                         resp = JSON.parse(resp);
-                                        if (authKey === "" && typeof resp.key !== "undefined") {
-                                            // try to get a key if you dont have one yet
-                                            authKey = resp.key;
-                                        } else if (resp.key === "") {
-                                            // drop the key when receiving logout signal
-                                            authKey = "";
-                                        }
                                         textBuffer += resp.message;
                                         renderText();
                                     });
@@ -201,6 +199,36 @@
                         break;
                 }
                 renderText();
+            }
+
+            function updateAuthKey(resp) {
+                if (authKey === "" && typeof resp.key !== "undefined") {
+                    // try to get a key if you dont have one yet
+                    authKey = resp.key;
+                } else if (resp.key === "") {
+                    // drop the key when receiving logout signal
+                    authKey = "";
+                }
+            }
+
+            function passwordMode(argv, confirmation) {
+                if (argv.length === 2 && argv[1].length > 0) {
+                    command = argv[0];
+                    name = argv[1];
+                    password_mode = true;
+                    password_entered = !confirmation;
+                    if (confirmation) {
+                        password = "";
+                        feedback = "Enter and confirm password:";
+                    } else {
+                        password = null;
+                        feedback = "Enter password:";
+                    }
+                } else {
+                    feedback = "Usage: " + command + " [NAME]";
+                }
+                textBuffer += prompt + line + '\n' + feedback + '\n';
+                line = "";
             }
 
             function sessionKeyHandler(e) {
@@ -300,14 +328,15 @@
 
             function updateState() {
                 $.post(conServlet, { key: authKey }, function (resp) {
+                    resp = JSON.parse(resp);
                     if (!jQuery.isEmptyObject(resp)) {
-                        resp = JSON.parse(resp);
                         // update to state from server.
                         if (state !== resp.state) {
                             changeState(resp.state);
                         }
                     } else {
-                        alert("connection failed.");
+                        authKey = "";
+                        // alert("connection failed.");
                         changeState(states.default);
                     }
                 });

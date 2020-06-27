@@ -7,15 +7,25 @@ import session.Session;
 public class User {
 
     private String name;
+    private String password;
     private Session session = null;
     private UserState state = UserState.DEFAULT;
     private Integer progress = 0;
     private Integer mistakes = 0;
     private Instant lastContact;
 
-    public User(String name) {
+    public User(String name, String password) {
         this.name = name;
+        this.password = password;
         lastContact = Instant.now();
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public Instant getLastContact() {

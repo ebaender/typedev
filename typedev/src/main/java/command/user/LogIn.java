@@ -26,16 +26,22 @@ public class LogIn extends Command {
         String encodedKey = "";
         String message = null;
         if (users.get(key) == null) {
-            if (args.length > 1) {
+            // user is not logged in already
+            if (args.length >= 3) {
+                // received name and password
                 String name = args[1];
-                if (name != null) {
-                    if (userExsists(name, users)) {
-                        message = name + " is logged in already.\n";
-                    } else {
+                String password = args[2];
+                if (userExsists(name, users)) {
+                    message = name + " is logged in already.\n";
+                } else {
+                    // no conflict with other user
+                    JsonObject authResp = new Authenticate(args).execute();
+                    if (authResp.get(Standard.MSG) == null) {
+                        // no error during authentication
                         try {
                             encodedKey = generateKey();
                             if (users.get(encodedKey) == null) {
-                                User user = new User(name);
+                                User user = new User(name, password);
                                 users.put(encodedKey, user);
                                 message = "Logged in as " + name + ".\n";
                                 jsonResp.addProperty(Standard.KEY, encodedKey);
@@ -47,12 +53,12 @@ public class LogIn extends Command {
                             e.printStackTrace();
                             message = "Your key could not be generated. Sorry about that.\n";
                         }
+                    } else {
+                        message = authResp.get(Standard.MSG).getAsString();
                     }
-                } else {
-                    message = "Could not read name, try again.\n";
                 }
             } else {
-                message = "Usage: login [NAME]\n";
+                message = "Did not receive name and password.\n";
             }
         } else {
             message = "You are logged in as " + users.get(key).getName() + " already.\n";
@@ -60,8 +66,8 @@ public class LogIn extends Command {
         jsonResp.addProperty(Standard.MSG, message);
         return jsonResp;
 
-    }   
-    
+    }
+
     private String generateKey() throws NoSuchAlgorithmException {
         KeyGenerator aesGen = KeyGenerator.getInstance("AES");
         aesGen.init(256);
