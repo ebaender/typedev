@@ -27,6 +27,7 @@ var logo = "                        _________\n ____  ____  ____  ____ ______  /
 var ezMode = true;
 var sessionProgress = null;
 var codeArray = null;
+var codeLength = null;
 var codeIndex = 0;
 var mistakes = 0;
 var progress = 0;
@@ -86,7 +87,7 @@ $.when(
         setInterval(() => {
             keepAlive();
             syncProgress();
-            renderStatus();
+            // renderStatus();
         }, 1000);
 
         renderMOTD();

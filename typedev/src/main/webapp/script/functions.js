@@ -1,5 +1,6 @@
 function resetSessionValues() {
     codeArray = null;
+    codeLength = null;
     codeIndex = 0;
     mistakes = 0;
     progress = 0;
@@ -58,15 +59,15 @@ function buildProgressBar() {
         for (let i = 0; i < sessionProgress.length; i++) {
             const user = sessionProgress[i];
             let bar = "";
-            let percentage = parseFloat(user.progress) / codeArray.length;
-            let char = "#";
+            let percentage = parseFloat(user.progress) / codeLength;
             for (let i = 0; i < barLength; i++) {
-                if (i == parseInt(barLength * percentage)) {
-                    char = " ";
+                let char = " ";
+                if (i < parseInt(barLength * percentage)) {
+                    char = "#";
                 }
                 bar += char;
             }
-            buffer += user.name + " |" + bar + "| " + user.progress + " " + user.mistakes + "\n";
+            buffer += user.name + " |" + bar + "| +" + user.progress + " -" + user.mistakes + "\n" + percentage + " " + user.progress + " " + codeLength;
         }
     }
     return buffer;
@@ -258,7 +259,20 @@ function getCode() {
         $.post(codServlet, { key: authKey }, function (resp) {
             resp = JSON.parse(resp);
             codeArray = resp.code.split("");
+            calculateCodeLength();
         });
+    }
+}
+
+function calculateCodeLength() {
+    if (codeArray != null) {
+        codeLength = 0;
+        for (let i = 0; i < codeArray.length; i++) {
+            const character = codeArray[i];
+            if (!(character === ' ' || character === '\n' || character == '\t')) {
+                codeLength++;
+            }
+        }
     }
 }
 
