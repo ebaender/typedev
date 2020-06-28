@@ -21,7 +21,7 @@ import user.UserTimeout;
 public class ContextConfiguration implements ServletContextListener {
 
     private ScheduledExecutorService scheduler;
-    private int timeout = 2;
+    private int timeout = 4;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {

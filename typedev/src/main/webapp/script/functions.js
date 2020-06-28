@@ -80,7 +80,7 @@ function defaultKeyHandler(e) {
                         fuseLine(getCensoredLine());
                         $.post(comServlet, { command: registration, key: authKey }, function (resp) {
                             resp = JSON.parse(resp);
-                            if (command === commands.login) {
+                            if (commands.login.includes(command)) {
                                 updateAuthKey(resp);
                             }
                             textBuffer += resp.message;
@@ -151,6 +151,8 @@ function updateAuthKey(resp) {
     if (authKey === "" && typeof resp.key !== "undefined") {
         // try to get a key if you dont have one yet
         authKey = resp.key;
+    } else {
+        alert("refused key");
     }
 }
 
@@ -284,6 +286,7 @@ function updateState() {
             authKey = "";
             // alert("connection failed.");
             changeState(states.default);
+            textBuffer += "You have been disconnected.\n";
         }
     });
 }

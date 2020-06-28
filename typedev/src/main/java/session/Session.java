@@ -10,6 +10,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -24,13 +25,15 @@ public class Session {
     private Set<User> users = new HashSet<>();
     private int totalChars = 0;
     private String language = null;
-    private boolean live = false;
-    private boolean stopped = false;
+    private AtomicBoolean live = null;
+    private AtomicBoolean stopped = null;
     private JsonObject result = null;
     private Long startTime = null;
     private Long duration = null;
 
     public Session(String language) throws EmptyLanguageException, IOException {
+        stopped = new AtomicBoolean(false);
+        live = new AtomicBoolean(false);
         this.language = language;
         File dirPath = new File("resource/language");
         File[] contents = dirPath.listFiles();
@@ -60,6 +63,7 @@ public class Session {
     }
 
     private void buildResult() {
+        System.out.println("!!" + this);
         AtomicInteger place = new AtomicInteger(1);
         result = new JsonObject();
         users.stream().sorted((a, b) -> Integer.compare(b.getProgress(), a.getProgress())).forEach(user -> {
@@ -79,13 +83,13 @@ public class Session {
     }
 
     public boolean isLive() {
-        return live;
+        return live.get();
     }
 
-    public void start() {
-        if (!live) {
+    public synchronized void start() {
+        if (!live.get()) {
             startTime = System.nanoTime();
-            live = true;
+            live.set(true);;
             for (User user : users) {
                 user.setState(UserState.LIVE_SESSION);
             }
@@ -93,10 +97,10 @@ public class Session {
         // System.out.println(getClass() + " started");
     }
 
-    public void stop() {
-        if (!stopped) {
+    public synchronized void stop() {
+        if (!stopped.get()) {
             System.out.println(getClass() + " this sessions took " + duration + " seconds.");
-            stopped = true;
+            stopped.set(true);
             for (User user : users) {
                 user.setState(UserState.FINISHED);
             }
@@ -104,9 +108,9 @@ public class Session {
         // System.out.println(getClass() + " stopped");
     }
     
-    public void think() {
+    public synchronized void think() {
         for (User user : users) {
-            if (user.getProgress() == totalChars && !stopped) {
+            if (user.getProgress() == totalChars && !stopped.get()) {
                 duration = (System.nanoTime() - startTime) / 1000000000L;
                 buildResult();
                 stop();
