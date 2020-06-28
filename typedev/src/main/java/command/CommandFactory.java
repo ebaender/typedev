@@ -9,7 +9,7 @@ import command.session.GetSessions;
 import command.session.JoinSession;
 import command.session.LeaveSession;
 import command.session.StartSession;
-import command.stats.GetLeaderbord;
+import command.stats.GetLeaderboard;
 import command.stats.GetStats;
 import command.user.GetName;
 import command.user.GetUsers;
@@ -92,8 +92,8 @@ public class CommandFactory {
                 command = new GetStats(key, args, users);
                 break;
             case "lb":
-            case "leaderbord":
-                command = new GetLeaderbord(key, args, users);
+            case "leaderboard":
+                command = new GetLeaderboard(key, args, users);
                 break;
             case "?":
             case "help":

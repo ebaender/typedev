@@ -11,9 +11,9 @@ import extra.DBStandard;
 import extra.Standard;
 import user.User;
 
-public class GetLeaderbord extends Command {
+public class GetLeaderboard extends Command {
 
-    public GetLeaderbord(String key, String[] args, ConcurrentHashMap<String, User> users) {
+    public GetLeaderboard(String key, String[] args, ConcurrentHashMap<String, User> users) {
         super(key, args, users);
     }
 

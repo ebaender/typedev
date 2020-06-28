@@ -1,27 +1,31 @@
-register (rg) [NAME]
+register / rg [NAME]
     Create a new user of specified name.
-login (li) [NAME]
+login / li [NAME]
     Log in as specified user.
-logout (lo)
+logout / lo
     Log out as current user.
-whoami (wh)
+whoami / wh
     Show which user you are logged in as.
-users (lu)
+users / lu
     List users that are currently online.
-sessions (ls)
+sessions / ls
     List sessions and the users that have joined them.
-create (cr) [LANGUAGE]
+create / cr [LANGUAGE]
     Create a new session for a specified programming language.
-join (jn) [NAME]
+join / jn [NAME]
     Join the session of the specified user.
-leave (lv)
+leave / lv
     Leave the session you are currently in.
     Can be invoked by pressing CTRL-C in a live session.
-start (st)
+start / st
     Start the session you are currently in.
-clear (cl)
+stats / us ([NAME])
+    Show stats about yourself or another user.
+leaderboard / lb ['victories' | 'cpm']
+    Show a list of highest ranking users for a given category.
+clear / cl
     Clear your screen.
-theme (th) [THEME]
+theme / th [THEME]
     Set the terminal colors to those of the specified theme.
-help (?)
+help / ?
     Show this message.

@@ -6,7 +6,7 @@ function resetSessionValues() {
 }
 
 function renderMOTD() {
-    textBuffer = logo + "\nWelcome! to list all commands, type help.\n";
+    textBuffer = logo + "\nWelcome! To list all commands, type \"help\".\n";
     renderText();
 }
 
