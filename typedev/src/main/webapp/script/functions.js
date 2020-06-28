@@ -64,7 +64,14 @@ function buildCode(buffer) {
 function buildProgressBar() {
     let buffer = "";
     let barLength = 64;
+    let longestUser = 0;
     if (sessionProgress != null) {
+        for (let i = 0; i < sessionProgress.length; i++) {
+            const user = sessionProgress[i];
+            if (user.name.length > longestUser) {
+                longestUser = user.name.length;
+            }
+        }
         for (let i = 0; i < sessionProgress.length; i++) {
             const user = sessionProgress[i];
             let bar = "";
@@ -76,7 +83,9 @@ function buildProgressBar() {
                 }
                 bar += char;
             }
-            buffer += user.name + " |" + bar + "| +" + user.progress + " -" + user.mistakes + "\n";
+            let spacerLength = longestUser - user.name.length;
+            let spacer = " ".repeat(spacerLength > 0 ? spacerLength : 0);
+            buffer += user.name + spacer + " |" + bar + "| +" + user.progress + " -" + user.mistakes + "\n";
         }
     }
     return buffer;
@@ -345,6 +354,7 @@ function updateState() {
             // alert("connection failed.");
             changeState(states.default);
             textBuffer += "You have been disconnected.\n";
+            renderText();
         }
     });
 }
