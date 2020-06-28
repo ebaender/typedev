@@ -67,7 +67,7 @@ function buildProgressBar() {
                 }
                 bar += char;
             }
-            buffer += user.name + " |" + bar + "| +" + user.progress + " -" + user.mistakes + "\n" + percentage + " " + user.progress + " " + codeLength;
+            buffer += user.name + " |" + bar + "| +" + user.progress + " -" + user.mistakes + "\n";
         }
     }
     return buffer;
