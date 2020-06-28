@@ -66,7 +66,7 @@ public class Session {
         AtomicInteger place = new AtomicInteger(1);
         result = new JsonObject();
         users.stream().sorted((a, b) -> Integer.compare(b.getProgress(), a.getProgress())).forEach(user -> {
-            int cpm = (int) (user.getProgress() * (60D / duration));
+            int cpm = (int) (user.getProgress() * 60D / duration);
             JsonObject userResult = new JsonObject();
             userResult.addProperty("name", user.getName());
             userResult.addProperty("progress", user.getProgress());

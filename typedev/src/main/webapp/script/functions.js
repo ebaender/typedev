@@ -1,3 +1,11 @@
+function scrollDown() {
+    if (state === states.live_session) {
+        $("html, body").animate({ scrollTop: 0 }, 0);
+    } else {
+        $("html, body").animate({ scrollTop: $(document).height() }, 0);
+    }
+}
+
 function resetSessionValues() {
     codeArray = null;
     codeLength = null;
@@ -19,6 +27,7 @@ function renderText() {
         renderBuffer = textBuffer + prompt + line + cursor;
     }
     $(output).text(renderBuffer);
+    scrollDown();
 }
 
 function getCensoredLine() {
@@ -40,8 +49,8 @@ function fuseStandardLine() {
 
 function renderStatus() {
     $("#status").text(state + " " + authKey + " "
-    + (codeArray === null ? null : codeArray.toString().replace(/,|\n/g, "").substring(0, 16)) + " " 
-    + manual_leave + " " + progress + " " + mistakes);
+        + (codeArray === null ? null : codeArray.toString().replace(/,|\n/g, "").substring(0, 16)) + " "
+        + manual_leave + " " + progress + " " + mistakes);
 }
 
 function buildCode(buffer) {
