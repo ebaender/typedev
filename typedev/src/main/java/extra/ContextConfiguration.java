@@ -1,7 +1,5 @@
 package extra;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -12,8 +10,6 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import command.CommandFactory;
-import session.EmptyLanguageException;
-import session.Session;
 import user.User;
 import user.UserTimeout;
 
