@@ -60,4 +60,13 @@ public class DBMan {
         return post(params);
     }
 
+    public JsonObject leaderbord(String leaderbordType) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put(DBStandard.NAME, owner.getName());
+        params.put(DBStandard.PASSWORD, owner.getPassword());
+        params.put(DBStandard.REQUEST, leaderbordType);
+        System.out.println(super.getClass() + " " + leaderbordType + " " + params);
+        return post(params);
+    }
+
 }

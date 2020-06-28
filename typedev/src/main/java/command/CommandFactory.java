@@ -9,8 +9,9 @@ import command.session.GetSessions;
 import command.session.JoinSession;
 import command.session.LeaveSession;
 import command.session.StartSession;
+import command.stats.GetLeaderbord;
+import command.stats.GetStats;
 import command.user.GetName;
-import command.user.GetStats;
 import command.user.GetUsers;
 import command.user.LogIn;
 import command.user.LogOut;
@@ -89,6 +90,10 @@ public class CommandFactory {
             case "us":
             case "stats":
                 command = new GetStats(key, args, users);
+                break;
+            case "lb":
+            case "leaderbord":
+                command = new GetLeaderbord(key, args, users);
                 break;
             case "?":
             case "help":

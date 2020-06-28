@@ -105,7 +105,7 @@ function defaultKeyHandler(e) {
                 switch (argv[0]) {
                     case "cl":
                     case "clear":
-                        textBuffer = "";
+                        textBuffer = logo + '\n';
                         line = "";
                         break;
                     case "th":
@@ -130,9 +130,10 @@ function defaultKeyHandler(e) {
                         passwordMode(argv, true);
                         break;
                     default:
-                        $.post(comServlet, { command: line, key: authKey }, function (resp) {
-                            textBuffer += prompt + line + '\n';
-                            line = "";
+                        let lineCopy = line;
+                        fuseLine(prompt + line);
+                        renderText();
+                        $.post(comServlet, { command: lineCopy, key: authKey }, function (resp) {
                             resp = JSON.parse(resp);
                             textBuffer += resp.message;
                             renderText();
