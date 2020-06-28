@@ -23,27 +23,42 @@ public class GetLeaderboard extends Command {
         User user = users.get(key);
         if (user != null) {
             // user is logged in
-            String leaderbordType = DBStandard.LEADERBORD_WINS;
-            JsonObject jsonLeaderbord = user.getManager().leaderbord(leaderbordType);
-            if (jsonLeaderbord != null) {
-                // received response from database
-                int code = jsonLeaderbord.get(DBStandard.CODE).getAsInt();
-                switch (code) {
-                    case DBStandard.CODE_SUCCESS:
-                        message = buildLeaderbord(jsonLeaderbord, message, leaderbordType);
-                        break;
-                    case DBStandard.CODE_WRONGPASSWORD:
-                        message.append("Your password was changed, try logging in again.\n");
-                        break;
-                    case DBStandard.CODE_NOTFOUND:
-                        message.append("Your user was removed from the database.\n");
-                        break;
-                    default:
-                        message.append("Unknown error" + code + " occured.\n");
-                        break;
+            if (args.length > 1) {
+                // received category
+                String leaderbordType = null;
+                if (args[1].equals("victories")) {
+                    leaderbordType = DBStandard.LEADERBORD_WINS;
+                } else if (args[1].equals("topspeed")) {
+                    leaderbordType = DBStandard.LEADERBORD_SPEED;
+                }
+                if (leaderbordType != null) {
+                    // recognized category
+                    JsonObject jsonLeaderbord = user.getManager().leaderbord(leaderbordType);
+                    if (jsonLeaderbord != null) {
+                        // received response from database
+                        int code = jsonLeaderbord.get(DBStandard.CODE).getAsInt();
+                        switch (code) {
+                            case DBStandard.CODE_SUCCESS:
+                                message = buildLeaderbord(jsonLeaderbord, message, leaderbordType);
+                                break;
+                            case DBStandard.CODE_WRONGPASSWORD:
+                                message.append("Your password was changed, try logging in again.\n");
+                                break;
+                            case DBStandard.CODE_NOTFOUND:
+                                message.append("Your user was removed from the database.\n");
+                                break;
+                            default:
+                                message.append("Unknown error" + code + " occured.\n");
+                                break;
+                        }
+                    } else {
+                        message.append("Could not reach user database.\n");
+                    }
+                } else {
+                    message.append("\"" + args[1] + "\" is not a valid category.\n");
                 }
             } else {
-                message.append("Could not reach user database.\n");
+                message.append("You need to specify a category.\n");
             }
         } else {
             message.append("You need to be logged in to view leaderbords.\n");
@@ -57,7 +72,7 @@ public class GetLeaderboard extends Command {
         JsonArray leaderbordArray = jsonLeaderbord.get(DBStandard.LEADERBORD_PROPERTY).getAsJsonArray();
         int place = 1;
         String category = null;
-        String unit = null;
+        String unit = "";
         switch (leaderbordType) {
             case DBStandard.LEADERBORD_SPEED:
                 category = DBStandard.UPDATE_SPEED;
@@ -65,7 +80,6 @@ public class GetLeaderboard extends Command {
                 break;
             case DBStandard.LEADERBORD_WINS:
                 category = DBStandard.UPDATE_GAMES_WON;
-                unit = "victories";
                 break;
             default:
                 return null;

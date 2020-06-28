@@ -21,7 +21,7 @@ start / st
     Start the session you are currently in.
 stats / us ([NAME])
     Show stats about yourself or another user.
-leaderboard / lb ['victories' | 'cpm']
+leaderboard / lb ['victories' | 'topspeed']
     Show a list of highest ranking users for a given category.
 clear / cl
     Clear your screen.
