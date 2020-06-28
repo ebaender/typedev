@@ -63,13 +63,14 @@ public class Session {
         AtomicInteger place = new AtomicInteger(1);
         result = new JsonObject();
         users.stream().sorted((a, b) -> Integer.compare(b.getProgress(), a.getProgress())).forEach(user -> {
+            int cpm = (int) (user.getProgress() * (60D / duration));
             JsonObject userResult = new JsonObject();
             userResult.addProperty("name", user.getName());
             userResult.addProperty("progress", user.getProgress());
             userResult.addProperty("mistakes", user.getMistakes());
-            userResult.addProperty("cpm", (int) (user.getProgress() * (60D / duration)));
+            userResult.addProperty("cpm", cpm);
+            user.getManager().update(place.intValue() == 1 ? true : false, cpm);
             result.add(String.valueOf(place.getAndIncrement()), userResult);
-            // user.getManager().update(place.intValue() == 1 ? true : false, 666);
         });
     }
 
@@ -105,7 +106,7 @@ public class Session {
     
     public void think() {
         for (User user : users) {
-            if (user.getProgress() == totalChars) {
+            if (user.getProgress() == totalChars && !stopped) {
                 duration = (System.nanoTime() - startTime) / 1000000000L;
                 buildResult();
                 stop();

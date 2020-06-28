@@ -34,7 +34,6 @@ public class Authenticate extends Command {
                 // received response from database
                 int code = databaseResp.get(DBStandard.CODE).getAsInt();
                 switch (code) {
-                    case 200:
                     case DBStandard.CODE_AUTHENTICATE_SUCCESS:
                         jsonResp = databaseResp;
                         break;

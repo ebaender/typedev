@@ -58,7 +58,6 @@ public class HttpMan {
         params.entrySet().forEach(entry -> {
             paramsBuilder.append(entry.getKey() + "=" + entry.getValue() + "&");
         });
-        System.out.println(paramsBuilder);
         return post(host, paramsBuilder.toString());
     }
 

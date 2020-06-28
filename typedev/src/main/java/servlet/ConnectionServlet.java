@@ -37,7 +37,7 @@ public class ConnectionServlet extends HttpServlet {
             jsonResp.addProperty(Standard.STA, user.getState().name().toLowerCase());
         }
         resp.getWriter().print(jsonResp);
-        System.out.println(getClass() + " responded with " + jsonResp);
+        // System.out.println(getClass() + " responded with " + jsonResp);
     }
 
 }

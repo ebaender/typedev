@@ -39,10 +39,10 @@ public class DBMan {
         params.put(DBStandard.NAME, owner.getName());
         params.put(DBStandard.PASSWORD, owner.getPassword());
         params.put(DBStandard.REQUEST, DBStandard.REQUEST_UPDATE);
-
         params.put(DBStandard.UPDATE_GAMES_PLAYED, "1");
         params.put(DBStandard.UPDATE_GAMES_WON, won ? "1" : "0");
         params.put(DBStandard.UPDATE_SPEED, Integer.toString(speed));
+        System.out.println(params);
         return post(params);
     }
 
