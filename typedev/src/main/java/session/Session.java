@@ -72,9 +72,13 @@ public class Session {
             userResult.addProperty("progress", user.getProgress());
             userResult.addProperty("mistakes", user.getMistakes());
             userResult.addProperty("cpm", cpm);
-            user.getManager().update(place.intValue() == 1 && users.size() > 1 ? true : false, cpm);
+            user.getManager().update(hasMultipleUsers(), hasMultipleUsers() && place.intValue() == 1, cpm);
             result.add(String.valueOf(place.getAndIncrement()), userResult);
         });
+    }
+
+    private boolean hasMultipleUsers() {
+        return users.size() > 1 ? true : false;
     }
 
     public int getTotalChars() {

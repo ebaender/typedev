@@ -48,12 +48,12 @@ public class DBMan {
         return post(params);
     }
 
-    public JsonObject update(boolean won, int speed) {
+    public JsonObject update(boolean played, boolean won, int speed) {
         HashMap<String, String> params = new HashMap<>();
         params.put(DBStandard.NAME, owner.getName());
         params.put(DBStandard.PASSWORD, owner.getPassword());
         params.put(DBStandard.REQUEST, DBStandard.REQUEST_UPDATE);
-        params.put(DBStandard.UPDATE_GAMES_PLAYED, "1");
+        params.put(DBStandard.UPDATE_GAMES_PLAYED, played ? "1" : "0");
         params.put(DBStandard.UPDATE_GAMES_WON, won ? "1" : "0");
         params.put(DBStandard.UPDATE_SPEED, Integer.toString(speed));
         System.out.println(super.getClass() + " update " + params);
