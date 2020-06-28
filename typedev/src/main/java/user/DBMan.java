@@ -1,10 +1,13 @@
-package extra;
+package user;
 
 import java.util.HashMap;
 
 import com.google.gson.JsonObject;
 
-import user.User;
+import extra.DBStandard;
+import extra.HttpEndpoint;
+import extra.HttpHost;
+import extra.HttpMan;
 
 public class DBMan {
 
@@ -42,7 +45,7 @@ public class DBMan {
         params.put(DBStandard.UPDATE_GAMES_PLAYED, "1");
         params.put(DBStandard.UPDATE_GAMES_WON, won ? "1" : "0");
         params.put(DBStandard.UPDATE_SPEED, Integer.toString(speed));
-        System.out.println(params);
+        System.out.println(getClass() + " updated " + params);
         return post(params);
     }
 

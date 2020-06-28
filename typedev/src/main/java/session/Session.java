@@ -63,7 +63,6 @@ public class Session {
     }
 
     private void buildResult() {
-        System.out.println("!!" + this);
         AtomicInteger place = new AtomicInteger(1);
         result = new JsonObject();
         users.stream().sorted((a, b) -> Integer.compare(b.getProgress(), a.getProgress())).forEach(user -> {

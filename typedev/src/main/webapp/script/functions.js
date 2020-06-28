@@ -152,7 +152,7 @@ function updateAuthKey(resp) {
         // try to get a key if you dont have one yet
         authKey = resp.key;
     } else {
-        alert("refused key");
+        // alert("refused key");
     }
 }
 
