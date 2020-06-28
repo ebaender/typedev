@@ -38,7 +38,9 @@ function fuseStandardLine() {
 }
 
 function renderStatus() {
-    $("#status").text(state + " " + authKey + " " + (codeArray === null ? null : codeArray.toString().replace(/,|\n/g, "").substring(0, 16)) + " " + manual_leave + " " + progress);
+    $("#status").text(state + " " + authKey + " "
+    + (codeArray === null ? null : codeArray.toString().replace(/,|\n/g, "").substring(0, 16)) + " " 
+    + manual_leave + " " + progress + " " + mistakes);
 }
 
 function buildCode(buffer) {
@@ -51,10 +53,20 @@ function buildCode(buffer) {
 
 function buildProgressBar() {
     let buffer = "";
+    let barLength = 64;
     if (sessionProgress != null) {
         for (let i = 0; i < sessionProgress.length; i++) {
             const user = sessionProgress[i];
-            buffer += user.name + " " + user.progress + " " + user.mistakes + "\n";
+            let bar = "";
+            let percentage = parseFloat(user.progress) / codeArray.length;
+            let char = "#";
+            for (let i = 0; i < barLength; i++) {
+                if (i == parseInt(barLength * percentage)) {
+                    char = " ";
+                }
+                bar += char;
+            }
+            buffer += user.name + " |" + bar + "| " + user.progress + " " + user.mistakes + "\n";
         }
     }
     return buffer;
@@ -205,6 +217,7 @@ function sessionKeyHandler(e) {
             textBuffer += resp.message;
             renderText();
         });
+        return;
     }
     if (ezMode) {
         typedKey = typedKey.toLowerCase();
@@ -261,6 +274,7 @@ function changeState(nextState) {
             renderText();
             break;
         case states.session:
+            resetSessionValues();
             getCode();
             break;
         case states.live_session:
