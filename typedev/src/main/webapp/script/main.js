@@ -42,6 +42,7 @@ var password = "";
 var name = "";
 
 // debug.
+var debug = false;
 var manual_leave = "no_manual_leave";
 
 $.when(
@@ -87,7 +88,7 @@ $.when(
         setInterval(() => {
             keepAlive();
             syncProgress();
-            // renderStatus();
+            renderStatus();
         }, 1000);
 
         renderMOTD();

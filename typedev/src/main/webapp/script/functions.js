@@ -1,9 +1,9 @@
 function scrollDown() {
-    if (state === states.live_session) {
-        $("html, body").animate({ scrollTop: 0 }, 0);
-    } else {
-        $("html, body").animate({ scrollTop: $(document).height() }, 0);
-    }
+    $("html, body").animate({ scrollTop: $(document).height() }, 0);
+}
+
+function scrollUp() {
+    $("html, body").animate({ scrollTop: 0 }, 0);
 }
 
 function resetSessionValues() {
@@ -48,9 +48,14 @@ function fuseStandardLine() {
 }
 
 function renderStatus() {
-    $("#status").text(state + " " + authKey + " "
-        + (codeArray === null ? null : codeArray.toString().replace(/,|\n/g, "").substring(0, 16)) + " "
-        + manual_leave + " " + progress + " " + mistakes);
+    if (debug) {
+        $("#status").text(state + " " + authKey + " "
+            + (codeArray === null ? null : codeArray.toString().replace(/,|\n/g, "").substring(0, 16)) + " "
+            + manual_leave + " " + progress + " " + mistakes);
+    }
+    if (state !== states.live_session) {
+        scrollDown();
+    }
 }
 
 function buildCode(buffer) {
@@ -95,6 +100,7 @@ function renderLiveSession(output) {
     var buffer = buildProgressBar("") + "\n";
     buffer = buildCode(buffer);
     $(output).html(PR.prettyPrintOne(buffer));
+    scrollUp();
 }
 
 function defaultKeyHandler(e) {
@@ -167,6 +173,11 @@ function defaultKeyHandler(e) {
                     case "rg":
                     case "register":
                         passwordMode(argv, true);
+                        break;
+                    case "debug":
+                        debug = !debug;
+                        fuseStandardLine();
+                        $("#status").text("");
                         break;
                     default:
                         let lineCopy = line;
@@ -362,13 +373,16 @@ function updateState() {
 function syncProgress() {
     if (state === states.live_session) {
         $.post(synServlet, { key: authKey, progress: progress, mistakes: mistakes }, function (resp) {
-            resp = JSON.parse(resp);
-            if (!jQuery.isEmptyObject(resp)) {
-                sessionProgress = resp.sessionProgress;
-                renderLiveSession(output);
-            } else {
-                alert("sync failed.");
-                changeState(states.default);
+            // might have chenged by the time we have a response
+            if (state === states.live_session) {
+                resp = JSON.parse(resp);
+                if (!jQuery.isEmptyObject(resp)) {
+                    sessionProgress = resp.sessionProgress;
+                    renderLiveSession(output);
+                } else {
+                    alert("sync failed.");
+                    changeState(states.default);
+                }
             }
         });
     }
