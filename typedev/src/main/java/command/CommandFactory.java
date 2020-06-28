@@ -10,6 +10,7 @@ import command.session.JoinSession;
 import command.session.LeaveSession;
 import command.session.StartSession;
 import command.user.GetName;
+import command.user.GetStats;
 import command.user.GetUsers;
 import command.user.LogIn;
 import command.user.LogOut;
@@ -84,6 +85,10 @@ public class CommandFactory {
             case "st":
             case "start":
                 command = new StartSession(key, users);
+                break;
+            case "us":
+            case "stats":
+                command = new GetStats(key, args, users);
                 break;
             case "?":
             case "help":

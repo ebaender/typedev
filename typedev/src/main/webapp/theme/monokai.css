@@ -1,0 +1,24 @@
+code.prettyprint { display: block; background-color: #fcfcfa }
+code .nocode { background-color: none; color: #080808 }
+code .str { color: #ffd866 } /* string */
+code .kwd { color: #ff6188; font-weight: bold } /* keyword */
+code .com { color: #a9dc76 } /* comment */
+code .typ { color: #78dce8 } /* type */
+code .lit { color: #ab9df2 } /* literal */
+code .pun { color: #727072 } /* punctuation */
+code .pln { color: #fcfcfa } /* plaintext */
+code .tag { color: #ffd866; font-weight: bold } /* html/xml tag */
+code .atn { color: #a9dc76; font-weight: bold } /* attribute name */
+code .atv { color: #ff6188 } /* attribute value */
+code .dec { color: #ab9df2 } /* decimal */
+
+/* Specify class=linenums on a code to get line numbering */
+ol.linenums { margin-top: 0; margin-bottom: 0; color: #AEAEAE }
+li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8 { list-style-type: none }
+/* Alternate shading for lines */
+li.L1,li.L3,li.L5,li.L7,li.L9 { }
+
+body {
+    background-color: #080808;
+    color: #fcfcfa;
+}

@@ -32,7 +32,7 @@ var mistakes = 0;
 var progress = 0;
 
 // theme.
-var themes = ["dark", "light"];
+var themes = ["monokai", "bluloco", "desert", "solarized"];
 
 // authentication.
 var password_mode = false;

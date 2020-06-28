@@ -26,6 +26,7 @@ public class DBMan {
         params.put(DBStandard.NAME, owner.getName());
         params.put(DBStandard.PASSWORD, owner.getPassword());
         params.put(DBStandard.REQUEST, requestType);
+        System.out.println(super.getClass() + " " + requestType + " " + params);
         return post(params);
     }
 
@@ -37,6 +38,16 @@ public class DBMan {
         return request(DBStandard.REQUEST_AUTHENTICATE);
     }
 
+    public JsonObject spy(String target) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put(DBStandard.NAME, owner.getName());
+        params.put(DBStandard.PASSWORD, owner.getPassword());
+        params.put(DBStandard.SPY_TARGET, target);
+        params.put(DBStandard.REQUEST, DBStandard.REQUEST_SPY);
+        System.out.println(super.getClass() + " spy " + params);
+        return post(params);
+    }
+
     public JsonObject update(boolean won, int speed) {
         HashMap<String, String> params = new HashMap<>();
         params.put(DBStandard.NAME, owner.getName());
@@ -45,7 +56,7 @@ public class DBMan {
         params.put(DBStandard.UPDATE_GAMES_PLAYED, "1");
         params.put(DBStandard.UPDATE_GAMES_WON, won ? "1" : "0");
         params.put(DBStandard.UPDATE_SPEED, Integer.toString(speed));
-        System.out.println(getClass() + " updated " + params);
+        System.out.println(super.getClass() + " update " + params);
         return post(params);
     }
 
