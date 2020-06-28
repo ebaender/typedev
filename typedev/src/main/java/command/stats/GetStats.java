@@ -17,12 +17,14 @@ public class GetStats extends Command {
 
     @Override
     public JsonObject execute() {
+        System.out.println("EXEC");
         StringBuilder message = new StringBuilder();
         User user = users.get(key);
         if (user != null) {
             // user is logged in
             JsonObject jsonStats = null;
             if (args.length > 1) {
+                System.out.println("ARG");
                 // received target argument
                 String targetUser = args[1];
                 jsonStats = user.getManager().spy(targetUser);
@@ -37,14 +39,16 @@ public class GetStats extends Command {
                             break;
                         case DBStandard.CODE_SPY_NOTFOUND:
                             message.append("User \"" + targetUser + "\" does not exist.\n");
+                            break;
                         default:
-                            message.append("Unknown error" + code + " occured.\n");
+                            message.append("Unknown error " + code + " occured.\n");
                             break;
                     }
                 } else {
                     message.append("Could not reach user database.\n");
                 }
             } else {
+                System.out.println("NOARG");
                 // no argument
                 jsonStats = user.getManager().authenticate();
                 if (jsonStats != null) {
@@ -60,7 +64,7 @@ public class GetStats extends Command {
                             message.append("Your user was removed from the database.\n");
                             break;
                         default:
-                            message.append("Unknown error" + code + " occured.\n");
+                            message.append("Unknown error " + code + " occured.\n");
                             break;
                     }
                 } else {

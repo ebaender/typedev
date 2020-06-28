@@ -102,7 +102,7 @@ public class Session {
 
     public synchronized void stop() {
         if (!stopped.get()) {
-            System.out.println(getClass() + " this sessions took " + duration + " seconds.");
+            System.out.println(getClass() + " took " + duration + " seconds.");
             stopped.set(true);
             for (User user : users) {
                 user.setState(UserState.FINISHED);
