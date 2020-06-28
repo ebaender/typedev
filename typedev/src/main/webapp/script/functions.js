@@ -33,6 +33,10 @@ function fuseLine(anyLine) {
     line = "";
 }
 
+function fuseStandardLine() {
+    fuseLine(prompt + line);
+}
+
 function renderStatus() {
     $("#status").text(state + " " + authKey + " " + (codeArray === null ? null : codeArray.toString().replace(/,|\n/g, "").substring(0, 16)) + " " + manual_leave + " " + progress);
 }
@@ -108,6 +112,10 @@ function defaultKeyHandler(e) {
                         textBuffer = logo + '\n';
                         line = "";
                         break;
+                    case "lt":
+                    case "themes":
+                        listThemes();
+                        break;
                     case "th":
                     case "theme":
                         $('#theme').each(function () {
@@ -146,6 +154,14 @@ function defaultKeyHandler(e) {
             break;
     }
     renderText();
+}
+
+function listThemes() {
+    fuseStandardLine();
+    themes.forEach(theme => {
+        textBuffer += theme + " ";
+    });
+    textBuffer += "\n";
 }
 
 function updateAuthKey(resp) {

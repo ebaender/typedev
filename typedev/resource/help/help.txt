@@ -25,6 +25,8 @@ leaderboard / lb ['victories' | 'cpm']
     Show a list of highest ranking users for a given category.
 clear / cl
     Clear your screen.
+themes / lt
+    Show available terminal color themes.
 theme / th [THEME]
     Set the terminal colors to those of the specified theme.
 help / ?
