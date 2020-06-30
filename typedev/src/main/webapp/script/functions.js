@@ -156,11 +156,16 @@ function defaultKeyHandler(e) {
                     case "th":
                     case "theme":
                         $('#theme').each(function () {
-                            if (themes.includes(argv[1])) {
-                                this.href = "theme/" + argv[1] + ".css";
-                                feedback = "Set theme to " + argv[1] + ".";
+                            if (argv.length > 1) {
+
+                                if (themes.includes(argv[1])) {
+                                    this.href = "theme/" + argv[1] + ".css";
+                                    feedback = "Set theme to " + argv[1] + ".";
+                                } else {
+                                    feedback = "\"" + argv[1] + "\" is not a valid theme.";
+                                }
                             } else {
-                                feedback = "\"" + argv[1] + "\" is not a valid theme.";
+                                feedback = "Usage: " + argv[0] + " [THEME]";
                             }
                         });
                         textBuffer += prompt + line + '\n' + feedback + '\n';
@@ -373,7 +378,7 @@ function updateState() {
 function syncProgress() {
     if (state === states.live_session) {
         $.post(synServlet, { key: authKey, progress: progress, mistakes: mistakes }, function (resp) {
-            // might have chenged by the time we have a response
+            // might have changed by the time we have a response
             if (state === states.live_session) {
                 resp = JSON.parse(resp);
                 if (!jQuery.isEmptyObject(resp)) {

@@ -38,8 +38,14 @@ public class Session {
         File dirPath = new File("resource/language");
         File[] contents = dirPath.listFiles();
         List<File> filePaths = Arrays.asList(contents);
-        filePaths = filePaths.stream().filter(e -> e.getName().split("\\.")[1].equals(language))
-                .collect(Collectors.toCollection(ArrayList::new));
+        filePaths = filePaths.stream().filter(e -> {
+            String[] fileAndExtension = e.getName().split("\\.");
+            if (fileAndExtension.length > 1 && fileAndExtension[1].equals(language)) {
+                return true;
+            } else {
+                return false;
+            }
+        }).collect(Collectors.toCollection(ArrayList::new));
         if (filePaths.size() == 0) {
             throw new EmptyLanguageException(language);
         }
@@ -92,7 +98,8 @@ public class Session {
     public synchronized void start() {
         if (!live.get()) {
             startTime = System.nanoTime();
-            live.set(true);;
+            live.set(true);
+            ;
             for (User user : users) {
                 user.setState(UserState.LIVE_SESSION);
             }
@@ -110,7 +117,7 @@ public class Session {
         }
         // System.out.println(getClass() + " stopped");
     }
-    
+
     public synchronized void think() {
         for (User user : users) {
             if (user.getProgress() == totalChars && !stopped.get()) {

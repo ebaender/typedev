@@ -58,7 +58,7 @@ public class GetLeaderboard extends Command {
                     message.append("\"" + args[1] + "\" is not a valid category.\n");
                 }
             } else {
-                message.append("You need to specify a category.\n");
+                message.append("Usage: " + args[0] + " ['victories' | 'topspeed']\n");
             }
         } else {
             message.append("You need to be logged in to view leaderbords.\n");

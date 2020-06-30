@@ -1,0 +1,14 @@
+// determines whether or not a dfa accepts a word
+dfa := procedure(D, w) {
+  msg(D);
+  // set the current state to the dfa's start state
+  q := D[4];
+  // update the current state by applying the dfa's function to each character of the word
+  for (c in w) {
+    nPrint("d(" + q + "," + c + ") = ");
+    q := D[3](q,c);
+    print(q);
+  }
+  // check that the final state is in the dfa's accepted state set
+  return q in D[5];
+}; 

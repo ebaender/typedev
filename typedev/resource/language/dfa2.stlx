@@ -1,0 +1,13 @@
+// determines how a set of states should expand by following all ε arrows
+E := procedure(d, qs) {
+  do {
+    // save previous state set
+    pqs := qs;
+    // add all states reachable by epsilon arrows to the state set
+    for (q in qs) {
+      qs := qs + d(q, "");
+    }
+  // repeat until no new states are added anymore
+  } while (qs != pqs);
+  return qs;
+};
