@@ -33,8 +33,10 @@ public class CommandServlet extends HttpServlet {
         String commandString = req.getParameter(Standard.COM);
         JsonObject jsonResp = null;
         if (key != null && commandString != null) {
+            // incoming request is usable.
             Command command = commandFactory.create(commandString, key);
             if (command != null) {
+                // requested command exists.
                 jsonResp = command.execute();
             } else {
                 jsonResp = new JsonObject();
@@ -45,7 +47,7 @@ public class CommandServlet extends HttpServlet {
             jsonResp.addProperty(Standard.MSG, Message.ARGS_NOT_RECEIVED.toLine());
         }
         resp.getWriter().print(jsonResp);
-        System.out.println(getClass() + Message.RESPONDED_WITH.toString() + jsonResp);
+        System.out.println(Message.RESPONDED_WITH.toLine(getClass(),jsonResp));
     }
 
     protected void setCommandFactory(CommandFactory commandFactory) {
