@@ -8,5 +8,6 @@ public class Standard {
     public static final String COD = "code";
     public static final String PRG = "sessionProgress";
     public static final String RES = "result";
+    public static final String COM = "command";
     
 }
