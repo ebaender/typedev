@@ -10,6 +10,7 @@ import extra.DBStandard;
 import extra.HttpEndpoint;
 import extra.HttpHost;
 import extra.HttpMan;
+import extra.Message;
 import extra.Standard;
 
 public class Register extends Command {
@@ -28,7 +29,7 @@ public class Register extends Command {
         String name = null;
         String password = null;
         if (args.length >= 3) {
-            // received both arguments arguments
+            // received both arguments arguments.
             if ((name = args[1]) != null && name.length() >= MIN_NAME_LENGTH) {
                 // name is long enough
                 Pattern alphaNumeric = Pattern.compile(ALLOWED_PATTERN);
@@ -68,7 +69,7 @@ public class Register extends Command {
                 message = "User name must be at least " + MIN_NAME_LENGTH + " characters long, try again.\n";
             }
         } else {
-            message = "Did not receive name and password.\n";
+            message = Message.ARGS_NOT_RECEIVED.toLine();;
         }
         JsonObject jsonResp = new JsonObject();
         jsonResp.addProperty(Standard.MSG, message);

@@ -13,16 +13,6 @@ public class LoginTest extends CommandTest {
 
     private TestUser testUser;
 
-    // private void registerTestUser() {
-    //     testUser = null;
-    //     try {
-    //         testUser = TestUser.getInstance("junit", "@Test");
-    //     } catch (DBException e) {
-    //         System.out.println(getClass() + "Can not guarantee existence of test user. "
-    //                 + Message.UNKNOWN_ERROR.toString(e.getErrorCode()));
-    //     }
-    // }
-
     @Before
     @Override
     public void setUp() throws Exception {
@@ -30,15 +20,20 @@ public class LoginTest extends CommandTest {
         super.setUp();
     }
 
+    @Override
+    public String getBaseCommand() {
+        return "login";
+    }
+
     @Test
     public void loginNoUserSpecifiedTest() throws Exception {
-        final String COMMAND_LOG_IN_NO_ARGUMENTS = "login";
-        assertCommand("KEY", COMMAND_LOG_IN_NO_ARGUMENTS, Message.ARGS_NOT_RECEIVED.toLine());
+        final String COMMAND_LOG_IN_NO_ARGUMENTS = getBaseCommand();
+        assertCommand("key", COMMAND_LOG_IN_NO_ARGUMENTS, Message.ARGS_NOT_RECEIVED.toLine());
     }
 
     public void assertLoginNameConflict(final String NEW_USER_KEY, final String LOGGED_IN_USER_KEY,
             final User LOGGED_IN_USER, final String EXPECTED_RESPONSE) throws Exception {
-        final String COMMAND_LOG_IN_AS_LOGGED_IN_USER = "login " + LOGGED_IN_USER.getName() + " "
+        final String COMMAND_LOG_IN_AS_LOGGED_IN_USER = getBaseCommand() + " " + LOGGED_IN_USER.getName() + " "
                 + LOGGED_IN_USER.getPassword();
         getUsers().put(LOGGED_IN_USER_KEY, LOGGED_IN_USER);
         assertCommand(NEW_USER_KEY, COMMAND_LOG_IN_AS_LOGGED_IN_USER, EXPECTED_RESPONSE);
@@ -57,14 +52,14 @@ public class LoginTest extends CommandTest {
 
     public void assertLoginPasswordConflict(final User REGISTERED_USER, final String PASSWORD,
             final String EXPECTED_RESPONSE) throws Exception {
-        final String COMMAND_LOG_IN = "login " + REGISTERED_USER.getName() + " " + PASSWORD;
+        final String COMMAND_LOG_IN = getBaseCommand() + " " + REGISTERED_USER.getName() + " " + PASSWORD;
         assertCommand("key", COMMAND_LOG_IN, EXPECTED_RESPONSE);
     }
 
     @Test 
     public void loginUserDoesNotExist() throws Exception {
         final String ILLEGAL_USER_NAME = "adDFJ(*433?/Z|==4Dsd=0``<fdDF{}}#f:kj";
-        final String COMMAND_LOG_IN_ILLEGAL_NAME = "login " + ILLEGAL_USER_NAME + " password";
+        final String COMMAND_LOG_IN_ILLEGAL_NAME = getBaseCommand() + " " + ILLEGAL_USER_NAME + " password";
         assertCommand("key", COMMAND_LOG_IN_ILLEGAL_NAME, Message.USER_NOT_FOUND.toLine(ILLEGAL_USER_NAME));
     }
     

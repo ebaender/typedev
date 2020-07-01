@@ -24,11 +24,14 @@ import user.User;
 import static matcher.JsonPropertyMatcher.hasJsonProperty;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class CommandTest {
+public abstract class CommandTest {
 
-    @Mock private HttpServletRequest req;
-    @Mock private HttpServletResponse resp;
-    @Mock private RequestDispatcher reqDispatcher;
+    @Mock
+    private HttpServletRequest req;
+    @Mock
+    private HttpServletResponse resp;
+    @Mock
+    private RequestDispatcher reqDispatcher;
 
     private CommandFactory commandFactory = null;
     private ConcurrentHashMap<String, User> users = null;
@@ -41,7 +44,10 @@ public class CommandTest {
         MockitoAnnotations.initMocks(this);
     }
 
-    protected void assertCommand(final String KEY, final String COMMAND, final String EXPECTED_RESPONSE) throws Exception {
+    public abstract String getBaseCommand();
+
+    protected void assertCommand(final String KEY, final String COMMAND, final String EXPECTED_RESPONSE)
+            throws Exception {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
 
