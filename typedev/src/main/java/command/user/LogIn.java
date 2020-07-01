@@ -11,6 +11,7 @@ import javax.crypto.SecretKey;
 import com.google.gson.JsonObject;
 
 import command.Command;
+import extra.Message;
 import extra.Standard;
 import user.User;
 
@@ -26,42 +27,42 @@ public class LogIn extends Command {
         String encodedKey = "";
         String message = null;
         if (users.get(key) == null) {
-            // user is not logged in already
+            // user is not logged in already.
             if (args.length >= 3) {
-                // received name and password
+                // received name and password.
                 String name = args[1];
                 String password = args[2];
                 if (userExsists(name, users)) {
-                    message = name + " is logged in already.\n";
+                    message = Message.OTHER_USER_LOGGED_IN_ALREADY.toLine(name);
                 } else {
-                    // no conflict with other user
+                    // no conflicts with another user.
                     JsonObject authResp = new Authenticate(args).execute();
                     if (authResp.get(Standard.MSG) == null) {
-                        // no error during authentication
+                        // no error occured during authentication.
                         try {
                             encodedKey = generateKey();
                             if (users.get(encodedKey) == null) {
                                 User user = new User(name, password);
                                 users.put(encodedKey, user);
-                                message = "Logged in as " + name + ".\n";
+                                message = Message.LOGIN_SUCCESS.toLine(name);
                                 jsonResp.addProperty(Standard.KEY, encodedKey);
                             } else {
                                 encodedKey = null;
-                                message = "You are one unlucky bastard, try again.\n";
+                                message = Message.UNLUCKY.toLine();
                             }
                         } catch (NoSuchAlgorithmException e) {
                             e.printStackTrace();
-                            message = "Your key could not be generated. Sorry about that.\n";
+                            message = Message.KEYGEN_FAILED.toLine();
                         }
                     } else {
                         message = authResp.get(Standard.MSG).getAsString();
                     }
                 }
             } else {
-                message = "Did not receive name and password.\n";
+                message = Message.ARGS_NOT_RECEIVED.toLine();
             }
         } else {
-            message = "You are logged in as " + users.get(key).getName() + " already.\n";
+            message = Message.LOGGED_IN_ALREADY.toLine(users.get(key).getName());
         }
         jsonResp.addProperty(Standard.MSG, message);
         return jsonResp;

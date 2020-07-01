@@ -18,30 +18,30 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import command.CommandFactory;
-import extra.Message;
 import extra.Standard;
 import user.User;
 
 import static matcher.JsonPropertyMatcher.hasJsonProperty;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public abstract class CommandTest {
+public class CommandTest {
 
     @Mock private HttpServletRequest req;
     @Mock private HttpServletResponse resp;
     @Mock private RequestDispatcher reqDispatcher;
 
-    private CommandFactory commandFactory;
-    private ConcurrentHashMap<String, User> users;
+    private CommandFactory commandFactory = null;
+    private ConcurrentHashMap<String, User> users = null;
 
     @Before
     public void setUp() throws Exception {
-        MockitoAnnotations.initMocks(this);
         users = new ConcurrentHashMap<>();
         commandFactory = CommandFactory.getInstance(users);
+        commandFactory.setUsers(users);
+        MockitoAnnotations.initMocks(this);
     }
 
-    protected void assertCommand(final String KEY, final String COMMAND, Message expectedResponse) throws Exception {
+    protected void assertCommand(final String KEY, final String COMMAND, final String EXPECTED_RESPONSE) throws Exception {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
 
@@ -54,7 +54,7 @@ public abstract class CommandTest {
         commandServlet.doPost(req, resp);
 
         JsonElement jsonResp = JsonParser.parseString(stringWriter.toString());
-        assertThat(jsonResp, hasJsonProperty(Standard.MSG, expectedResponse.toLine()));
+        assertThat(jsonResp, hasJsonProperty(Standard.MSG, EXPECTED_RESPONSE));
     }
 
     protected CommandFactory getCommandFactory() {

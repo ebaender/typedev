@@ -9,6 +9,7 @@ import extra.DBStandard;
 import extra.HttpEndpoint;
 import extra.HttpHost;
 import extra.HttpMan;
+import extra.Message;
 import extra.Standard;
 
 public class Authenticate extends Command {
@@ -22,7 +23,7 @@ public class Authenticate extends Command {
         JsonObject jsonResp = null;
         String message = null;
         if (args.length == 3) {
-            // received name and password
+            // received name and password.
             String name = args[1];
             String password = args[2];
             HashMap<String, String> params = new HashMap<>();
@@ -31,24 +32,24 @@ public class Authenticate extends Command {
             params.put(DBStandard.REQUEST, DBStandard.REQUEST_AUTHENTICATE);
             JsonObject databaseResp = HttpMan.post(HttpHost.PI, HttpEndpoint.USER_DB, params);
             if (databaseResp != null) {
-                // received response from database
+                // received response from database.
                 int code = databaseResp.get(DBStandard.CODE).getAsInt();
                 switch (code) {
                     case DBStandard.CODE_AUTHENTICATE_SUCCESS:
                         jsonResp = databaseResp;
                         break;
                     case DBStandard.CODE_WRONGPASSWORD:
-                        message = "Wrong password, try again.\n";
+                        message = Message.WRONG_PASSWORD.toLine();
                         break;
                     case DBStandard.CODE_NOTFOUND:
-                        message = "User \"" + name + "\" does not exist.\n";
+                        message = Message.USER_NOT_FOUND.toLine(name);
                         break;
                     default:
-                        message = "Unknown error " + code + " occured.\n";
+                        message = Message.UNKNOWN_ERROR.toLine(code);
                         break;
                 }
             } else {
-                message = "Could not reach user database.\n";
+                message = Message.DB_UNREACHABLE.toLine();
             }
         }
         if (jsonResp == null) {

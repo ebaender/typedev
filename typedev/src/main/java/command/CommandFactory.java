@@ -105,18 +105,8 @@ public class CommandFactory {
         return command;
     }
 
-    @Deprecated
-    public Command create(Class<? extends Command> commandType) {
-        Command command = null;
-        try {
-            command = commandType.newInstance();
-        } catch (InstantiationException e) {
-            System.err.println(getClass() + "Could not instantiate command of type " + commandType + ".");
-        } catch (IllegalAccessException e) {
-            System.err.println(getClass() + "IllegalAccessException occured during instantiation of command of type "
-                    + commandType + ".");
-        }
-        return command;
+    public void setUsers(ConcurrentHashMap<String, User> users) {
+        this.users = users;
     }
 
 }

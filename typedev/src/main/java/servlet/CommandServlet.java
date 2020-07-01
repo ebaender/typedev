@@ -47,7 +47,7 @@ public class CommandServlet extends HttpServlet {
             jsonResp.addProperty(Standard.MSG, Message.ARGS_NOT_RECEIVED.toLine());
         }
         resp.getWriter().print(jsonResp);
-        System.out.println(Message.RESPONDED_WITH.toLine(getClass(),jsonResp));
+        System.out.println(Message.RESPONDED_WITH.toLine(getClass(), jsonResp));
     }
 
     protected void setCommandFactory(CommandFactory commandFactory) {
