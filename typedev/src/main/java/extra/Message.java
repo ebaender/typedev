@@ -8,7 +8,7 @@ public enum Message {
     RESPONDED_WITH("{0} responded with {1}"), LOGGED_IN_ALREADY("You are logged in as {0} already."),
     OTHER_USER_LOGGED_IN_ALREADY("{0} is logged in already."), LOGIN_SUCCESS("Logged in as {0}."),
     REGISTERED_SUCCESS("Registered user {0}."), REGISTERED_DUPLICATE("User {0} is registered already."),
-    USER_NOT_FOUND("User \"{0}\" does not exist."), USER_NOT_LOGGED_IN("{0} is not logged in."),
+    USER_NOT_FOUND("User \"{0}\" does not exist."), USER_NOT_LOGGED_IN("\"{0}\" is not logged in."),
     UNKNOWN_ERROR("Unknown error {0} occured."), DB_UNREACHABLE("User database could not be reached."),
     UPDATE_SUCESS("Updated {0}."), KEYGEN_FAILED("Your key could not be generated."),
     WRONG_PASSWORD("Wrong password, try again."), CONCAT("{0} {1}"),

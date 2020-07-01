@@ -83,7 +83,7 @@ public class Session {
                 case DBStandard.CODE_WRONGPASSWORD:
                     message = Message.WRONG_PASSWORD.toString();
                     break;
-                case DBStandard.CODE_NOTFOUND:
+                case DBStandard.CODE_USER_NOT_FOUND:
                     message = Message.USER_NOT_FOUND.toString(user.getName());
                     break;
                 default:

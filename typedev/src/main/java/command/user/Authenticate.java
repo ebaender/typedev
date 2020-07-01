@@ -41,7 +41,7 @@ public class Authenticate extends Command {
                     case DBStandard.CODE_WRONGPASSWORD:
                         message = Message.WRONG_PASSWORD.toLine();
                         break;
-                    case DBStandard.CODE_NOTFOUND:
+                    case DBStandard.CODE_USER_NOT_FOUND:
                         message = Message.USER_NOT_FOUND.toLine(name);
                         break;
                     default:

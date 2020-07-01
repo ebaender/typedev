@@ -44,7 +44,7 @@ public class GetLeaderboard extends Command {
                             case DBStandard.CODE_WRONGPASSWORD:
                                 message.append("Your password was changed, try logging in again.\n");
                                 break;
-                            case DBStandard.CODE_NOTFOUND:
+                            case DBStandard.CODE_USER_NOT_FOUND:
                                 message.append("Your user was removed from the database.\n");
                                 break;
                             default:

@@ -20,7 +20,7 @@ public class DBMan {
     private JsonObject post(HashMap<String, String> params) {
         return HttpMan.post(HttpHost.PI, HttpEndpoint.USER_DB, params);
     }
-    
+
     private JsonObject request(String requestType) {
         HashMap<String, String> params = new HashMap<>();
         params.put(DBStandard.NAME, owner.getName());
@@ -42,7 +42,7 @@ public class DBMan {
         HashMap<String, String> params = new HashMap<>();
         params.put(DBStandard.NAME, owner.getName());
         params.put(DBStandard.PASSWORD, owner.getPassword());
-        params.put(DBStandard.SPY_TARGET, target);
+        params.put(DBStandard.USER_TARGET, target);
         params.put(DBStandard.REQUEST, DBStandard.REQUEST_SPY);
         System.out.println(super.getClass() + " spy " + params);
         return post(params);
@@ -70,8 +70,18 @@ public class DBMan {
         return post(params);
     }
 
+    public JsonObject language(String target) {
+        HashMap<String, String> params = new HashMap<>();
+        params.put(DBStandard.NAME, owner.getName());
+        params.put(DBStandard.PASSWORD, owner.getPassword());
+        params.put(DBStandard.USER_TARGET, target);
+        params.put(DBStandard.REQUEST, DBStandard.REQUEST_LANGUAGE);
+        System.out.println(super.getClass() + " language " + params);
+        return post(params);
+    }
+
     public JsonObject language() {
-        return request(DBStandard.REQUEST_LANGUAGE);
+        return language(owner.getName());
     }
 
 }

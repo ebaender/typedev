@@ -10,6 +10,8 @@ users / lu
     List users that are currently online.
 sessions / ls
     List sessions and the users that have joined them.
+languages / ll
+    List all available programming languages.
 create / cr [LANGUAGE]
     Create a new session for a specified programming language.
 join / jn [NAME]
@@ -21,6 +23,8 @@ start / st
     Start the session you are currently in.
 stats / us ([NAME])
     Show stats about yourself or another user.
+language / ul ([NAME])
+    Show a ranked list of your or another users's favorite languages.
 leaderboard / lb ['victories' | 'topspeed']
     Show a list of highest ranking users for a given category.
 clear / cl

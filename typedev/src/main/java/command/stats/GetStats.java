@@ -35,7 +35,7 @@ public class GetStats extends Command {
                         case DBStandard.CODE_WRONGPASSWORD:
                             message.append("Your password was changed, try logging in again.\n");
                             break;
-                        case DBStandard.CODE_SPY_NOTFOUND:
+                        case DBStandard.CODE_REQUESTED_USER_NOT_FOUND:
                             message.append("User \"" + targetUser + "\" does not exist.\n");
                             break;
                         default:
@@ -57,7 +57,7 @@ public class GetStats extends Command {
                         case DBStandard.CODE_WRONGPASSWORD:
                             message.append("Your password was changed, try logging in again.\n");
                             break;
-                        case DBStandard.CODE_NOTFOUND:
+                        case DBStandard.CODE_USER_NOT_FOUND:
                             message.append("Your user was removed from the database.\n");
                             break;
                         default:

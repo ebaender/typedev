@@ -27,24 +27,12 @@ public class GetLanguageStats extends Command {
         if (requestingUser != null) {
             // user is logged in.
             if (args.length > 1) {
-                // use requested somone else's stats.
+                // user requested somone else's stats.
                 String requestedName = args[1];
-                User requestedUser = null;
-                for (User user : users.values()) {
-                    if (user.getName().equals(requestedName)) {
-                        requestedUser = user;
-                        break;
-                    }
-                }
-                if (requestedUser != null) {
-                    // requested user exists.
-                    appendTargetUserMessage(requestedUser);
-                } else {
-                    message.append(Message.USER_NOT_LOGGED_IN.toLine(requestedName));
-                }
+                appendRequestedUserMessage(requestingUser, requestedName);
             } else {
                 // user requested his own stats.
-                appendTargetUserMessage(requestingUser);
+                appendRequestedUserMessage(requestingUser, requestingUser.getName());
             }
         } else {
             message.append(Message.LOG_IN_TO_VIEW_STATS.toLine());
@@ -54,9 +42,8 @@ public class GetLanguageStats extends Command {
         return jsonResp;
     }
 
-    private void appendTargetUserMessage(User targetUser) {
-        JsonObject jsonLanguageStats = null;
-        jsonLanguageStats = targetUser.getManager().language();
+    private void appendRequestedUserMessage(User requestingUser, String requestedUserName) {
+        JsonObject jsonLanguageStats = requestingUser.getManager().language(requestedUserName);
         if (jsonLanguageStats != null) {
             // received response from user db.
             int code = jsonLanguageStats.get(DBStandard.CODE).getAsInt();
@@ -65,8 +52,11 @@ public class GetLanguageStats extends Command {
                     System.out.println(jsonLanguageStats);
                     message = buildLanguageBoard(jsonLanguageStats);
                     break;
-                case DBStandard.CODE_NOTFOUND:
-                    message.append(Message.USER_NOT_FOUND.toLine(targetUser.getName()));
+                case DBStandard.CODE_USER_NOT_FOUND:
+                    message.append(Message.USER_NOT_FOUND.toLine(requestingUser.getName()));
+                    break;
+                case DBStandard.CODE_REQUESTED_USER_NOT_FOUND:
+                    message.append(Message.USER_NOT_FOUND.toLine(requestedUserName));
                     break;
                 case DBStandard.CODE_WRONGPASSWORD:
                     message.append(Message.WRONG_PASSWORD.toLine());
