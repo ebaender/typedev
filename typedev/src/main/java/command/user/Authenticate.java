@@ -22,7 +22,7 @@ public class Authenticate extends Command {
     public JsonObject execute() {
         JsonObject jsonResp = null;
         String message = null;
-        if (args.length == 3) {
+        if (args.length > 2) {
             // received name and password.
             String name = args[1];
             String password = args[2];
@@ -30,13 +30,13 @@ public class Authenticate extends Command {
             params.put(DBStandard.NAME, name);
             params.put(DBStandard.PASSWORD, password);
             params.put(DBStandard.REQUEST, DBStandard.REQUEST_AUTHENTICATE);
-            JsonObject databaseResp = HttpMan.post(HttpHost.PI, HttpEndpoint.USER_DB, params);
-            if (databaseResp != null) {
+            JsonObject authResp = HttpMan.post(HttpHost.PI, HttpEndpoint.USER_DB, params);
+            if (authResp != null) {
                 // received response from database.
-                int code = databaseResp.get(DBStandard.CODE).getAsInt();
+                int code = authResp.get(DBStandard.CODE).getAsInt();
                 switch (code) {
                     case DBStandard.CODE_AUTHENTICATE_SUCCESS:
-                        jsonResp = databaseResp;
+                        jsonResp = authResp;
                         break;
                     case DBStandard.CODE_WRONGPASSWORD:
                         message = Message.WRONG_PASSWORD.toLine();
