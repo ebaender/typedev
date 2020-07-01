@@ -17,8 +17,9 @@ public enum Message {
     NAME_TOO_SHORT("Name must be at least {0} characters long, try again."),
     NAME_ILLEGAL_CHARS("\"{0}\" contains invalid special characters, try again."),
     LOGGED_OUT_ALREADY("You are logged out already."), LOGGED_OUT("Logged out as {0}."),
-    YOU_ARE_NOBODY("You are nobody."), YOU_ARE("You are {0}."),
-    LOG_IN_TO_VIEW_STATS("You need to be logged in to view stats."), UNLUCKY("You are one unlucky bastard, try again.");
+    YOU_ARE_NOBODY("You are nobody."), YOU_ARE("You are {0}."), NOBODY_HERE("Nobody is logged in right now."),
+    INDEX_OUT_OF_BOUNDS("Index {0} is out of bounds."), LOG_IN_TO_VIEW_STATS("You need to be logged in to view stats."),
+    UNLUCKY("You are one unlucky bastard, try again.");
 
     private final String MESSAGE;
 

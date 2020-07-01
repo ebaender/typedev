@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.gson.JsonObject;
 
 import command.Command;
+import extra.Message;
 import extra.Standard;
 import user.User;
 
@@ -16,12 +17,16 @@ public class GetUsers extends Command {
 
     @Override
     public JsonObject execute() {
-        StringBuilder messageBuilder = new StringBuilder();
+        StringBuilder message = new StringBuilder();
+        if (users.size() == 0) {
+            // no users are logged in.
+            message.append(Message.NOBODY_HERE.toLine());
+        }
         users.entrySet().forEach(user -> {
-            messageBuilder.append(user.getValue().getName() + "\n");
+            message.append(user.getValue().getName() + "\n");
         });
         JsonObject jsonResp = new JsonObject();
-        jsonResp.addProperty(Standard.MSG, messageBuilder.toString());
+        jsonResp.addProperty(Standard.MSG, message.toString());
         return jsonResp;
  
     }

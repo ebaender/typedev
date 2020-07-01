@@ -1,5 +1,8 @@
 package extra;
 
+import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.gson.JsonElement;
@@ -10,13 +13,12 @@ import user.User;
 
 public class TestUser extends User {
 
-    private static TestUser instance = null;
-    private static final String NAME = "junit3";
-    private static final String PASSWORD = "@Test";
+    private static List<TestUser> instancePool = new ArrayList<>();
+    private static int INSTANCE_LIMIT = 3;
     private String key;
 
-    private TestUser(final String NAME, final String PASSWORD) throws DBException {
-        super(NAME, PASSWORD);
+    private TestUser() throws DBException, NoSuchAlgorithmException {
+        super(KeyMan.getKey().replaceAll(UserStandard.FORBIDDEN_CHAR_PATTERN, ""), KeyMan.getKey());
         setKey("");
         JsonObject registerResp = getManager().register();
         if (registerResp != null) {
@@ -35,25 +37,54 @@ public class TestUser extends User {
         this.key = key;
     }
 
-    private static TestUser getInternalInstance(final String NAME, final String PASSWORD) throws DBException {
-        if (instance == null) {
-            instance = new TestUser(NAME, PASSWORD);
+    public static TestUser getInstance(int instanceIndex) {
+        TestUser instance = null;
+        if (instancePool.size() < INSTANCE_LIMIT) {
+            try {
+                instance = new TestUser();
+                instancePool.add(instanceIndex, instance);
+            } catch (NoSuchAlgorithmException e) {
+                System.err.println(Message.CONCAT.toString(TestUser.class, Message.KEYGEN_FAILED.toString()));
+            } catch (DBException e) {
+                System.err.println(
+                        Message.CONCAT.toString(TestUser.class, Message.UNKNOWN_ERROR.toString(e.getErrorCode())));
+            }
+        } else {
+            if (instanceIndex < INSTANCE_LIMIT) {
+                instance = instancePool.get(instanceIndex);
+            } else {
+                System.err.println(
+                        Message.CONCAT.toString(TestUser.class, Message.INDEX_OUT_OF_BOUNDS.toString(instanceIndex)));
+            }
         }
         return instance;
     }
 
     public static TestUser getInstance() {
-        try {
-            return TestUser.getInternalInstance(NAME, PASSWORD);
-        } catch (DBException e) {
-            System.out.println(TestUser.class + "Can not guarantee existence of test user. "
-                    + Message.UNKNOWN_ERROR.toString(e.getErrorCode()));
-            return null;
-        }
+        return getInstance(0);
     }
 
+    // private static TestUser getInternalInstance(final String NAME, final String
+    // PASSWORD) throws DBException {
+    // if (instance == null) {
+    // instance = new TestUser(NAME, PASSWORD);
+    // }
+    // return instance;
+    // }
+
+    // public static TestUser getInstance() {
+    // try {
+    // return TestUser.getInternalInstance(NAME, PASSWORD);
+    // } catch (DBException e) {
+    // System.out.println(TestUser.class + "Can not guarantee existence of test
+    // user. "
+    // + Message.UNKNOWN_ERROR.toString(e.getErrorCode()));
+    // return null;
+    // }
+    // }
+
     public JsonObject logIn(final ConcurrentHashMap<String, User> USERS) {
-        final String[] ARGUMENTS = {"login", getName(), getPassword()};
+        final String[] ARGUMENTS = { "login", getName(), getPassword() };
         JsonObject loginResp = new LogIn(getKey(), ARGUMENTS, USERS).execute();
         JsonElement receivedKey = loginResp.get(Standard.KEY);
         if (receivedKey != null) {
