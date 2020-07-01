@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.gson.JsonObject;
 
 import command.Command;
+import extra.DBStandard;
 import extra.Standard;
 import session.Session;
 import user.User;
@@ -25,6 +26,7 @@ public class LeaveSession extends Command {
                 String sessionLanguage = session.getLanguage();
                 user.setSession(null);
                 session.leave(user);
+                user.getManager().updateLeftSession();
                 message = "Left " + sessionLanguage.toUpperCase() + " session.\n";
             } else {
                 message = "You already have no session.\n";

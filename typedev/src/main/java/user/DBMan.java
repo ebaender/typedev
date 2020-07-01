@@ -61,6 +61,10 @@ public class DBMan {
         return post(params);
     }
 
+    public JsonObject updateLeftSession() {
+        return update(true, false, 0, DBStandard.NULL_LANGUAGE);
+    }
+
     public JsonObject leaderbord(String leaderbordType) {
         HashMap<String, String> params = new HashMap<>();
         params.put(DBStandard.NAME, owner.getName());
