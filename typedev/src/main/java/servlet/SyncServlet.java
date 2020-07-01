@@ -13,6 +13,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import extra.ContextAttribute;
+import extra.Message;
 import extra.Standard;
 import user.User;
 
@@ -29,7 +30,7 @@ public class SyncServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String key = req.getParameter("key");
+        String key = req.getParameter(Standard.KEY);
         User user = users.get(key);
         JsonObject jsonResp = new JsonObject();
         if (user != null && user.getSession() != null && user.getSession().isLive()) {
@@ -55,7 +56,7 @@ public class SyncServlet extends HttpServlet {
             }
         }
         resp.getWriter().print(jsonResp);
-        System.out.println(getClass() + " responded with " + jsonResp);
+        System.out.println(Message.STATEMENT.toString(getClass(), "responded", jsonResp));
     }
 
 }

@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import command.CommandFactory;
+import extra.CommandBuilder;
 import extra.Standard;
 import user.User;
 
@@ -35,16 +36,35 @@ public abstract class CommandTest {
 
     private CommandFactory commandFactory = null;
     private ConcurrentHashMap<String, User> users = null;
+    private CommandBuilder commandBuilder = null;
 
     @Before
     public void setUp() throws Exception {
         users = new ConcurrentHashMap<>();
         commandFactory = CommandFactory.getInstance(users);
         commandFactory.setUsers(users);
+        commandBuilder = new CommandBuilder(getBaseCommand());
         MockitoAnnotations.initMocks(this);
     }
 
+
     public abstract String getBaseCommand();
+
+    public String buildCommand(String... arguments) {
+        return commandBuilder.build(arguments);
+    }
+
+    protected String getValidKey() {
+        return "key";
+    }
+
+    protected String getValidName() {
+        return "name";
+    }
+
+    protected String getValidPassword() {
+        return "password";
+    }
 
     protected void assertCommand(final String KEY, final String COMMAND, final String EXPECTED_RESPONSE)
             throws Exception {

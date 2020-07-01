@@ -11,8 +11,11 @@ public enum Message {
     USER_NOT_FOUND("User \"{0}\" does not exist."), USER_NOT_LOGGED_IN("\"{0}\" is not logged in."),
     UNKNOWN_ERROR("Unknown error {0} occured."), DB_UNREACHABLE("User database could not be reached."),
     UPDATE_SUCESS("Updated {0}."), KEYGEN_FAILED("Your key could not be generated."),
-    WRONG_PASSWORD("Wrong password, try again."), CONCAT("{0} {1}"),
+    WRONG_PASSWORD("Wrong password, try again."), CONCAT("{0} {1}"), STATEMENT("{0}: {1} {2}"),
     NO_LANGUAGES_YET("No languages have been used yet."),
+    PASSWORD_TOO_SHORT("Password must be at least {0} characters long, try again."),
+    NAME_TOO_SHORT("Name must be at least {0} characters long, try again."),
+    NAME_ILLEGAL_CHARS("\"{0}\" contains invalid special characters, try again."),
     LOG_IN_TO_VIEW_STATS("You need to be logged in to view stats."), UNLUCKY("You are one unlucky bastard, try again.");
 
     private final String MESSAGE;

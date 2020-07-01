@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.JsonObject;
 
 import extra.ContextAttribute;
+import extra.Message;
 import extra.Standard;
 import user.User;
 
@@ -21,7 +22,7 @@ public class ConnectionServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private ConcurrentHashMap<String, User> users;
-    
+
     @Override
     public void init() throws ServletException {
         users = (ConcurrentHashMap<String, User>) getServletContext().getAttribute(ContextAttribute.USERS.name());
@@ -30,14 +31,14 @@ public class ConnectionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         JsonObject jsonResp = new JsonObject();
-        String key = req.getParameter("key");
+        String key = req.getParameter(Standard.KEY);
         User user = users.get(key);
         if (user != null) {
             user.setLastContact(Instant.now());
             jsonResp.addProperty(Standard.STA, user.getState().name().toLowerCase());
         }
         resp.getWriter().print(jsonResp);
-        // System.out.println(getClass() + " responded with " + jsonResp);
+        // System.out.println(Message.STATEMENT.toString(getClass(), "responded", jsonResp));
     }
 
 }

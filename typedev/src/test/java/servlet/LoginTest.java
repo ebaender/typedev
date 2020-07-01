@@ -26,43 +26,46 @@ public class LoginTest extends CommandTest {
     }
 
     @Test
-    public void loginNoUserSpecifiedTest() throws Exception {
+    public void loginNoUserSpecified() throws Exception {
         final String COMMAND_LOG_IN_NO_ARGUMENTS = getBaseCommand();
-        assertCommand("key", COMMAND_LOG_IN_NO_ARGUMENTS, Message.ARGS_NOT_RECEIVED.toLine());
+        assertCommand(getValidKey(), COMMAND_LOG_IN_NO_ARGUMENTS, Message.ARGS_NOT_RECEIVED.toLine());
     }
 
     public void assertLoginNameConflict(final String NEW_USER_KEY, final String LOGGED_IN_USER_KEY,
             final User LOGGED_IN_USER, final String EXPECTED_RESPONSE) throws Exception {
-        final String COMMAND_LOG_IN_AS_LOGGED_IN_USER = getBaseCommand() + " " + LOGGED_IN_USER.getName() + " "
-                + LOGGED_IN_USER.getPassword();
+        final String COMMAND_LOG_IN_AS_LOGGED_IN_USER = buildCommand(LOGGED_IN_USER.getName(),
+                LOGGED_IN_USER.getPassword());
         getUsers().put(LOGGED_IN_USER_KEY, LOGGED_IN_USER);
         assertCommand(NEW_USER_KEY, COMMAND_LOG_IN_AS_LOGGED_IN_USER, EXPECTED_RESPONSE);
     }
 
     @Test
     public void loginLoggedInAlready() throws Exception {
-        assertLoginNameConflict("key", "key", new User("name", "password"), Message.LOGGED_IN_ALREADY.toLine("name"));
+        final String KEY = getValidKey();
+        final String NAME = getValidName();
+        assertLoginNameConflict(KEY, KEY, new User(NAME, getValidPassword()), Message.LOGGED_IN_ALREADY.toLine(NAME));
     }
 
     @Test
     public void loginOtherUserLoggedInAlready() throws Exception {
-        assertLoginNameConflict("firstKey", "secondKey", new User("name", "password"),
-                Message.OTHER_USER_LOGGED_IN_ALREADY.toLine("name"));
+        final String NAME = getValidName();
+        assertLoginNameConflict("firstKey", "secondKey", new User(NAME, getValidPassword()),
+                Message.OTHER_USER_LOGGED_IN_ALREADY.toLine(NAME));
+    }
+
+    @Test
+    public void loginUserDoesNotExist() throws Exception {
+        final String ILLEGAL_USER_NAME = "adDFJ(*433?/Z|==4Dsd=0``<fdDF{}}#f:kj";
+        final String COMMAND_LOG_IN_ILLEGAL_NAME = buildCommand(ILLEGAL_USER_NAME, getValidPassword());
+        assertCommand(getValidKey(), COMMAND_LOG_IN_ILLEGAL_NAME, Message.USER_NOT_FOUND.toLine(ILLEGAL_USER_NAME));
     }
 
     public void assertLoginPasswordConflict(final User REGISTERED_USER, final String PASSWORD,
             final String EXPECTED_RESPONSE) throws Exception {
-        final String COMMAND_LOG_IN = getBaseCommand() + " " + REGISTERED_USER.getName() + " " + PASSWORD;
-        assertCommand("key", COMMAND_LOG_IN, EXPECTED_RESPONSE);
+        final String COMMAND_LOG_IN = buildCommand(REGISTERED_USER.getName(), PASSWORD);
+        assertCommand(getValidKey(), COMMAND_LOG_IN, EXPECTED_RESPONSE);
     }
 
-    @Test 
-    public void loginUserDoesNotExist() throws Exception {
-        final String ILLEGAL_USER_NAME = "adDFJ(*433?/Z|==4Dsd=0``<fdDF{}}#f:kj";
-        final String COMMAND_LOG_IN_ILLEGAL_NAME = getBaseCommand() + " " + ILLEGAL_USER_NAME + " password";
-        assertCommand("key", COMMAND_LOG_IN_ILLEGAL_NAME, Message.USER_NOT_FOUND.toLine(ILLEGAL_USER_NAME));
-    }
-    
     @Test
     public void loginWrongPassword() throws Exception {
         assertFalse(testUser == null);

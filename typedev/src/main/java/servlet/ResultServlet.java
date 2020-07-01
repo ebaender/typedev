@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.gson.JsonObject;
 
 import extra.ContextAttribute;
+import extra.Message;
 import extra.Standard;
 import user.User;
 import user.UserState;
@@ -21,7 +22,7 @@ public class ResultServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
     private ConcurrentHashMap<String, User> users;
-    
+
     @Override
     public void init() throws ServletException {
         users = (ConcurrentHashMap<String, User>) getServletContext().getAttribute(ContextAttribute.USERS.name());
@@ -29,17 +30,16 @@ public class ResultServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String key = req.getParameter("key");
+        String key = req.getParameter(Standard.KEY);
         User user = users.get(key);
         JsonObject jsonResp = new JsonObject();
         if (user != null && user.getState() == UserState.FINISHED) {
             jsonResp.add(Standard.RES, user.getSession().getResult());
-            // user.getSession().leave(user);
             user.setSession(null);
             user.setState(UserState.DEFAULT);
         }
         resp.getWriter().print(jsonResp);
-        System.out.println(getClass() + " responded with " + jsonResp);
+        System.out.println(Message.STATEMENT.toString(getClass(), "responded", jsonResp));
     }
 
 }

@@ -12,18 +12,18 @@ public class CommandServletTest extends CommandTest {
     }
 
     @Test
-    public void missingKeyTest() throws Exception {
+    public void missingKey() throws Exception {
         assertCommand(null, getBaseCommand(), Message.ARGS_NOT_RECEIVED.toLine());
     }
 
     @Test
-    public void missingCommandTest() throws Exception {
-        assertCommand("key", null, Message.ARGS_NOT_RECEIVED.toLine());
+    public void missingCommand() throws Exception {
+        assertCommand(getValidKey(), null, Message.ARGS_NOT_RECEIVED.toLine());
     }
 
     @Test
-    public void unknownCommandTest() throws Exception {
-        assertCommand("key", getBaseCommand(), Message.COMMAND_NOT_FOUND.toLine());
+    public void unknownCommand() throws Exception {
+        assertCommand(getValidKey(), getBaseCommand(), Message.COMMAND_NOT_FOUND.toLine());
     }
 
 }
