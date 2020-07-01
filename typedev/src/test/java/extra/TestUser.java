@@ -64,25 +64,6 @@ public class TestUser extends User {
         return getInstance(0);
     }
 
-    // private static TestUser getInternalInstance(final String NAME, final String
-    // PASSWORD) throws DBException {
-    // if (instance == null) {
-    // instance = new TestUser(NAME, PASSWORD);
-    // }
-    // return instance;
-    // }
-
-    // public static TestUser getInstance() {
-    // try {
-    // return TestUser.getInternalInstance(NAME, PASSWORD);
-    // } catch (DBException e) {
-    // System.out.println(TestUser.class + "Can not guarantee existence of test
-    // user. "
-    // + Message.UNKNOWN_ERROR.toString(e.getErrorCode()));
-    // return null;
-    // }
-    // }
-
     public JsonObject logIn(final ConcurrentHashMap<String, User> USERS) {
         final String[] ARGUMENTS = { "login", getName(), getPassword() };
         JsonObject loginResp = new LogIn(getKey(), ARGUMENTS, USERS).execute();

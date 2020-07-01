@@ -11,6 +11,7 @@ import javax.crypto.SecretKey;
 import com.google.gson.JsonObject;
 
 import command.Command;
+import extra.KeyMan;
 import extra.Message;
 import extra.Standard;
 import user.User;
@@ -40,7 +41,7 @@ public class LogIn extends Command {
                     if (authResp.get(Standard.MSG) == null) {
                         // no error occured during authentication.
                         try {
-                            encodedKey = generateKey();
+                            encodedKey = KeyMan.getKey();
                             if (users.get(encodedKey) == null) {
                                 User user = new User(name, password);
                                 users.put(encodedKey, user);
@@ -67,13 +68,6 @@ public class LogIn extends Command {
         jsonResp.addProperty(Standard.MSG, message);
         return jsonResp;
 
-    }
-
-    private String generateKey() throws NoSuchAlgorithmException {
-        KeyGenerator aesGen = KeyGenerator.getInstance("AES");
-        aesGen.init(256);
-        SecretKey key = aesGen.generateKey();
-        return Base64.getEncoder().encodeToString(key.getEncoded());
     }
 
     private boolean userExsists(String name, ConcurrentHashMap<String, User> users) {
