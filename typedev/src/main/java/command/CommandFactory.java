@@ -9,6 +9,7 @@ import command.session.GetSessions;
 import command.session.JoinSession;
 import command.session.LeaveSession;
 import command.session.StartSession;
+import command.stats.GetLanguageStats;
 import command.stats.GetLeaderboard;
 import command.stats.GetStats;
 import command.user.GetName;
@@ -22,7 +23,6 @@ public class CommandFactory {
 
     private static CommandFactory instance = null;
     private ConcurrentHashMap<String, User> users;
-
 
     private CommandFactory(ConcurrentHashMap<String, User> users) {
         this.users = users;
@@ -94,6 +94,10 @@ public class CommandFactory {
             case "lb":
             case "leaderboard":
                 command = new GetLeaderboard(key, args, users);
+                break;
+            case "ul":
+            case "language":
+                command = new GetLanguageStats(key, args, users);
                 break;
             case "?":
             case "help":

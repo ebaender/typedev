@@ -369,7 +369,7 @@ function updateState() {
             authKey = "";
             // alert("connection failed.");
             changeState(states.default);
-            textBuffer += "You have been disconnected.\n";
+            textBuffer += "Goodbye.\n";
             renderText();
         }
     });

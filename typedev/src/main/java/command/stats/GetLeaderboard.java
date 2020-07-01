@@ -69,7 +69,7 @@ public class GetLeaderboard extends Command {
     }
 
     private StringBuilder buildLeaderbord(JsonObject jsonLeaderbord, StringBuilder message, String leaderbordType) {
-        JsonArray leaderbordArray = jsonLeaderbord.get(DBStandard.LEADERBORD_PROPERTY).getAsJsonArray();
+        JsonArray leaderbordArray = jsonLeaderbord.get(DBStandard.BOARD_PROPERTY).getAsJsonArray();
         int place = 1;
         String category = null;
         String unit = "";

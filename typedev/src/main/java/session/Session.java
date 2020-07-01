@@ -16,6 +16,8 @@ import java.util.stream.Collectors;
 
 import com.google.gson.JsonObject;
 
+import extra.DBStandard;
+import extra.Message;
 import user.User;
 import user.UserState;
 
@@ -68,7 +70,33 @@ public class Session {
         return result;
     }
 
-    private void buildResult() {
+    private void updateDB(User user, int place, int cpm) {
+        JsonObject updateResp = user.getManager().update(hasMultipleUsers(), hasMultipleUsers() && place == 1, cpm,
+                language);
+        String message = null;
+        if (updateResp != null) {
+            int code = updateResp.get(DBStandard.CODE).getAsInt();
+            switch (code) {
+                case DBStandard.CODE_WRITE_SUCCESS:
+                    message = Message.UPDATE_SUCESS.toString(user.getName());
+                    break;
+                case DBStandard.CODE_WRONGPASSWORD:
+                    message = Message.WRONG_PASSWORD.toString();
+                    break;
+                case DBStandard.CODE_NOTFOUND:
+                    message = Message.USER_NOT_FOUND.toString(user.getName());
+                    break;
+                default:
+                    message = Message.UNKNOWN_ERROR.toString(code);
+                    break;
+            }
+        } else {
+            message = Message.DB_UNREACHABLE.toString();
+        }
+        System.out.println(Message.CONCAT.toString(getClass(), message));
+    }
+
+    private void finish() {
         AtomicInteger place = new AtomicInteger(1);
         result = new JsonObject();
         users.stream().sorted((a, b) -> Integer.compare(b.getProgress(), a.getProgress())).forEach(user -> {
@@ -78,7 +106,7 @@ public class Session {
             userResult.addProperty("progress", user.getProgress());
             userResult.addProperty("mistakes", user.getMistakes());
             userResult.addProperty("cpm", cpm);
-            user.getManager().update(hasMultipleUsers(), hasMultipleUsers() && place.intValue() == 1, cpm);
+            updateDB(user, place.intValue(), cpm);
             result.add(String.valueOf(place.getAndIncrement()), userResult);
         });
     }
@@ -122,7 +150,7 @@ public class Session {
         for (User user : users) {
             if (user.getProgress() == totalChars && !stopped.get()) {
                 duration = (System.nanoTime() - startTime) / 1000000000L;
-                buildResult();
+                finish();
                 stop();
             }
         }

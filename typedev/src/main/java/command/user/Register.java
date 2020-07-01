@@ -45,7 +45,7 @@ public class Register extends Command {
                             // database request succeeded
                             int code = databaseResp.get(DBStandard.CODE.toString()).getAsInt();
                             switch (code) {
-                                case DBStandard.CODE_REGISTER_SUCCESS:
+                                case DBStandard.CODE_WRITE_SUCCESS:
                                     message = "Registered user " + name + ".\n";
                                     break;
                                 case DBStandard.CODE_REGISTERED_DUPLICATE:

@@ -48,7 +48,7 @@ public class DBMan {
         return post(params);
     }
 
-    public JsonObject update(boolean played, boolean won, int speed) {
+    public JsonObject update(boolean played, boolean won, int speed, String language) {
         HashMap<String, String> params = new HashMap<>();
         params.put(DBStandard.NAME, owner.getName());
         params.put(DBStandard.PASSWORD, owner.getPassword());
@@ -56,6 +56,7 @@ public class DBMan {
         params.put(DBStandard.UPDATE_GAMES_PLAYED, played ? "1" : "0");
         params.put(DBStandard.UPDATE_GAMES_WON, won ? "1" : "0");
         params.put(DBStandard.UPDATE_SPEED, Integer.toString(speed));
+        params.put(DBStandard.UPDATE_LANGUAGE, language);
         System.out.println(super.getClass() + " update " + params);
         return post(params);
     }
@@ -67,6 +68,10 @@ public class DBMan {
         params.put(DBStandard.REQUEST, leaderbordType);
         System.out.println(super.getClass() + " " + leaderbordType + " " + params);
         return post(params);
+    }
+
+    public JsonObject language() {
+        return request(DBStandard.REQUEST_LANGUAGE);
     }
 
 }

@@ -13,7 +13,7 @@ public class TestUser extends User {
         JsonObject registerResp = getManager().register();
         if (registerResp != null) {
             int code = registerResp.get(DBStandard.CODE).getAsInt();
-            if (code != DBStandard.CODE_REGISTER_SUCCESS && code != DBStandard.CODE_REGISTERED_DUPLICATE) {
+            if (code != DBStandard.CODE_WRITE_SUCCESS && code != DBStandard.CODE_REGISTERED_DUPLICATE) {
                 throw new DBException(code);
             }
         }
