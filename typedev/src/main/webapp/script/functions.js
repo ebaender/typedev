@@ -52,9 +52,9 @@ function renderStatus() {
         $("#status").text(state + " " + authKey + " "
             + (codeArray === null ? null : codeArray.toString().replace(/,|\n/g, "").substring(0, 16)) + " "
             + manual_leave + " " + progress + " " + mistakes);
-    }
-    if (state !== states.live_session) {
-        scrollDown();
+        if (state !== states.live_session) {
+            scrollDown();
+        }
     }
 }
 
