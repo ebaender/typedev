@@ -4,8 +4,6 @@ import static matcher.JsonPropertyMatcher.hasJsonProperty;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertTrue;
 
-import java.util.jar.Attributes.Name;
-
 import com.google.gson.JsonObject;
 
 import org.junit.Before;

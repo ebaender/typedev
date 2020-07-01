@@ -19,6 +19,9 @@ public enum Message {
     LOGGED_OUT_ALREADY("You are logged out already."), LOGGED_OUT("Logged out as {0}."),
     YOU_ARE_NOBODY("You are nobody."), YOU_ARE("You are {0}."), NOBODY_HERE("Nobody is logged in right now."),
     INDEX_OUT_OF_BOUNDS("Index {0} is out of bounds."), LOG_IN_TO_VIEW_STATS("You need to be logged in to view stats."),
+    CREATE_SESSION_NO_LOGIN("You need to be logged in to create a session."),
+    IN_SESSION_ALREADY("You are in a session already."), LANGUAGE_DIR_MISSING("Could not find the language directory."),
+    LANGUAGE_UNSUPPORTED("Language \"{0}\" is not supported."), CREATED_SESSION("Created {0} session."),
     UNLUCKY("You are one unlucky bastard, try again.");
 
     private final String MESSAGE;

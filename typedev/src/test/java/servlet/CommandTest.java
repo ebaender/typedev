@@ -70,6 +70,10 @@ public abstract class CommandTest {
         return "password";
     }
 
+    protected String getValidLanguage() {
+        return "c";
+    }
+
     protected void assertCommand(final String KEY, final String COMMAND, final String EXPECTED_RESPONSE)
             throws Exception {
         StringWriter stringWriter = new StringWriter();
