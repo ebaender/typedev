@@ -20,12 +20,17 @@ public class LeaveSession extends Command {
         String message = null;
         User user = null;
         if (key != null && (user = users.get(key)) != null) {
+            // user exists.
             Session session = null;
             if ((session = user.getSession()) != null) {
+                // user has a session.
                 String sessionLanguage = session.getLanguage();
                 user.setSession(null);
                 session.leave(user);
-                user.getManager().updateLeftSession();
+                if (session.getUsers().size() > 1) {
+                    // user wants to leave a multi player session.
+                    user.getManager().updateLeftSession();
+                }
                 message = "Left " + sessionLanguage.toUpperCase() + " session.\n";
             } else {
                 message = "You already have no session.\n";
