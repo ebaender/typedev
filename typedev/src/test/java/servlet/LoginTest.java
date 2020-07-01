@@ -5,7 +5,6 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.Test;
 
-import extra.DBException;
 import extra.Message;
 import extra.TestUser;
 import user.User;
@@ -14,20 +13,20 @@ public class LoginTest extends CommandTest {
 
     private TestUser testUser;
 
-    private void registerTestUser() {
-        testUser = null;
-        try {
-            testUser = TestUser.getInstance("junit", "@Test");
-        } catch (DBException e) {
-            System.out.println(getClass() + "Can not guarantee existence of test user. "
-                    + Message.UNKNOWN_ERROR.toString(e.getErrorCode()));
-        }
-    }
+    // private void registerTestUser() {
+    //     testUser = null;
+    //     try {
+    //         testUser = TestUser.getInstance("junit", "@Test");
+    //     } catch (DBException e) {
+    //         System.out.println(getClass() + "Can not guarantee existence of test user. "
+    //                 + Message.UNKNOWN_ERROR.toString(e.getErrorCode()));
+    //     }
+    // }
 
     @Before
     @Override
     public void setUp() throws Exception {
-        registerTestUser();
+        testUser = TestUser.getInstance();
         super.setUp();
     }
 
