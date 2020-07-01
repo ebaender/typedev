@@ -392,3 +392,7 @@ function syncProgress() {
         });
     }
 }
+
+function openMobileKeyboard() {
+    $(document).find('input:first').focus();
+}

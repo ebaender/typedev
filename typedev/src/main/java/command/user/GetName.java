@@ -5,6 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.gson.JsonObject;
 
 import command.Command;
+import extra.Message;
 import extra.Standard;
 import user.User;
 
@@ -18,9 +19,10 @@ public class GetName extends Command {
     public JsonObject execute() {
         String message = null;
         if (key == null || key.equals("") || users.get(key) == null) {
-            message = "You are nobody.\n";
+            // user is unrecognizable.
+            message = Message.YOU_ARE_NOBODY.toLine();
         } else {
-            message = "You are " + users.get(key).getName() + ".\n";
+            message = Message.YOU_ARE.toLine(users.get(key).getName());
         }
         JsonObject jsonResp = new JsonObject();
         jsonResp.addProperty(Standard.MSG, message);
