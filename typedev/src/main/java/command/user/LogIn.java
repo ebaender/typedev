@@ -1,12 +1,8 @@
 package command.user;
 
 import java.security.NoSuchAlgorithmException;
-import java.util.Base64;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 
 import com.google.gson.JsonObject;
 

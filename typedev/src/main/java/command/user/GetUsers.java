@@ -23,7 +23,7 @@ public class GetUsers extends Command {
             message.append(Message.NOBODY_HERE.toLine());
         }
         users.entrySet().forEach(user -> {
-            message.append(user.getValue().getName() + "\n");
+            message.append(user.getValue().getName() + System.lineSeparator());
         });
         JsonObject jsonResp = new JsonObject();
         jsonResp.addProperty(Standard.MSG, message.toString());

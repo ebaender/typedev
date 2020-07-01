@@ -14,11 +14,12 @@ import user.User;
 public class TestUser extends User {
 
     private static List<TestUser> instancePool = new ArrayList<>();
-    private static int INSTANCE_LIMIT = 3;
+    public static int INSTANCE_LIMIT = 4;
+    public static int InsertionIndexPointer = 0;
     private String key;
 
     private TestUser() throws DBException, NoSuchAlgorithmException {
-        super(KeyMan.getKey().replaceAll(UserStandard.FORBIDDEN_CHAR_PATTERN, ""), KeyMan.getKey());
+        super(KeyMan.getShortKey().replaceAll(UserStandard.FORBIDDEN_CHAR_PATTERN, ""), KeyMan.getShortKey());
         setKey("");
         JsonObject registerResp = getManager().register();
         if (registerResp != null) {
@@ -42,7 +43,11 @@ public class TestUser extends User {
         if (instancePool.size() < INSTANCE_LIMIT) {
             try {
                 instance = new TestUser();
+                System.out.println(Message.STATEMENT.toString(TestUser.class, "created", instance.getName()));
                 instancePool.add(instanceIndex, instance);
+                if (instancePool.size() < INSTANCE_LIMIT) {
+                    InsertionIndexPointer++;
+                }
             } catch (NoSuchAlgorithmException e) {
                 System.err.println(Message.CONCAT.toString(TestUser.class, Message.KEYGEN_FAILED.toString()));
             } catch (DBException e) {
@@ -61,7 +66,17 @@ public class TestUser extends User {
     }
 
     public static TestUser getInstance() {
-        return getInstance(0);
+        return getInstance(InsertionIndexPointer);
+    }
+
+    public static void instantiateAll() {
+        for (int i = 0; i < INSTANCE_LIMIT; i++) {
+            getInstance();
+        }
+    }
+
+    public static final List<TestUser> getInstancePool() {
+        return instancePool;
     }
 
     public JsonObject logIn(final ConcurrentHashMap<String, User> USERS) {
