@@ -54,6 +54,10 @@ public abstract class CommandTest {
         return commandBuilder.build(arguments);
     }
 
+    public String buildSpecificCommand(String command, String... arguments) {
+        return commandBuilder.buildSpecific(command, arguments);
+    }
+
     protected String getValidKey() {
         return "key";
     }

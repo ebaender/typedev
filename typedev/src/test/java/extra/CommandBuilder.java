@@ -8,14 +8,18 @@ public class CommandBuilder {
         this.BASE_COMMAND = BASE_COMMAND;
     }
 
-    public final String build(String... arguments) {
-        StringBuilder command = new StringBuilder();
-        command.append(BASE_COMMAND);
+    public final String buildSpecific(String command, String... arguments) {
+        StringBuilder commandBuilder = new StringBuilder();
+        commandBuilder.append(command);
         for (String argument : arguments) {
-            command.append(' ').append(argument);
+            commandBuilder.append(' ').append(argument);
         }
-        System.out.println(Message.STATEMENT.toString(getClass(), "built", command.toString()));
-        return command.toString();
+        System.out.println(Message.STATEMENT.toString(getClass(), "built", commandBuilder.toString()));
+        return commandBuilder.toString();
+    }
+
+    public final String build(String... arguments) {
+        return buildSpecific(BASE_COMMAND, arguments);
     }
 
 }
