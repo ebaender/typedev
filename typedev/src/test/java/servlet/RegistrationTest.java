@@ -6,8 +6,11 @@ import common.TestUser;
 import manager.KeyMan;
 import standard.UserStd;
 import translator.Message;
+import user.User;
 
 public class RegistrationTest extends CommandTest {
+
+    private User registrationUser = null;
 
     @Override
     public String getBaseCommand() {
@@ -29,8 +32,7 @@ public class RegistrationTest extends CommandTest {
     public void registerNameTooShort() throws Exception {
         final String SHORT_NAME = new String(new char[UserStd.MIN_NAME_LENGTH - 1]).replace("\0", "a");
         final String COMMAND = buildCommand(SHORT_NAME, getValidPassword());
-        assertCommand(getValidKey(), COMMAND,
-                Message.NAME_TOO_SHORT.toLine(UserStd.MIN_NAME_LENGTH));
+        assertCommand(getValidKey(), COMMAND, Message.NAME_TOO_SHORT.toLine(UserStd.MIN_NAME_LENGTH));
     }
 
     @Test
@@ -44,8 +46,7 @@ public class RegistrationTest extends CommandTest {
     public void registerPasswordTooShort() throws Exception {
         final String SHORT_PASSWORD = new String(new char[UserStd.MIN_PASSWORD_LENGTH - 1]).replace("\0", "*");
         final String COMMAND = buildCommand(getValidName(), SHORT_PASSWORD);
-        assertCommand(getValidKey(), COMMAND,
-                Message.PASSWORD_TOO_SHORT.toLine(UserStd.MIN_PASSWORD_LENGTH));
+        assertCommand(getValidKey(), COMMAND, Message.PASSWORD_TOO_SHORT.toLine(UserStd.MIN_PASSWORD_LENGTH));
     }
 
     @Test
@@ -57,10 +58,17 @@ public class RegistrationTest extends CommandTest {
 
     @Test
     public void registerValidUser() throws Exception {
-        final String NAME = KeyMan.getShortKey().replace(UserStd.FORBIDDEN_CHAR_PATTERN, "");
-        final String COMMAND = buildCommand(NAME, KeyMan.getShortKey());
-        assertCommand(getValidKey(), COMMAND, Message.REGISTERED_SUCCESS.toLine(NAME));
-
+        registrationUser = new User(KeyMan.getShortName(), KeyMan.getShortKey());
+        final String COMMAND = buildCommand(registrationUser.getName(), registrationUser.getPassword());
+        assertCommand(getValidKey(), COMMAND, Message.REGISTERED_SUCCESS.toLine(registrationUser.getName()));
     }
-    
+
+    @Override
+    public void tearDown() throws Exception {
+        if (registrationUser != null) {
+            registrationUser.getDB().delete();
+        }
+        super.tearDown();
+    }
+
 }

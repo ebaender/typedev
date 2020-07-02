@@ -9,6 +9,7 @@ import com.google.gson.JsonObject;
 import command.Command;
 import standard.DBStd;
 import standard.JsonStd;
+import translator.Message;
 import user.User;
 
 public class GetLeaderboard extends Command {
@@ -22,46 +23,47 @@ public class GetLeaderboard extends Command {
         StringBuilder message = new StringBuilder();
         User user = users.get(key);
         if (user != null) {
-            // user is logged in
+            // user is logged in.
             if (args.length > 1) {
-                // received category
+                // received category argument.
                 String leaderbordType = null;
-                if (args[1].equals("victories")) {
+                String requestedCategory = args[1];
+                if (requestedCategory.equals(DBStd.CATEGORY_VICTORIES)) {
                     leaderbordType = DBStd.LEADERBORD_WINS;
-                } else if (args[1].equals("topspeed")) {
+                } else if (requestedCategory.equals(DBStd.CATEGORY_TOPSPEED)) {
                     leaderbordType = DBStd.LEADERBORD_SPEED;
                 }
                 if (leaderbordType != null) {
-                    // recognized category
+                    // recognized category.
                     JsonObject jsonLeaderbord = user.getDB().leaderbord(leaderbordType);
                     if (jsonLeaderbord != null) {
-                        // received response from database
+                        // received response from database.
                         int code = jsonLeaderbord.get(DBStd.CODE).getAsInt();
                         switch (code) {
                             case DBStd.CODE_SUCCESS:
                                 message = buildLeaderbord(jsonLeaderbord, message, leaderbordType);
                                 break;
                             case DBStd.CODE_WRONGPASSWORD:
-                                message.append("Your password was changed, try logging in again.\n");
+                                message.append(Message.WRONG_PASSWORD.toLine());
                                 break;
                             case DBStd.CODE_USER_NOT_FOUND:
-                                message.append("Your user was removed from the database.\n");
+                                message.append(Message.USER_NOT_FOUND.toLine(user.getName()));
                                 break;
                             default:
-                                message.append("Unknown error" + code + " occured.\n");
+                                message.append(Message.UNKNOWN_ERROR.toLine(code));
                                 break;
                         }
                     } else {
-                        message.append("Could not reach user database.\n");
+                        message.append(Message.DB_UNREACHABLE);
                     }
                 } else {
-                    message.append("\"" + args[1] + "\" is not a valid category.\n");
+                    message.append(Message.LEADERBOARD_INVALID_CATEGORY.toLine(requestedCategory));
                 }
             } else {
-                message.append("Usage: " + args[0] + " ['victories' | 'topspeed']\n");
+                message.append(Message.ARGS_NOT_RECEIVED);
             }
         } else {
-            message.append("You need to be logged in to view leaderbords.\n");
+            message.append(Message.NEED_LOGIN.toLine());
         }
         JsonObject jsonResp = new JsonObject();
         jsonResp.addProperty(JsonStd.MSG, message.toString());
@@ -92,4 +94,5 @@ public class GetLeaderboard extends Command {
         }
         return message;
     }
+
 }
