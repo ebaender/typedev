@@ -34,9 +34,7 @@ public class UsersTest extends CommandTest {
 
     @Test
     public void usersSingleUserOnline() throws Exception {
-        TestUser testUser = TestUser.getInstance(0);
-        JsonObject loginResp = testUser.logIn(getUsers());
-        assertThat(loginResp, hasJsonProperty(JsonStd.MSG, Message.LOGIN_SUCCESS.toLine(testUser.getName())));
+        TestUser testUser = TestUser.getAndAssertLoggedInInstance(0);
         final String EXPECTED_RESPONSE = testUser.getName() + System.lineSeparator();
         assertCommand(getValidKey(), getBaseCommand(), EXPECTED_RESPONSE);
     }
@@ -45,7 +43,7 @@ public class UsersTest extends CommandTest {
     public void usersMultipleUsersOnline() throws Exception {
         TestUser.instantiateAll();
         for (TestUser testUser : TestUser.getInstancePool()) {
-            JsonObject loginResp = testUser.logIn(getUsers());
+            JsonObject loginResp = testUser.logIn();
             assertThat(loginResp, hasJsonProperty(JsonStd.MSG, Message.LOGIN_SUCCESS.toLine(testUser.getName())));
         }
         JsonObject usersResp = new GetUsers(getUsers()).execute();

@@ -1,25 +1,16 @@
 package servlet;
 
-import static matcher.JsonPropertyMatcher.hasJsonProperty;
-import static org.hamcrest.MatcherAssert.assertThat;
-
-import com.google.gson.JsonObject;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import common.TestUser;
 import translator.Message;
-import standard.JsonStd;
 
 public class LogoutTest extends CommandTest {
-
-    private TestUser testUser;
 
     @Before
     @Override
     public void setUp() throws Exception {
-        testUser = TestUser.getInstance();
         super.setUp();
     }
 
@@ -35,9 +26,8 @@ public class LogoutTest extends CommandTest {
 
     @Test 
     public void logoutLoggedIn() throws Exception {
-        JsonObject loginResp = testUser.logIn(getUsers());
-        assertThat(loginResp, hasJsonProperty(JsonStd.MSG, Message.LOGIN_SUCCESS.toLine(testUser.getName())));
-        assertCommand(testUser.getKey(), getBaseCommand(), Message.LOGGED_OUT.toLine(testUser.getName()));
+        TestUser user = TestUser.getAndAssertLoggedInInstance(0);
+        assertCommand(user.getKey(), getBaseCommand(), Message.LOGGED_OUT.toLine(user.getName()));
     }
 
 }

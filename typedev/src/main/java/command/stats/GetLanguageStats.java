@@ -35,7 +35,7 @@ public class GetLanguageStats extends Command {
                 appendRequestedUserMessage(requestingUser, requestingUser.getName());
             }
         } else {
-            message.append(Message.LOG_IN_TO_VIEW_STATS.toLine());
+            message.append(Message.NEED_LOGIN.toLine());
         }
         JsonObject jsonResp = new JsonObject();
         jsonResp.addProperty(JsonStd.MSG, message.toString());

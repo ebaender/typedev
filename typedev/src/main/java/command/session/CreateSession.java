@@ -47,7 +47,7 @@ public class CreateSession extends Command {
                 message = Message.ARGS_NOT_RECEIVED.toLine();
             }
         } else {
-            message = Message.CREATE_SESSION_NO_LOGIN.toLine();
+            message = Message.NEED_LOGIN.toLine();
         }
         JsonObject jsonResp = new JsonObject();
         jsonResp.addProperty(JsonStd.MSG, message);

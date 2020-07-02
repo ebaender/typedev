@@ -19,6 +19,7 @@ import org.mockito.MockitoAnnotations;
 
 import command.CommandFactory;
 import common.CommandBuilder;
+import common.TestUser;
 import standard.JsonStd;
 import user.User;
 
@@ -44,6 +45,7 @@ public abstract class CommandTest {
         commandFactory = CommandFactory.getInstance(users);
         commandFactory.setUsers(users);
         commandBuilder = new CommandBuilder(getBaseCommand());
+        TestUser.setUsers(users);
         MockitoAnnotations.initMocks(this);
     }
 

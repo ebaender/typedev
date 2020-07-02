@@ -1,16 +1,12 @@
 package servlet;
 
-import static matcher.JsonPropertyMatcher.hasJsonProperty;
-import static org.hamcrest.MatcherAssert.assertThat;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import common.TestUser;
 import manager.KeyMan;
-import translator.Message;
-import standard.JsonStd;
 import session.Session;
+import translator.Message;
 
 public class SessionCreationTest extends CommandTest {
 
@@ -27,24 +23,18 @@ public class SessionCreationTest extends CommandTest {
 
     @Test
     public void createSessionNotLoggedIn() throws Exception {
-        assertCommand(getValidKey(), getBaseCommand(), Message.CREATE_SESSION_NO_LOGIN.toLine());
-    }
-
-    public TestUser getAndAssertLoggedInTestUser(int instanceIndex) {
-        TestUser user = TestUser.getInstance(instanceIndex);
-        assertThat(user.logIn(getUsers()), hasJsonProperty(JsonStd.MSG, Message.LOGIN_SUCCESS.toLine(user.getName())));
-        return user;
+        assertCommand(getValidKey(), getBaseCommand(), Message.NEED_LOGIN.toLine());
     }
 
     @Test
     public void createSessionNoLanguageSpecified() throws Exception {
-        TestUser user = getAndAssertLoggedInTestUser(0);
+        TestUser user = TestUser.getAndAssertLoggedInInstance(0);
         assertCommand(user.getKey(), getBaseCommand(), Message.ARGS_NOT_RECEIVED.toLine());
     }
 
     @Test
     public void createSessionUnsupportedLanguage() throws Exception {
-        TestUser user = getAndAssertLoggedInTestUser(0);
+        TestUser user = TestUser.getAndAssertLoggedInInstance(0);
         final String UNSUPPORTED_LANGUAGE = KeyMan.getShortKey();
         final String COMMAND = buildCommand(UNSUPPORTED_LANGUAGE);
         assertCommand(user.getKey(), COMMAND, Message.LANGUAGE_UNSUPPORTED.toLine(UNSUPPORTED_LANGUAGE.toUpperCase()));
@@ -52,7 +42,7 @@ public class SessionCreationTest extends CommandTest {
 
     @Test
     public void createSessionAlreadyInSession() throws Exception {
-        TestUser user = getAndAssertLoggedInTestUser(0);
+        TestUser user = TestUser.getAndAssertLoggedInInstance(0);
         getUsers().get(user.getKey()).setSession(new Session(getValidLanguage()));
         final String COMMAND  = buildCommand(getValidLanguage());
         assertCommand(user.getKey(), COMMAND, Message.IN_SESSION_ALREADY.toLine());
@@ -60,7 +50,7 @@ public class SessionCreationTest extends CommandTest {
 
     @Test
     public void createSessionNotInSession() throws Exception {
-        TestUser user = getAndAssertLoggedInTestUser(0);
+        TestUser user = TestUser.getAndAssertLoggedInInstance(0);
         final String LANGUAGE = getValidLanguage();
         final String COMMAND  = buildCommand(LANGUAGE);
         assertCommand(user.getKey(), COMMAND, Message.CREATED_SESSION.toLine(LANGUAGE.toUpperCase()));

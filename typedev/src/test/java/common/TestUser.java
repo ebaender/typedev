@@ -1,5 +1,8 @@
 package common;
 
+import static matcher.JsonPropertyMatcher.hasJsonProperty;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +24,7 @@ public class TestUser extends User {
     private static List<TestUser> instancePool = new ArrayList<>();
     public static int INSTANCE_LIMIT = 4;
     public static int InsertionIndexPointer = 0;
+    private static ConcurrentHashMap<String, User> users = null;
     private String key;
 
     private TestUser() throws DBException, NoSuchAlgorithmException {
@@ -33,6 +37,14 @@ public class TestUser extends User {
                 throw new DBException(code);
             }
         }
+    }
+
+    public static ConcurrentHashMap<String, User> getUsers() {
+        return users;
+    }
+
+    public static void setUsers(ConcurrentHashMap<String, User> users) {
+        TestUser.users = users;
     }
 
     public String getKey() {
@@ -84,14 +96,20 @@ public class TestUser extends User {
         return instancePool;
     }
 
-    public JsonObject logIn(final ConcurrentHashMap<String, User> USERS) {
+    public JsonObject logIn() {
         final String[] ARGUMENTS = { "login", getName(), getPassword() };
-        JsonObject loginResp = new LogIn(getKey(), ARGUMENTS, USERS).execute();
+        JsonObject loginResp = new LogIn(getKey(), ARGUMENTS, users).execute();
         JsonElement receivedKey = loginResp.get(JsonStd.KEY);
         if (receivedKey != null) {
             setKey(receivedKey.getAsString());
         }
         return loginResp;
+    }
+
+    public static TestUser getAndAssertLoggedInInstance(int instanceIndex) {
+        TestUser user = TestUser.getInstance(instanceIndex);
+        assertThat(user.logIn(), hasJsonProperty(JsonStd.MSG, Message.LOGIN_SUCCESS.toLine(user.getName())));
+        return user;
     }
 
 }

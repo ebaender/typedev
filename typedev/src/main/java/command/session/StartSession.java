@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import command.Command;
 import standard.JsonStd;
+import translator.Message;
 import session.Session;
 import user.User;
 
@@ -20,15 +21,17 @@ import user.User;
         String message = null;
         User user = getUsers().get(key);
         if (user != null) {
+            // user is logged in.
             Session session = user.getSession();
             if (session != null) {
+                // user is part of a session.
                 session.start();
-                message = "Starting session...\n";
+                message = Message.STARTING_SESSION.toLine();
             } else {
-                message = "You need to have a session to start it.\n";
+                message = Message.NO_SESSION.toLine();
             }
         } else {
-            message = "You need to be logged in to start a session.\n";
+            message = Message.NEED_LOGIN.toLine();
         }
         JsonObject jsonResp = new JsonObject();
         jsonResp.addProperty(JsonStd.MSG, message);
