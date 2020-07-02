@@ -2,6 +2,7 @@ package common;
 
 import static matcher.JsonPropertyMatcher.hasJsonProperty;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -110,6 +111,18 @@ public class TestUser extends User {
         TestUser user = TestUser.getInstance(instanceIndex);
         assertThat(user.logIn(), hasJsonProperty(JsonStd.MSG, Message.LOGIN_SUCCESS.toLine(user.getName())));
         return user;
+    }
+
+    public static List<TestUser> getAndAssertLoggedInInstancePool(int poolSize) {
+        if (poolSize > TestUser.INSTANCE_LIMIT) {
+            poolSize = TestUser.INSTANCE_LIMIT;
+        }
+        List<TestUser> userPool = new ArrayList<>();
+        for (int i = 0; i < poolSize; i++) {
+            userPool.add(TestUser.getAndAssertLoggedInInstance(i));
+        }
+        assertTrue(userPool.size() == poolSize);
+        return userPool;
     }
 
 }

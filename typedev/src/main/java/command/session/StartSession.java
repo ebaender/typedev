@@ -28,7 +28,7 @@ import user.User;
                 session.start();
                 message = Message.STARTING_SESSION.toLine();
             } else {
-                message = Message.NO_SESSION.toLine();
+                message = Message.YOU_HAVE_NO_SESSION.toLine();
             }
         } else {
             message = Message.NEED_LOGIN.toLine();
