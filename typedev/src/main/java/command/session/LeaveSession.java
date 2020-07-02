@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 
 import command.Command;
 import standard.JsonStd;
+import translator.Message;
 import session.Session;
 import user.User;
 
@@ -18,11 +19,11 @@ public class LeaveSession extends Command {
     @Override
     public JsonObject execute() {
         String message = null;
-        User user = null;
-        if (key != null && (user = users.get(key)) != null) {
-            // user exists.
-            Session session = null;
-            if ((session = user.getSession()) != null) {
+        User user = users.get(key);
+        if (user != null) {
+            // user is logged in.
+            Session session = user.getSession();
+            if (session != null) {
                 // user has a session.
                 String sessionLanguage = session.getLanguage();
                 user.setSession(null);
@@ -31,12 +32,12 @@ public class LeaveSession extends Command {
                     // user wants to leave a multi player session.
                     user.getManager().updateLeftSession();
                 }
-                message = "Left " + sessionLanguage.toUpperCase() + " session.\n";
+                message = Message.LEFT_SESSION.toLine(sessionLanguage.toUpperCase());
             } else {
-                message = "You already have no session.\n";
+                message = Message.YOU_HAVE_NO_SESSION.toLine();
             }
         } else {
-            message = "You need to be logged in to leave a session.\n";
+            message = Message.NEED_LOGIN.toLine();
         }
         JsonObject jsonResp = new JsonObject();
         jsonResp.addProperty(JsonStd.MSG, message);

@@ -73,7 +73,7 @@ public abstract class CommandTest {
     }
 
     protected String getValidLanguage() {
-        return "c";
+        return "java";
     }
 
     protected void assertCommand(final String KEY, final String COMMAND, final String EXPECTED_RESPONSE)

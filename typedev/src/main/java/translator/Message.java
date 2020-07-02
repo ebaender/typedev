@@ -21,8 +21,9 @@ public enum Message {
     INDEX_OUT_OF_BOUNDS("Index {0} is out of bounds."), NEED_LOGIN("You need to be logged in to do that."),
     IN_SESSION_ALREADY("You are in a session already."), LANGUAGE_DIR_MISSING("Could not find the language directory."),
     LANGUAGE_UNSUPPORTED("Language \"{0}\" is not supported."), CREATED_SESSION("Created {0} session."),
-    STARTING_SESSION("Starting Session..."), YOU_HAVE_NO_SESSION("You don't have a session."), JOINED_SESSION("Joined {0}''s {1} session."),
-    SESSION_ALREADY_LIVE("{0}''s session is already live."), USER_HAS_NO_SESSION("{0} is not a member of any session."),
+    STARTING_SESSION("Starting Session..."), YOU_HAVE_NO_SESSION("You don't have a session."),
+    JOINED_SESSION("Joined {0}''s {1} session."), SESSION_ALREADY_LIVE("{0}''s session is already live."),
+    USER_HAS_NO_SESSION("{0} is not a member of any session."), LEFT_SESSION("Left {0} session."),
     UNLUCKY("You are one unlucky bastard, try again.");
 
     private final String MESSAGE;
