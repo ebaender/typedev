@@ -16,7 +16,7 @@ public class CommandBuilder {
         for (String argument : arguments) {
             commandBuilder.append(' ').append(argument);
         }
-        System.out.println(Message.STATEMENT.toString(getClass(), "built", commandBuilder.toString()));
+        System.out.println(Message.STATEMENT.toString(getClass(), "built", "\"" + commandBuilder.toString() + "\""));
         return commandBuilder.toString();
     }
 
