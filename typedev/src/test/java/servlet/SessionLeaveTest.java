@@ -1,20 +1,11 @@
 package servlet;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import org.junit.Before;
 import org.junit.Test;
 
 import common.TestUser;
-import manager.KeyMan;
 import session.Session;
 import translator.Message;
-import user.User;
 
 public class SessionLeaveTest extends CommandTest {
 
@@ -36,16 +27,16 @@ public class SessionLeaveTest extends CommandTest {
 
     @Test
     public void leaveSessionNoSession() throws Exception {
-        final String USER_KEY = TestUser.getAndAssertLoggedInInstance(0).getKey();
-        assertCommand(USER_KEY, getBaseCommand(), Message.YOU_HAVE_NO_SESSION.toLine());
+        final TestUser USER = TestUser.getAndAssertLoggedInInstance(0);
+        assertCommand(USER.getKey(), getBaseCommand(), Message.YOU_HAVE_NO_SESSION.toLine());
     }
 
     @Test
     public void leaveSessionHasSession() throws Exception {
-        final String USER_KEY = TestUser.getAndAssertLoggedInInstance(0).getKey();
+        final TestUser USER = TestUser.getAndAssertLoggedInInstance(0);
         final String LANGUAGE = getValidLanguage();
-        getUsers().get(USER_KEY).setSession(new Session(LANGUAGE));
-        assertCommand(USER_KEY, getBaseCommand(), Message.LEFT_SESSION.toLine(LANGUAGE.toUpperCase()));
+        USER.getUser().setSession(new Session(LANGUAGE));
+        assertCommand(USER.getKey(), getBaseCommand(), Message.LEFT_SESSION.toLine(LANGUAGE.toUpperCase()));
     }
 
    }

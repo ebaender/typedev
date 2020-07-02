@@ -27,6 +27,7 @@ public class TestUser extends User {
     public static int InsertionIndexPointer = 0;
     private static ConcurrentHashMap<String, User> users = null;
     private String key;
+    private User user;
 
     private TestUser() throws DBException, NoSuchAlgorithmException {
         super(KeyMan.getShortKey().replaceAll(UserStd.FORBIDDEN_CHAR_PATTERN, ""), KeyMan.getShortKey());
@@ -38,6 +39,14 @@ public class TestUser extends User {
                 throw new DBException(code);
             }
         }
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public static ConcurrentHashMap<String, User> getUsers() {
@@ -87,12 +96,6 @@ public class TestUser extends User {
         return getInstance(InsertionIndexPointer);
     }
 
-    public static void instantiateAll() {
-        for (int i = 0; i < INSTANCE_LIMIT; i++) {
-            getInstance();
-        }
-    }
-
     public static final List<TestUser> getInstancePool() {
         return instancePool;
     }
@@ -103,6 +106,7 @@ public class TestUser extends User {
         JsonElement receivedKey = loginResp.get(JsonStd.KEY);
         if (receivedKey != null) {
             setKey(receivedKey.getAsString());
+            setUser(users.get(getKey()));
         }
         return loginResp;
     }

@@ -27,15 +27,15 @@ public class SessionStartTest extends CommandTest {
 
     @Test
     public void startSessionNoSession() throws Exception {
-        TestUser user = TestUser.getAndAssertLoggedInInstance(0);
-        assertCommand(user.getKey(), getBaseCommand(), Message.YOU_HAVE_NO_SESSION.toLine());
+        final TestUser USER = TestUser.getAndAssertLoggedInInstance(0);
+        assertCommand(USER.getKey(), getBaseCommand(), Message.YOU_HAVE_NO_SESSION.toLine());
     }
 
     @Test
     public void startSessionHasSession() throws Exception {
-        TestUser user = TestUser.getAndAssertLoggedInInstance(0);
-        getUsers().get(user.getKey()).setSession(new Session(getValidLanguage()));
-        assertCommand(user.getKey(), getBaseCommand(), Message.STARTING_SESSION.toLine());
+        final TestUser USER = TestUser.getAndAssertLoggedInInstance(0);
+        USER.getUser().setSession(new Session(getValidLanguage()));
+        assertCommand(USER.getKey(), getBaseCommand(), Message.STARTING_SESSION.toLine());
     }
     
 }

@@ -28,32 +28,32 @@ public class SessionCreationTest extends CommandTest {
 
     @Test
     public void createSessionNoLanguageSpecified() throws Exception {
-        TestUser user = TestUser.getAndAssertLoggedInInstance(0);
-        assertCommand(user.getKey(), getBaseCommand(), Message.ARGS_NOT_RECEIVED.toLine());
+        final TestUser USER = TestUser.getAndAssertLoggedInInstance(0);
+        assertCommand(USER.getKey(), getBaseCommand(), Message.ARGS_NOT_RECEIVED.toLine());
     }
 
     @Test
     public void createSessionUnsupportedLanguage() throws Exception {
-        TestUser user = TestUser.getAndAssertLoggedInInstance(0);
+        final TestUser USER = TestUser.getAndAssertLoggedInInstance(0);
         final String UNSUPPORTED_LANGUAGE = KeyMan.getShortKey();
         final String COMMAND = buildCommand(UNSUPPORTED_LANGUAGE);
-        assertCommand(user.getKey(), COMMAND, Message.LANGUAGE_UNSUPPORTED.toLine(UNSUPPORTED_LANGUAGE.toUpperCase()));
+        assertCommand(USER.getKey(), COMMAND, Message.LANGUAGE_UNSUPPORTED.toLine(UNSUPPORTED_LANGUAGE.toUpperCase()));
     }
 
     @Test
     public void createSessionAlreadyInSession() throws Exception {
-        TestUser user = TestUser.getAndAssertLoggedInInstance(0);
-        getUsers().get(user.getKey()).setSession(new Session(getValidLanguage()));
-        final String COMMAND  = buildCommand(getValidLanguage());
-        assertCommand(user.getKey(), COMMAND, Message.IN_SESSION_ALREADY.toLine());
+        final TestUser USER = TestUser.getAndAssertLoggedInInstance(0);
+        USER.getUser().setSession(new Session(getValidLanguage()));
+        final String COMMAND = buildCommand(getValidLanguage());
+        assertCommand(USER.getKey(), COMMAND, Message.IN_SESSION_ALREADY.toLine());
     }
 
     @Test
     public void createSessionNotInSession() throws Exception {
-        TestUser user = TestUser.getAndAssertLoggedInInstance(0);
+        final TestUser USER = TestUser.getAndAssertLoggedInInstance(0);
         final String LANGUAGE = getValidLanguage();
         final String COMMAND  = buildCommand(LANGUAGE);
-        assertCommand(user.getKey(), COMMAND, Message.CREATED_SESSION.toLine(LANGUAGE.toUpperCase()));
+        assertCommand(USER.getKey(), COMMAND, Message.CREATED_SESSION.toLine(LANGUAGE.toUpperCase()));
     }
 
 }

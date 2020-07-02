@@ -26,8 +26,8 @@ public class LogoutTest extends CommandTest {
 
     @Test 
     public void logoutLoggedIn() throws Exception {
-        TestUser user = TestUser.getAndAssertLoggedInInstance(0);
-        assertCommand(user.getKey(), getBaseCommand(), Message.LOGGED_OUT.toLine(user.getName()));
+        final TestUser USER = TestUser.getAndAssertLoggedInInstance(0);
+        assertCommand(USER.getKey(), getBaseCommand(), Message.LOGGED_OUT.toLine(USER.getName()));
     }
 
 }

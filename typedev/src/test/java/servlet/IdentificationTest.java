@@ -26,8 +26,8 @@ public class IdentificationTest extends CommandTest {
 
     @Test 
     public void identifyLoggedIn() throws Exception {
-        TestUser user = TestUser.getAndAssertLoggedInInstance(0);
-        assertCommand(user.getKey(), getBaseCommand(), Message.YOU_ARE.toLine(user.getName()));
+        final TestUser USER = TestUser.getAndAssertLoggedInInstance(0);
+        assertCommand(USER.getKey(), getBaseCommand(), Message.YOU_ARE.toLine(USER.getName()));
     }
 
 }
