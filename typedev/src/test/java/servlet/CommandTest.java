@@ -4,7 +4,6 @@ import static org.mockito.Mockito.when;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.RequestDispatcher;
