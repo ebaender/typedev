@@ -4,6 +4,7 @@ import static org.mockito.Mockito.when;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.RequestDispatcher;
@@ -11,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 import org.junit.Before;
@@ -20,11 +22,13 @@ import org.mockito.MockitoAnnotations;
 import command.CommandFactory;
 import common.CommandBuilder;
 import common.TestUser;
+import manager.ResourceMan;
 import standard.JsonStd;
 import user.User;
 
 import static matcher.JsonPropertyMatcher.hasJsonProperty;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertFalse;
 
 public abstract class CommandTest {
 
@@ -49,7 +53,6 @@ public abstract class CommandTest {
         MockitoAnnotations.initMocks(this);
     }
 
-
     public abstract String getBaseCommand();
 
     public String buildCommand(String... arguments) {
@@ -73,11 +76,16 @@ public abstract class CommandTest {
     }
 
     protected String getValidLanguage() {
-        return "java";
+        return ResourceMan.getRandomLanguage();
     }
 
     protected void assertCommand(final String KEY, final String COMMAND, final String EXPECTED_RESPONSE)
             throws Exception {
+        JsonObject commandResp = executeCommand(KEY, COMMAND);
+        assertThat(commandResp, hasJsonProperty(JsonStd.MSG, EXPECTED_RESPONSE));
+    }
+
+    protected JsonObject executeCommand(final String KEY, final String COMMAND) throws Exception {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
 
@@ -89,8 +97,9 @@ public abstract class CommandTest {
         commandServlet.setCommandFactory(commandFactory);
         commandServlet.doPost(req, resp);
 
-        JsonElement jsonResp = JsonParser.parseString(stringWriter.toString());
-        assertThat(jsonResp, hasJsonProperty(JsonStd.MSG, EXPECTED_RESPONSE));
+        JsonElement commandResp = JsonParser.parseString(stringWriter.toString());
+        assertFalse(commandResp == null);
+        return commandResp.getAsJsonObject();
     }
 
     protected CommandFactory getCommandFactory() {

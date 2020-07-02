@@ -1,13 +1,13 @@
 package servlet;
 
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.*;
 
 import com.google.gson.JsonObject;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import command.user.GetUsers;
 import common.TestUser;
 import standard.JsonStd;
 import translator.Message;
@@ -40,12 +40,11 @@ public class UsersTest extends CommandTest {
     @Test
     public void usersMultipleUsersOnline() throws Exception {
         TestUser.getAndAssertLoggedInInstancePool(TestUser.INSTANCE_LIMIT);
-        final JsonObject USERS_RESP = new GetUsers(getUsers()).execute();
-        assertTrue(USERS_RESP != null);
-        assertTrue(USERS_RESP.get(JsonStd.MSG) != null);
+        final JsonObject USERS_RESP = executeCommand(getValidKey(), getBaseCommand());
+        assertThat(USERS_RESP.get(JsonStd.MSG), notNullValue());
         final String USER_LIST = USERS_RESP.get(JsonStd.MSG).getAsString();
         for (final TestUser USER : TestUser.getInstancePool()) {
-            assertTrue(USER_LIST.contains(USER.getName()));
+            assertThat(USER_LIST, containsString(USER.getName()));
         }
     }
 

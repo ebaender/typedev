@@ -27,7 +27,7 @@ public class GetSessions extends Command {
         users.entrySet().forEach(user -> {
             Session session = user.getValue().getSession();
             if (session != null && !knownSessions.contains(session)) {
-                noSessions.set(false);;
+                noSessions.set(false);
                 String live = session.isLive() ? "live " : "";
                 message.append(live + session.getLanguage().toUpperCase() + " session (");
                 session.getUsers().forEach(sessionUser -> message.append(sessionUser.getName() + ", "));
