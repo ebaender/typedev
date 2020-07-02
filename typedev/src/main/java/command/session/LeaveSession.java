@@ -30,7 +30,7 @@ public class LeaveSession extends Command {
                 session.leave(user);
                 if (session.getUsers().size() > 1) {
                     // user wants to leave a multi player session.
-                    user.getManager().updateLeftSession();
+                    user.getDB().updateLeftSession();
                 }
                 message = Message.LEFT_SESSION.toLine(sessionLanguage.toUpperCase());
             } else {

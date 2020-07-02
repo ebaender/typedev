@@ -25,7 +25,7 @@ public class GetStats extends Command {
             if (args.length > 1) {
                 // received target argument
                 String targetUser = args[1];
-                jsonStats = user.getManager().spy(targetUser);
+                jsonStats = user.getDB().spy(targetUser);
                 if (jsonStats != null) {
                     int code = jsonStats.get(DBStd.CODE).getAsInt();
                     switch (code) {
@@ -47,7 +47,7 @@ public class GetStats extends Command {
                 }
             } else {
                 // no argument
-                jsonStats = user.getManager().authenticate();
+                jsonStats = user.getDB().authenticate();
                 if (jsonStats != null) {
                     int code = jsonStats.get(DBStd.CODE).getAsInt();
                     switch (code) {

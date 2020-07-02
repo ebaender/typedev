@@ -15,8 +15,10 @@ import translator.Message;
 
 public class ResourceMan {
 
+    public static final String LANGUAGE_DIR = "resource/language", HELP_FILE_PATH = "resource/help/help.txt";
+
     public static Set<String> getLanguages() {
-        File dirPath = new File("resource/language");
+        File dirPath = new File(LANGUAGE_DIR);
         File[] files = dirPath.listFiles();
         HashSet<String> languages = new HashSet<>();
         for (File file : files) {
@@ -27,14 +29,14 @@ public class ResourceMan {
 
     public static String getRandomLanguage() {
         ArrayList<String> languages = new ArrayList<>(getLanguages());
-        String randomLanguage = languages.get((int) (Math.random() * languages .size()));
+        String randomLanguage = languages.get((int) (Math.random() * languages.size()));
         System.out.println(Message.STATEMENT.toString(ResourceMan.class, "generated", randomLanguage));
         return randomLanguage;
     }
 
     public static List<String> getHelp() {
         List<String> helpLines = new LinkedList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(new File("resource/help/help.txt")))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(new File(HELP_FILE_PATH)))) {
             String line;
             while ((line = br.readLine()) != null) {
                 helpLines.add(line);
@@ -47,7 +49,7 @@ public class ResourceMan {
 
     public static List<String> getSpecificHelp(String query) {
         List<String> helpLines = getHelp();
-        List<String>  specificHelpLines = new LinkedList<>();
+        List<String> specificHelpLines = new LinkedList<>();
         Pattern queryPattern = Pattern.compile(".*\\b" + query + "\\b.*");
         boolean include = false;
         for (String line : helpLines) {
@@ -64,5 +66,5 @@ public class ResourceMan {
         }
         return specificHelpLines;
     }
-    
+
 }

@@ -43,7 +43,7 @@ public class GetLanguageStats extends Command {
     }
 
     private void appendRequestedUserMessage(User requestingUser, String requestedUserName) {
-        JsonObject jsonLanguageStats = requestingUser.getManager().language(requestedUserName);
+        JsonObject jsonLanguageStats = requestingUser.getDB().language(requestedUserName);
         if (jsonLanguageStats != null) {
             // received response from user db.
             int code = jsonLanguageStats.get(DBStd.CODE).getAsInt();

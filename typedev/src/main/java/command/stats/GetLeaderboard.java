@@ -33,7 +33,7 @@ public class GetLeaderboard extends Command {
                 }
                 if (leaderbordType != null) {
                     // recognized category
-                    JsonObject jsonLeaderbord = user.getManager().leaderbord(leaderbordType);
+                    JsonObject jsonLeaderbord = user.getDB().leaderbord(leaderbordType);
                     if (jsonLeaderbord != null) {
                         // received response from database
                         int code = jsonLeaderbord.get(DBStd.CODE).getAsInt();

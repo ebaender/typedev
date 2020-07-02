@@ -10,6 +10,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import command.CommandFactory;
+import standard.SystemStd;
 import translator.ContextAttribute;
 import user.User;
 import user.UserTimeout;
@@ -18,7 +19,6 @@ import user.UserTimeout;
 public class ContextConfiguration implements ServletContextListener {
 
     private ScheduledExecutorService scheduler;
-    private int timeout = 4;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -27,7 +27,7 @@ public class ContextConfiguration implements ServletContextListener {
         CommandFactory commandFactory = CommandFactory.getInstance(users);
         sce.getServletContext().setAttribute(ContextAttribute.COMMAND_FACTORY.name(), commandFactory);
         scheduler = Executors.newSingleThreadScheduledExecutor();
-        scheduler.scheduleAtFixedRate(new UserTimeout(users.values(), timeout), 0, timeout, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(new UserTimeout(users.values(), SystemStd.USER_TIMEOUT), 0, SystemStd.USER_TIMEOUT, TimeUnit.SECONDS);
     }
 
     @Override

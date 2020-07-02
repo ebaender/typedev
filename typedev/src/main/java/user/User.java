@@ -23,7 +23,7 @@ public class User {
         manager = new DBMan(this);
     }
 
-    public DBMan getManager() {
+    public DBMan getDB() {
         return manager;
     }
 

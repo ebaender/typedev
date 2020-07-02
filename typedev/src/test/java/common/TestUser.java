@@ -32,7 +32,7 @@ public class TestUser extends User {
     private TestUser() throws DBException, NoSuchAlgorithmException {
         super(KeyMan.getShortKey().replaceAll(UserStd.FORBIDDEN_CHAR_PATTERN, ""), KeyMan.getShortKey());
         setKey("");
-        final JsonObject registerResp = getManager().register();
+        final JsonObject registerResp = getDB().register();
         if (registerResp != null) {
             final int code = registerResp.get(DBStd.CODE).getAsInt();
             if (code != DBStd.CODE_WRITE_SUCCESS && code != DBStd.CODE_REGISTERED_DUPLICATE) {
@@ -131,7 +131,7 @@ public class TestUser extends User {
 
     public static void reset() {
         for (final TestUser USER : instancePool) {
-            USER.getManager().delete();
+            USER.getDB().delete();
                 System.out.println(Message.STATEMENT.toString(TestUser.class, "deleted", USER.getName()));
         }
         instancePool = new ArrayList<>();

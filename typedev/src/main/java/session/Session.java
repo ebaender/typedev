@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import com.google.gson.JsonObject;
 
 import standard.DBStd;
+import standard.UserStd;
 import translator.Message;
 import user.User;
 import user.UserState;
@@ -71,7 +72,7 @@ public class Session {
     }
 
     private void updateDB(User user, int place, int cpm) {
-        JsonObject updateResp = user.getManager().update(hasMultipleUsers(), hasMultipleUsers() && place == 1, cpm,
+        JsonObject updateResp = user.getDB().update(hasMultipleUsers(), hasMultipleUsers() && place == 1, cpm,
                 language);
         String message = null;
         if (updateResp != null) {
@@ -102,10 +103,10 @@ public class Session {
         users.stream().sorted((a, b) -> Integer.compare(b.getProgress(), a.getProgress())).forEach(user -> {
             int cpm = (int) (user.getProgress() * 60D / duration);
             JsonObject userResult = new JsonObject();
-            userResult.addProperty("name", user.getName());
-            userResult.addProperty("progress", user.getProgress());
-            userResult.addProperty("mistakes", user.getMistakes());
-            userResult.addProperty("cpm", cpm);
+            userResult.addProperty(UserStd.NAME, user.getName());
+            userResult.addProperty(UserStd.PROGRESS, user.getProgress());
+            userResult.addProperty(UserStd.MISTAKES, user.getMistakes());
+            userResult.addProperty(UserStd.SPEED, cpm);
             updateDB(user, place.intValue(), cpm);
             result.add(String.valueOf(place.getAndIncrement()), userResult);
         });
@@ -132,7 +133,6 @@ public class Session {
                 user.setState(UserState.LIVE_SESSION);
             }
         }
-        // System.out.println(getClass() + " started");
     }
 
     public synchronized void stop() {
@@ -143,7 +143,6 @@ public class Session {
                 user.setState(UserState.FINISHED);
             }
         }
-        // System.out.println(getClass() + " stopped");
     }
 
     public synchronized void think() {
@@ -154,7 +153,6 @@ public class Session {
                 stop();
             }
         }
-        // System.out.println(getClass() + " thinking about the number " + totalChars);
     }
 
     public void join(User user) {
