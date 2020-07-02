@@ -6,8 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.gson.JsonObject;
 
 import command.Command;
-import extra.Message;
-import extra.JsonStan;
+import translator.Message;
+import standard.JsonStd;
 import session.EmptyLanguageException;
 import session.Session;
 import user.User;
@@ -50,7 +50,7 @@ public class CreateSession extends Command {
             message = Message.CREATE_SESSION_NO_LOGIN.toLine();
         }
         JsonObject jsonResp = new JsonObject();
-        jsonResp.addProperty(JsonStan.MSG, message);
+        jsonResp.addProperty(JsonStd.MSG, message);
         return jsonResp;
     }
     

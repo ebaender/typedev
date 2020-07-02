@@ -1,4 +1,4 @@
-package extra;
+package manager;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Base64;

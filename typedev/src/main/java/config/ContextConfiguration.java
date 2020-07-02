@@ -1,4 +1,4 @@
-package extra;
+package config;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
@@ -10,6 +10,7 @@ import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
 import command.CommandFactory;
+import translator.ContextAttribute;
 import user.User;
 import user.UserTimeout;
 

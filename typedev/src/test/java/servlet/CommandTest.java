@@ -18,8 +18,8 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import command.CommandFactory;
-import extra.CommandBuilder;
-import extra.JsonStan;
+import common.CommandBuilder;
+import standard.JsonStd;
 import user.User;
 
 import static matcher.JsonPropertyMatcher.hasJsonProperty;
@@ -79,8 +79,8 @@ public abstract class CommandTest {
         StringWriter stringWriter = new StringWriter();
         PrintWriter printWriter = new PrintWriter(stringWriter);
 
-        when(req.getParameter(JsonStan.KEY)).thenReturn(KEY);
-        when(req.getParameter(JsonStan.COM)).thenReturn(COMMAND);
+        when(req.getParameter(JsonStd.KEY)).thenReturn(KEY);
+        when(req.getParameter(JsonStd.COM)).thenReturn(COMMAND);
         when(resp.getWriter()).thenReturn(printWriter);
 
         CommandServlet commandServlet = new CommandServlet();
@@ -88,7 +88,7 @@ public abstract class CommandTest {
         commandServlet.doPost(req, resp);
 
         JsonElement jsonResp = JsonParser.parseString(stringWriter.toString());
-        assertThat(jsonResp, hasJsonProperty(JsonStan.MSG, EXPECTED_RESPONSE));
+        assertThat(jsonResp, hasJsonProperty(JsonStd.MSG, EXPECTED_RESPONSE));
     }
 
     protected CommandFactory getCommandFactory() {

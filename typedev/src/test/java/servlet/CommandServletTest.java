@@ -2,7 +2,7 @@ package servlet;
 
 import org.junit.Test;
 
-import extra.Message;
+import translator.Message;
 
 public class CommandServletTest extends CommandTest {
 

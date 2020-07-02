@@ -8,9 +8,9 @@ import com.google.gson.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import extra.Message;
-import extra.JsonStan;
-import extra.TestUser;
+import common.TestUser;
+import translator.Message;
+import standard.JsonStd;
 
 public class IdentificationTest extends CommandTest {
 
@@ -36,7 +36,7 @@ public class IdentificationTest extends CommandTest {
     @Test 
     public void identifyLoggedIn() throws Exception {
         JsonObject loginResp = testUser.logIn(getUsers());
-        assertThat(loginResp, hasJsonProperty(JsonStan.MSG, Message.LOGIN_SUCCESS.toLine(testUser.getName())));
+        assertThat(loginResp, hasJsonProperty(JsonStd.MSG, Message.LOGIN_SUCCESS.toLine(testUser.getName())));
         assertCommand(testUser.getKey(), getBaseCommand(), Message.YOU_ARE.toLine(testUser.getName()));
     }
 

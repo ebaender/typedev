@@ -12,9 +12,9 @@ import com.google.gson.JsonObject;
 
 import command.Command;
 import command.CommandFactory;
-import extra.ContextAttribute;
-import extra.Message;
-import extra.JsonStan;
+import translator.ContextAttribute;
+import translator.Message;
+import standard.JsonStd;
 
 @WebServlet(name = "CommandServlet", urlPatterns = { "command" }, loadOnStartup = 1)
 public class CommandServlet extends HttpServlet {
@@ -29,8 +29,8 @@ public class CommandServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String key = req.getParameter(JsonStan.KEY);
-        String commandString = req.getParameter(JsonStan.COM);
+        String key = req.getParameter(JsonStd.KEY);
+        String commandString = req.getParameter(JsonStd.COM);
         JsonObject jsonResp = null;
         if (key != null && commandString != null) {
             // incoming request is usable.
@@ -40,11 +40,11 @@ public class CommandServlet extends HttpServlet {
                 jsonResp = command.execute();
             } else {
                 jsonResp = new JsonObject();
-                jsonResp.addProperty(JsonStan.MSG, Message.COMMAND_NOT_FOUND.toLine());
+                jsonResp.addProperty(JsonStd.MSG, Message.COMMAND_NOT_FOUND.toLine());
             }
         } else {
             jsonResp = new JsonObject();
-            jsonResp.addProperty(JsonStan.MSG, Message.ARGS_NOT_RECEIVED.toLine());
+            jsonResp.addProperty(JsonStd.MSG, Message.ARGS_NOT_RECEIVED.toLine());
         }
         resp.getWriter().print(jsonResp);
         System.out.println(Message.STATEMENT.toString(getClass(), "responded", jsonResp));

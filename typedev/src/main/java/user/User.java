@@ -2,6 +2,7 @@ package user;
 
 import java.time.Instant;
 
+import manager.DBMan;
 import session.Session;
 
 public class User {

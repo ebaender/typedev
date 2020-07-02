@@ -1,4 +1,4 @@
-package extra;
+package common;
 
 public class DBException extends Exception {
 

@@ -5,8 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.gson.JsonObject;
 
 import command.Command;
-import extra.Message;
-import extra.JsonStan;
+import translator.Message;
+import standard.JsonStd;
 import user.User;
 
 public class GetUsers extends Command {
@@ -26,7 +26,7 @@ public class GetUsers extends Command {
             message.append(user.getValue().getName() + System.lineSeparator());
         });
         JsonObject jsonResp = new JsonObject();
-        jsonResp.addProperty(JsonStan.MSG, message.toString());
+        jsonResp.addProperty(JsonStd.MSG, message.toString());
         return jsonResp;
  
     }

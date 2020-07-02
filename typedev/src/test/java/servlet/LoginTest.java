@@ -5,8 +5,8 @@ import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.Test;
 
-import extra.Message;
-import extra.TestUser;
+import common.TestUser;
+import translator.Message;
 import user.User;
 
 public class LoginTest extends CommandTest {

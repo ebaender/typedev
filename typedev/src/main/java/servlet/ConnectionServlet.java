@@ -12,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.gson.JsonObject;
 
-import extra.ContextAttribute;
-import extra.JsonStan;
+import translator.ContextAttribute;
+import standard.JsonStd;
 import user.User;
 
 @WebServlet(name = "ConnectionServlet", urlPatterns = { "connection" }, loadOnStartup = 1)
@@ -30,11 +30,11 @@ public class ConnectionServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         JsonObject jsonResp = new JsonObject();
-        String key = req.getParameter(JsonStan.KEY);
+        String key = req.getParameter(JsonStd.KEY);
         User user = users.get(key);
         if (user != null) {
             user.setLastContact(Instant.now());
-            jsonResp.addProperty(JsonStan.STA, user.getState().name().toLowerCase());
+            jsonResp.addProperty(JsonStd.STA, user.getState().name().toLowerCase());
         }
         resp.getWriter().print(jsonResp);
         // System.out.println(Message.STATEMENT.toString(getClass(), "responded", jsonResp));

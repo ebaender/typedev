@@ -16,8 +16,8 @@ import java.util.stream.Collectors;
 
 import com.google.gson.JsonObject;
 
-import extra.DBStan;
-import extra.Message;
+import standard.DBStd;
+import translator.Message;
 import user.User;
 import user.UserState;
 
@@ -75,15 +75,15 @@ public class Session {
                 language);
         String message = null;
         if (updateResp != null) {
-            int code = updateResp.get(DBStan.CODE).getAsInt();
+            int code = updateResp.get(DBStd.CODE).getAsInt();
             switch (code) {
-                case DBStan.CODE_WRITE_SUCCESS:
+                case DBStd.CODE_WRITE_SUCCESS:
                     message = Message.UPDATE_SUCESS.toString(user.getName());
                     break;
-                case DBStan.CODE_WRONGPASSWORD:
+                case DBStd.CODE_WRONGPASSWORD:
                     message = Message.WRONG_PASSWORD.toString();
                     break;
-                case DBStan.CODE_USER_NOT_FOUND:
+                case DBStd.CODE_USER_NOT_FOUND:
                     message = Message.USER_NOT_FOUND.toString(user.getName());
                     break;
                 default:

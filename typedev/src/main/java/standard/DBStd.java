@@ -1,6 +1,6 @@
-package extra;
+package standard;
 
-public class DBStan {
+public class DBStd {
 
         public static final String NAME = "username", PASSWORD = "password", REQUEST = "request",
                         REQUEST_REGISTER = "register", REQUEST_AUTHENTICATE = "authentificate",

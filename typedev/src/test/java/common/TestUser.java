@@ -1,4 +1,4 @@
-package extra;
+package common;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -9,6 +9,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import command.user.LogIn;
+import manager.KeyMan;
+import standard.DBStd;
+import standard.JsonStd;
+import standard.UserStd;
+import translator.Message;
 import user.User;
 
 public class TestUser extends User {
@@ -19,12 +24,12 @@ public class TestUser extends User {
     private String key;
 
     private TestUser() throws DBException, NoSuchAlgorithmException {
-        super(KeyMan.getShortKey().replaceAll(UserStan.FORBIDDEN_CHAR_PATTERN, ""), KeyMan.getShortKey());
+        super(KeyMan.getShortKey().replaceAll(UserStd.FORBIDDEN_CHAR_PATTERN, ""), KeyMan.getShortKey());
         setKey("");
         JsonObject registerResp = getManager().register();
         if (registerResp != null) {
-            int code = registerResp.get(DBStan.CODE).getAsInt();
-            if (code != DBStan.CODE_WRITE_SUCCESS && code != DBStan.CODE_REGISTERED_DUPLICATE) {
+            int code = registerResp.get(DBStd.CODE).getAsInt();
+            if (code != DBStd.CODE_WRITE_SUCCESS && code != DBStd.CODE_REGISTERED_DUPLICATE) {
                 throw new DBException(code);
             }
         }
@@ -82,7 +87,7 @@ public class TestUser extends User {
     public JsonObject logIn(final ConcurrentHashMap<String, User> USERS) {
         final String[] ARGUMENTS = { "login", getName(), getPassword() };
         JsonObject loginResp = new LogIn(getKey(), ARGUMENTS, USERS).execute();
-        JsonElement receivedKey = loginResp.get(JsonStan.KEY);
+        JsonElement receivedKey = loginResp.get(JsonStd.KEY);
         if (receivedKey != null) {
             setKey(receivedKey.getAsString());
         }

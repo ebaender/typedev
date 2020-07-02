@@ -1,4 +1,4 @@
-package extra;
+package manager;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -16,6 +16,9 @@ import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import translator.HttpHost;
+import translator.HttpEndpoint;
 
 public class HttpMan {
 

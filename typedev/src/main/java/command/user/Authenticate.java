@@ -5,12 +5,12 @@ import java.util.HashMap;
 import com.google.gson.JsonObject;
 
 import command.Command;
-import extra.DBStan;
-import extra.HttpEndpoint;
-import extra.HttpHost;
-import extra.HttpMan;
-import extra.Message;
-import extra.JsonStan;
+import standard.DBStd;
+import translator.HttpEndpoint;
+import translator.HttpHost;
+import manager.HttpMan;
+import translator.Message;
+import standard.JsonStd;
 
 public class Authenticate extends Command {
 
@@ -27,21 +27,21 @@ public class Authenticate extends Command {
             String name = args[1];
             String password = args[2];
             HashMap<String, String> params = new HashMap<>();
-            params.put(DBStan.NAME, name);
-            params.put(DBStan.PASSWORD, password);
-            params.put(DBStan.REQUEST, DBStan.REQUEST_AUTHENTICATE);
+            params.put(DBStd.NAME, name);
+            params.put(DBStd.PASSWORD, password);
+            params.put(DBStd.REQUEST, DBStd.REQUEST_AUTHENTICATE);
             JsonObject authResp = HttpMan.post(HttpHost.PI, HttpEndpoint.USER_DB, params);
             if (authResp != null) {
                 // received response from database.
-                int code = authResp.get(DBStan.CODE).getAsInt();
+                int code = authResp.get(DBStd.CODE).getAsInt();
                 switch (code) {
-                    case DBStan.CODE_AUTHENTICATE_SUCCESS:
+                    case DBStd.CODE_AUTHENTICATE_SUCCESS:
                         jsonResp = authResp;
                         break;
-                    case DBStan.CODE_WRONGPASSWORD:
+                    case DBStd.CODE_WRONGPASSWORD:
                         message = Message.WRONG_PASSWORD.toLine();
                         break;
-                    case DBStan.CODE_USER_NOT_FOUND:
+                    case DBStd.CODE_USER_NOT_FOUND:
                         message = Message.USER_NOT_FOUND.toLine(name);
                         break;
                     default:
@@ -54,7 +54,7 @@ public class Authenticate extends Command {
         }
         if (jsonResp == null) {
             jsonResp = new JsonObject();
-            jsonResp.addProperty(JsonStan.MSG, message);
+            jsonResp.addProperty(JsonStd.MSG, message);
         }
         return jsonResp;
     }

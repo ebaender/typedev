@@ -1,6 +1,6 @@
-package extra;
+package standard;
 
-public class UserStan {
+public class UserStd {
 
     public static final int MIN_NAME_LENGTH = 2, MIN_PASSWORD_LENGTH = 4;
 

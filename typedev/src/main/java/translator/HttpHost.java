@@ -1,4 +1,4 @@
-package extra;
+package translator;
 
 public enum HttpHost {
 

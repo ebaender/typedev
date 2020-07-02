@@ -5,8 +5,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.gson.JsonObject;
 
 import command.Command;
-import extra.DBStan;
-import extra.JsonStan;
+import standard.DBStd;
+import standard.JsonStd;
 import user.User;
 
 public class GetStats extends Command {
@@ -27,15 +27,15 @@ public class GetStats extends Command {
                 String targetUser = args[1];
                 jsonStats = user.getManager().spy(targetUser);
                 if (jsonStats != null) {
-                    int code = jsonStats.get(DBStan.CODE).getAsInt();
+                    int code = jsonStats.get(DBStd.CODE).getAsInt();
                     switch (code) {
-                        case DBStan.CODE_SUCCESS:
+                        case DBStd.CODE_SUCCESS:
                             message = buildStats(jsonStats, message);
                             break;
-                        case DBStan.CODE_WRONGPASSWORD:
+                        case DBStd.CODE_WRONGPASSWORD:
                             message.append("Your password was changed, try logging in again.\n");
                             break;
-                        case DBStan.CODE_REQUESTED_USER_NOT_FOUND:
+                        case DBStd.CODE_REQUESTED_USER_NOT_FOUND:
                             message.append("User \"" + targetUser + "\" does not exist.\n");
                             break;
                         default:
@@ -49,15 +49,15 @@ public class GetStats extends Command {
                 // no argument
                 jsonStats = user.getManager().authenticate();
                 if (jsonStats != null) {
-                    int code = jsonStats.get(DBStan.CODE).getAsInt();
+                    int code = jsonStats.get(DBStd.CODE).getAsInt();
                     switch (code) {
-                        case DBStan.CODE_AUTHENTICATE_SUCCESS:
+                        case DBStd.CODE_AUTHENTICATE_SUCCESS:
                             message = buildStats(jsonStats, message);
                             break;
-                        case DBStan.CODE_WRONGPASSWORD:
+                        case DBStd.CODE_WRONGPASSWORD:
                             message.append("Your password was changed, try logging in again.\n");
                             break;
-                        case DBStan.CODE_USER_NOT_FOUND:
+                        case DBStd.CODE_USER_NOT_FOUND:
                             message.append("Your user was removed from the database.\n");
                             break;
                         default:
@@ -72,14 +72,14 @@ public class GetStats extends Command {
             message.append("You need to be logged in to view stats.\n");
         }
         JsonObject jsonResp = new JsonObject();
-        jsonResp.addProperty(JsonStan.MSG, message.toString());
+        jsonResp.addProperty(JsonStd.MSG, message.toString());
         return jsonResp;
     }
 
     private StringBuilder buildStats(JsonObject jsonStats, StringBuilder message) {
-        int gamesPlayed = jsonStats.get(DBStan.UPDATE_GAMES_PLAYED).getAsInt();
-        int gamesWon = jsonStats.get(DBStan.UPDATE_GAMES_WON).getAsInt();
-        int speed = jsonStats.get(DBStan.UPDATE_SPEED).getAsInt();
+        int gamesPlayed = jsonStats.get(DBStd.UPDATE_GAMES_PLAYED).getAsInt();
+        int gamesWon = jsonStats.get(DBStd.UPDATE_GAMES_WON).getAsInt();
+        int speed = jsonStats.get(DBStd.UPDATE_SPEED).getAsInt();
         message.append("Games played: " + gamesPlayed);
         message.append("\nGames won: " + gamesWon);
         message.append("\nWin ratio: " + (int) ((gamesWon / (double) gamesPlayed) * 100) + " %");

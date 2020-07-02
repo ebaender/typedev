@@ -6,10 +6,10 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
-import extra.KeyMan;
-import extra.Message;
-import extra.JsonStan;
-import extra.TestUser;
+import common.TestUser;
+import manager.KeyMan;
+import translator.Message;
+import standard.JsonStd;
 import session.Session;
 
 public class SessionCreationTest extends CommandTest {
@@ -32,7 +32,7 @@ public class SessionCreationTest extends CommandTest {
 
     public TestUser getAndAssertLoggedInTestUser(int instanceIndex) {
         TestUser user = TestUser.getInstance(instanceIndex);
-        assertThat(user.logIn(getUsers()), hasJsonProperty(JsonStan.MSG, Message.LOGIN_SUCCESS.toLine(user.getName())));
+        assertThat(user.logIn(getUsers()), hasJsonProperty(JsonStd.MSG, Message.LOGIN_SUCCESS.toLine(user.getName())));
         return user;
     }
 

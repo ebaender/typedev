@@ -8,9 +8,9 @@ import com.google.gson.JsonObject;
 import org.junit.Before;
 import org.junit.Test;
 
-import extra.Message;
-import extra.JsonStan;
-import extra.TestUser;
+import common.TestUser;
+import translator.Message;
+import standard.JsonStd;
 
 public class LogoutTest extends CommandTest {
 
@@ -36,7 +36,7 @@ public class LogoutTest extends CommandTest {
     @Test 
     public void logoutLoggedIn() throws Exception {
         JsonObject loginResp = testUser.logIn(getUsers());
-        assertThat(loginResp, hasJsonProperty(JsonStan.MSG, Message.LOGIN_SUCCESS.toLine(testUser.getName())));
+        assertThat(loginResp, hasJsonProperty(JsonStd.MSG, Message.LOGIN_SUCCESS.toLine(testUser.getName())));
         assertCommand(testUser.getKey(), getBaseCommand(), Message.LOGGED_OUT.toLine(testUser.getName()));
     }
 

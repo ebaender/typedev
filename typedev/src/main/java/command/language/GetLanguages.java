@@ -6,7 +6,7 @@ import java.util.HashSet;
 import com.google.gson.JsonObject;
 
 import command.Command;
-import extra.JsonStan;
+import standard.JsonStd;
 
 public class GetLanguages extends Command {
 
@@ -28,7 +28,7 @@ public class GetLanguages extends Command {
         }
         message.append('\n');
         JsonObject jsonResp = new JsonObject();
-        jsonResp.addProperty(JsonStan.MSG, message.toString());
+        jsonResp.addProperty(JsonStd.MSG, message.toString());
         return jsonResp;
     }
     

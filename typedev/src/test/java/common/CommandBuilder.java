@@ -1,4 +1,6 @@
-package extra;
+package common;
+
+import translator.Message;
 
 public class CommandBuilder {
 
