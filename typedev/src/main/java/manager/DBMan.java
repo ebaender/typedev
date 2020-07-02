@@ -84,6 +84,10 @@ public class DBMan {
         return post(params);
     }
 
+    public JsonObject delete() {
+        return request(DBStd.REQUEST_DELETE);
+    }
+
     public JsonObject language() {
         return language(owner.getName());
     }

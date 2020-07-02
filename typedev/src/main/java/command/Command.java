@@ -1,5 +1,6 @@
 package command;
 
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.google.gson.JsonObject;
@@ -17,6 +18,8 @@ public abstract class Command {
         this.key = key;
         this.users = users;
     };
+
+    // public abstract List<String> getHandles();
 
     public Command(String key, String[] args) {
         this(key, args, null);

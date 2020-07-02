@@ -3,6 +3,7 @@ package servlet;
 import org.junit.Test;
 
 import common.TestUser;
+import manager.KeyMan;
 import standard.UserStd;
 import translator.Message;
 
@@ -56,7 +57,10 @@ public class RegistrationTest extends CommandTest {
 
     @Test
     public void registerValidUser() throws Exception {
-        // TODO
+        final String NAME = KeyMan.getShortKey().replace(UserStd.FORBIDDEN_CHAR_PATTERN, "");
+        final String COMMAND = buildCommand(NAME, KeyMan.getShortKey());
+        assertCommand(getValidKey(), COMMAND, Message.REGISTERED_SUCCESS.toLine(NAME));
+
     }
     
 }

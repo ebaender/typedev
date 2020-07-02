@@ -14,6 +14,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import org.junit.After;
 import org.junit.Before;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -50,6 +51,11 @@ public abstract class CommandTest {
         commandBuilder = new CommandBuilder(getBaseCommand());
         TestUser.setUsers(users);
         MockitoAnnotations.initMocks(this);
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        TestUser.reset();
     }
 
     public abstract String getBaseCommand();
