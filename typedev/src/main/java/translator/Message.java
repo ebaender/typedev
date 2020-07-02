@@ -25,7 +25,7 @@ public enum Message {
     STARTING_SESSION("Starting Session..."), YOU_HAVE_NO_SESSION("You don't have a session."),
     JOINED_SESSION("Joined {0}''s {1} session."), SESSION_ALREADY_LIVE("{0}''s session is already live."),
     USER_HAS_NO_SESSION("{0} is not a member of any session."), LEFT_SESSION("Left {0} session."),
-    UNLUCKY("You are one unlucky bastard, try again.");
+    UNLUCKY("You are one unlucky bastard, try again."), NO_HELP("There is no help. May god have mercy on your soul.");
 
     private final String MESSAGE;
 

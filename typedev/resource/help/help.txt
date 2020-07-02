@@ -33,5 +33,5 @@ themes / lt
     Show available terminal color themes.
 theme / th [THEME]
     Set the terminal colors to those of the specified theme.
-help / ?
-    Show this message.
+help / ? ([COMMAND])
+    Show help about all commands or a single specified command.
