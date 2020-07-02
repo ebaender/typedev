@@ -7,8 +7,8 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import command.Command;
-import extra.DBStandard;
-import extra.Standard;
+import extra.DBStan;
+import extra.JsonStan;
 import user.User;
 
 public class GetLeaderboard extends Command {
@@ -27,24 +27,24 @@ public class GetLeaderboard extends Command {
                 // received category
                 String leaderbordType = null;
                 if (args[1].equals("victories")) {
-                    leaderbordType = DBStandard.LEADERBORD_WINS;
+                    leaderbordType = DBStan.LEADERBORD_WINS;
                 } else if (args[1].equals("topspeed")) {
-                    leaderbordType = DBStandard.LEADERBORD_SPEED;
+                    leaderbordType = DBStan.LEADERBORD_SPEED;
                 }
                 if (leaderbordType != null) {
                     // recognized category
                     JsonObject jsonLeaderbord = user.getManager().leaderbord(leaderbordType);
                     if (jsonLeaderbord != null) {
                         // received response from database
-                        int code = jsonLeaderbord.get(DBStandard.CODE).getAsInt();
+                        int code = jsonLeaderbord.get(DBStan.CODE).getAsInt();
                         switch (code) {
-                            case DBStandard.CODE_SUCCESS:
+                            case DBStan.CODE_SUCCESS:
                                 message = buildLeaderbord(jsonLeaderbord, message, leaderbordType);
                                 break;
-                            case DBStandard.CODE_WRONGPASSWORD:
+                            case DBStan.CODE_WRONGPASSWORD:
                                 message.append("Your password was changed, try logging in again.\n");
                                 break;
-                            case DBStandard.CODE_USER_NOT_FOUND:
+                            case DBStan.CODE_USER_NOT_FOUND:
                                 message.append("Your user was removed from the database.\n");
                                 break;
                             default:
@@ -64,22 +64,22 @@ public class GetLeaderboard extends Command {
             message.append("You need to be logged in to view leaderbords.\n");
         }
         JsonObject jsonResp = new JsonObject();
-        jsonResp.addProperty(Standard.MSG, message.toString());
+        jsonResp.addProperty(JsonStan.MSG, message.toString());
         return jsonResp;
     }
 
     private StringBuilder buildLeaderbord(JsonObject jsonLeaderbord, StringBuilder message, String leaderbordType) {
-        JsonArray leaderbordArray = jsonLeaderbord.get(DBStandard.BOARD_PROPERTY).getAsJsonArray();
+        JsonArray leaderbordArray = jsonLeaderbord.get(DBStan.BOARD_PROPERTY).getAsJsonArray();
         int place = 1;
         String category = null;
         String unit = "";
         switch (leaderbordType) {
-            case DBStandard.LEADERBORD_SPEED:
-                category = DBStandard.UPDATE_SPEED;
+            case DBStan.LEADERBORD_SPEED:
+                category = DBStan.UPDATE_SPEED;
                 unit = "cpm";
                 break;
-            case DBStandard.LEADERBORD_WINS:
-                category = DBStandard.UPDATE_GAMES_WON;
+            case DBStan.LEADERBORD_WINS:
+                category = DBStan.UPDATE_GAMES_WON;
                 break;
             default:
                 return null;
@@ -87,7 +87,7 @@ public class GetLeaderboard extends Command {
         for (JsonElement entry : leaderbordArray) {
             JsonObject entryObject = entry.getAsJsonObject();
             message.append(place++ + ". ");
-            message.append(entryObject.get(DBStandard.NAME).getAsString() + " | ");
+            message.append(entryObject.get(DBStan.NAME).getAsString() + " | ");
             message.append(entryObject.get(category).getAsString() + " " + unit + "\n");
         }
         return message;

@@ -13,7 +13,7 @@ import com.google.gson.JsonObject;
 
 import extra.ContextAttribute;
 import extra.Message;
-import extra.Standard;
+import extra.JsonStan;
 import user.User;
 import user.UserState;
 
@@ -30,11 +30,11 @@ public class ResultServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String key = req.getParameter(Standard.KEY);
+        String key = req.getParameter(JsonStan.KEY);
         User user = users.get(key);
         JsonObject jsonResp = new JsonObject();
         if (user != null && user.getState() == UserState.FINISHED) {
-            jsonResp.add(Standard.RES, user.getSession().getResult());
+            jsonResp.add(JsonStan.RES, user.getSession().getResult());
             user.setSession(null);
             user.setState(UserState.DEFAULT);
         }

@@ -9,7 +9,7 @@ import extra.Message;
 import extra.TestUser;
 import user.User;
 
-public class LogInTest extends CommandTest {
+public class LoginTest extends CommandTest {
 
     private TestUser testUser;
 

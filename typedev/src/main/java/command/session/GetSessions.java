@@ -7,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.gson.JsonObject;
 
 import command.Command;
-import extra.Standard;
+import extra.JsonStan;
 import session.Session;
 import user.User;
 
@@ -33,7 +33,7 @@ public class GetSessions extends Command {
             }
         });
         JsonObject jsonResp = new JsonObject();
-        jsonResp.addProperty(Standard.MSG, messageBuilder.toString());
+        jsonResp.addProperty(JsonStan.MSG, messageBuilder.toString());
         return jsonResp;
     }
 }

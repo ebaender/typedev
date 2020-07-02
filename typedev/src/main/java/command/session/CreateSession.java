@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 
 import command.Command;
 import extra.Message;
-import extra.Standard;
+import extra.JsonStan;
 import session.EmptyLanguageException;
 import session.Session;
 import user.User;
@@ -50,7 +50,7 @@ public class CreateSession extends Command {
             message = Message.CREATE_SESSION_NO_LOGIN.toLine();
         }
         JsonObject jsonResp = new JsonObject();
-        jsonResp.addProperty(Standard.MSG, message);
+        jsonResp.addProperty(JsonStan.MSG, message);
         return jsonResp;
     }
     

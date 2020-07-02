@@ -5,12 +5,12 @@ import java.util.HashMap;
 import com.google.gson.JsonObject;
 
 import command.Command;
-import extra.DBStandard;
+import extra.DBStan;
 import extra.HttpEndpoint;
 import extra.HttpHost;
 import extra.HttpMan;
 import extra.Message;
-import extra.Standard;
+import extra.JsonStan;
 
 public class Authenticate extends Command {
 
@@ -27,21 +27,21 @@ public class Authenticate extends Command {
             String name = args[1];
             String password = args[2];
             HashMap<String, String> params = new HashMap<>();
-            params.put(DBStandard.NAME, name);
-            params.put(DBStandard.PASSWORD, password);
-            params.put(DBStandard.REQUEST, DBStandard.REQUEST_AUTHENTICATE);
+            params.put(DBStan.NAME, name);
+            params.put(DBStan.PASSWORD, password);
+            params.put(DBStan.REQUEST, DBStan.REQUEST_AUTHENTICATE);
             JsonObject authResp = HttpMan.post(HttpHost.PI, HttpEndpoint.USER_DB, params);
             if (authResp != null) {
                 // received response from database.
-                int code = authResp.get(DBStandard.CODE).getAsInt();
+                int code = authResp.get(DBStan.CODE).getAsInt();
                 switch (code) {
-                    case DBStandard.CODE_AUTHENTICATE_SUCCESS:
+                    case DBStan.CODE_AUTHENTICATE_SUCCESS:
                         jsonResp = authResp;
                         break;
-                    case DBStandard.CODE_WRONGPASSWORD:
+                    case DBStan.CODE_WRONGPASSWORD:
                         message = Message.WRONG_PASSWORD.toLine();
                         break;
-                    case DBStandard.CODE_USER_NOT_FOUND:
+                    case DBStan.CODE_USER_NOT_FOUND:
                         message = Message.USER_NOT_FOUND.toLine(name);
                         break;
                     default:
@@ -54,7 +54,7 @@ public class Authenticate extends Command {
         }
         if (jsonResp == null) {
             jsonResp = new JsonObject();
-            jsonResp.addProperty(Standard.MSG, message);
+            jsonResp.addProperty(JsonStan.MSG, message);
         }
         return jsonResp;
     }

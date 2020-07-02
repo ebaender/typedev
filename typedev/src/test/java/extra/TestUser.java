@@ -19,12 +19,12 @@ public class TestUser extends User {
     private String key;
 
     private TestUser() throws DBException, NoSuchAlgorithmException {
-        super(KeyMan.getShortKey().replaceAll(UserStandard.FORBIDDEN_CHAR_PATTERN, ""), KeyMan.getShortKey());
+        super(KeyMan.getShortKey().replaceAll(UserStan.FORBIDDEN_CHAR_PATTERN, ""), KeyMan.getShortKey());
         setKey("");
         JsonObject registerResp = getManager().register();
         if (registerResp != null) {
-            int code = registerResp.get(DBStandard.CODE).getAsInt();
-            if (code != DBStandard.CODE_WRITE_SUCCESS && code != DBStandard.CODE_REGISTERED_DUPLICATE) {
+            int code = registerResp.get(DBStan.CODE).getAsInt();
+            if (code != DBStan.CODE_WRITE_SUCCESS && code != DBStan.CODE_REGISTERED_DUPLICATE) {
                 throw new DBException(code);
             }
         }
@@ -82,7 +82,7 @@ public class TestUser extends User {
     public JsonObject logIn(final ConcurrentHashMap<String, User> USERS) {
         final String[] ARGUMENTS = { "login", getName(), getPassword() };
         JsonObject loginResp = new LogIn(getKey(), ARGUMENTS, USERS).execute();
-        JsonElement receivedKey = loginResp.get(Standard.KEY);
+        JsonElement receivedKey = loginResp.get(JsonStan.KEY);
         if (receivedKey != null) {
             setKey(receivedKey.getAsString());
         }

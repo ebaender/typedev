@@ -7,9 +7,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import command.Command;
-import extra.DBStandard;
+import extra.DBStan;
 import extra.Message;
-import extra.Standard;
+import extra.JsonStan;
 import user.User;
 
 public class GetLanguageStats extends Command {
@@ -38,7 +38,7 @@ public class GetLanguageStats extends Command {
             message.append(Message.LOG_IN_TO_VIEW_STATS.toLine());
         }
         JsonObject jsonResp = new JsonObject();
-        jsonResp.addProperty(Standard.MSG, message.toString());
+        jsonResp.addProperty(JsonStan.MSG, message.toString());
         return jsonResp;
     }
 
@@ -46,19 +46,19 @@ public class GetLanguageStats extends Command {
         JsonObject jsonLanguageStats = requestingUser.getManager().language(requestedUserName);
         if (jsonLanguageStats != null) {
             // received response from user db.
-            int code = jsonLanguageStats.get(DBStandard.CODE).getAsInt();
+            int code = jsonLanguageStats.get(DBStan.CODE).getAsInt();
             switch (code) {
-                case DBStandard.CODE_SUCCESS:
+                case DBStan.CODE_SUCCESS:
                     System.out.println(jsonLanguageStats);
                     message = buildLanguageBoard(jsonLanguageStats);
                     break;
-                case DBStandard.CODE_USER_NOT_FOUND:
+                case DBStan.CODE_USER_NOT_FOUND:
                     message.append(Message.USER_NOT_FOUND.toLine(requestingUser.getName()));
                     break;
-                case DBStandard.CODE_REQUESTED_USER_NOT_FOUND:
+                case DBStan.CODE_REQUESTED_USER_NOT_FOUND:
                     message.append(Message.USER_NOT_FOUND.toLine(requestedUserName));
                     break;
-                case DBStandard.CODE_WRONGPASSWORD:
+                case DBStan.CODE_WRONGPASSWORD:
                     message.append(Message.WRONG_PASSWORD.toLine());
                 default:
                     message.append(Message.UNKNOWN_ERROR.toLine(code));
@@ -70,7 +70,7 @@ public class GetLanguageStats extends Command {
     }
 
     private StringBuilder buildLanguageBoard(JsonObject jsonLanguageStats) {
-        JsonArray languageArray = jsonLanguageStats.get(DBStandard.BOARD_PROPERTY).getAsJsonArray();
+        JsonArray languageArray = jsonLanguageStats.get(DBStan.BOARD_PROPERTY).getAsJsonArray();
         int place = 1;
         if (languageArray.size() == 0) {
             // user has no language stats yet.
@@ -79,8 +79,8 @@ public class GetLanguageStats extends Command {
         for (JsonElement entry : languageArray) {
             JsonObject entryObject = entry.getAsJsonObject();
             message.append(place++ + ". ");
-            message.append(entryObject.get(DBStandard.LANGUAGE_NAME_PROPERTY).getAsString() + " | ");
-            message.append(entryObject.get(DBStandard.LANGUAGE_PLAYED_PROPERTY).getAsString() + "\n");
+            message.append(entryObject.get(DBStan.LANGUAGE_NAME_PROPERTY).getAsString() + " | ");
+            message.append(entryObject.get(DBStan.LANGUAGE_PLAYED_PROPERTY).getAsString() + "\n");
         }
         return message;
     }

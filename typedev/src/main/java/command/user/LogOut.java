@@ -7,7 +7,7 @@ import com.google.gson.JsonObject;
 import command.Command;
 import command.session.LeaveSession;
 import extra.Message;
-import extra.Standard;
+import extra.JsonStan;
 import user.User;
 
 public class LogOut extends Command {
@@ -28,7 +28,7 @@ public class LogOut extends Command {
             users.remove(key);
             message = Message.LOGGED_OUT.toLine(name);
         }
-        jsonResp.addProperty(Standard.MSG, message);
+        jsonResp.addProperty(JsonStan.MSG, message);
         return jsonResp;
    }
 

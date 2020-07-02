@@ -9,7 +9,7 @@ import com.google.gson.JsonObject;
 import command.Command;
 import extra.KeyMan;
 import extra.Message;
-import extra.Standard;
+import extra.JsonStan;
 import user.User;
 
 public class LogIn extends Command {
@@ -34,7 +34,7 @@ public class LogIn extends Command {
                 } else {
                     // no conflicts with another user.
                     JsonObject authResp = new Authenticate(args).execute();
-                    if (authResp.get(Standard.MSG) == null) {
+                    if (authResp.get(JsonStan.MSG) == null) {
                         // no error occured during authentication.
                         try {
                             encodedKey = KeyMan.getKey();
@@ -42,7 +42,7 @@ public class LogIn extends Command {
                                 User user = new User(name, password);
                                 users.put(encodedKey, user);
                                 message = Message.LOGIN_SUCCESS.toLine(name);
-                                jsonResp.addProperty(Standard.KEY, encodedKey);
+                                jsonResp.addProperty(JsonStan.KEY, encodedKey);
                             } else {
                                 encodedKey = null;
                                 message = Message.UNLUCKY.toLine();
@@ -52,7 +52,7 @@ public class LogIn extends Command {
                             message = Message.KEYGEN_FAILED.toLine();
                         }
                     } else {
-                        message = authResp.get(Standard.MSG).getAsString();
+                        message = authResp.get(JsonStan.MSG).getAsString();
                     }
                 }
             } else {
@@ -61,7 +61,7 @@ public class LogIn extends Command {
         } else {
             message = Message.LOGGED_IN_ALREADY.toLine(users.get(key).getName());
         }
-        jsonResp.addProperty(Standard.MSG, message);
+        jsonResp.addProperty(JsonStan.MSG, message);
         return jsonResp;
 
     }

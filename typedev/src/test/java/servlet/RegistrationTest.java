@@ -5,9 +5,9 @@ import org.junit.Test;
 
 import extra.Message;
 import extra.TestUser;
-import extra.UserStandard;
+import extra.UserStan;
 
-public class RegisterTest extends CommandTest {
+public class RegistrationTest extends CommandTest {
 
     private TestUser testUser;
 
@@ -36,10 +36,10 @@ public class RegisterTest extends CommandTest {
 
     @Test
     public void registerNameTooShort() throws Exception {
-        final String SHORT_NAME = new String(new char[UserStandard.MIN_NAME_LENGTH - 1]).replace("\0", "a");
+        final String SHORT_NAME = new String(new char[UserStan.MIN_NAME_LENGTH - 1]).replace("\0", "a");
         final String COMMAND_SHORT_PASSWORD = buildCommand(SHORT_NAME, getValidPassword());
         assertCommand(getValidKey(), COMMAND_SHORT_PASSWORD,
-                Message.NAME_TOO_SHORT.toLine(UserStandard.MIN_NAME_LENGTH));
+                Message.NAME_TOO_SHORT.toLine(UserStan.MIN_NAME_LENGTH));
     }
 
     @Test
@@ -51,10 +51,10 @@ public class RegisterTest extends CommandTest {
 
     @Test
     public void registerPasswordTooShort() throws Exception {
-        final String SHORT_PASSWORD = new String(new char[UserStandard.MIN_PASSWORD_LENGTH - 1]).replace("\0", "*");
+        final String SHORT_PASSWORD = new String(new char[UserStan.MIN_PASSWORD_LENGTH - 1]).replace("\0", "*");
         final String COMMAND_SHORT_PASSWORD = buildCommand(getValidName(), SHORT_PASSWORD);
         assertCommand(getValidKey(), COMMAND_SHORT_PASSWORD,
-                Message.PASSWORD_TOO_SHORT.toLine(UserStandard.MIN_PASSWORD_LENGTH));
+                Message.PASSWORD_TOO_SHORT.toLine(UserStan.MIN_PASSWORD_LENGTH));
     }
 
     @Test

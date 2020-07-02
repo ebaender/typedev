@@ -9,10 +9,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import extra.Message;
-import extra.Standard;
+import extra.JsonStan;
 import extra.TestUser;
 
-public class LogOutTest extends CommandTest {
+public class LogoutTest extends CommandTest {
 
     private TestUser testUser;
 
@@ -36,7 +36,7 @@ public class LogOutTest extends CommandTest {
     @Test 
     public void logoutLoggedIn() throws Exception {
         JsonObject loginResp = testUser.logIn(getUsers());
-        assertThat(loginResp, hasJsonProperty(Standard.MSG, Message.LOGIN_SUCCESS.toLine(testUser.getName())));
+        assertThat(loginResp, hasJsonProperty(JsonStan.MSG, Message.LOGIN_SUCCESS.toLine(testUser.getName())));
         assertCommand(testUser.getKey(), getBaseCommand(), Message.LOGGED_OUT.toLine(testUser.getName()));
     }
 

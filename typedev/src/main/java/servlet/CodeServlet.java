@@ -13,7 +13,7 @@ import com.google.gson.JsonObject;
 
 import extra.ContextAttribute;
 import extra.Message;
-import extra.Standard;
+import extra.JsonStan;
 import user.User;
 
 @WebServlet(name = "CodeServlet", urlPatterns = { "code" }, loadOnStartup = 1)
@@ -29,11 +29,11 @@ public class CodeServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String key = req.getParameter(Standard.KEY);
+        String key = req.getParameter(JsonStan.KEY);
         User user = users.get(key);
         JsonObject jsonResp = new JsonObject();
         if (user != null && user.getSession() != null) {
-            jsonResp.addProperty(Standard.COD, user.getSession().getCode());
+            jsonResp.addProperty(JsonStan.COD, user.getSession().getCode());
         }
         resp.getWriter().print(jsonResp);
         System.out.println(Message.STATEMENT.toString(getClass(), "responded", jsonResp));

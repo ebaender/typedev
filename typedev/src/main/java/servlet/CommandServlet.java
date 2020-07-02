@@ -14,7 +14,7 @@ import command.Command;
 import command.CommandFactory;
 import extra.ContextAttribute;
 import extra.Message;
-import extra.Standard;
+import extra.JsonStan;
 
 @WebServlet(name = "CommandServlet", urlPatterns = { "command" }, loadOnStartup = 1)
 public class CommandServlet extends HttpServlet {
@@ -29,8 +29,8 @@ public class CommandServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String key = req.getParameter(Standard.KEY);
-        String commandString = req.getParameter(Standard.COM);
+        String key = req.getParameter(JsonStan.KEY);
+        String commandString = req.getParameter(JsonStan.COM);
         JsonObject jsonResp = null;
         if (key != null && commandString != null) {
             // incoming request is usable.
@@ -40,11 +40,11 @@ public class CommandServlet extends HttpServlet {
                 jsonResp = command.execute();
             } else {
                 jsonResp = new JsonObject();
-                jsonResp.addProperty(Standard.MSG, Message.COMMAND_NOT_FOUND.toLine());
+                jsonResp.addProperty(JsonStan.MSG, Message.COMMAND_NOT_FOUND.toLine());
             }
         } else {
             jsonResp = new JsonObject();
-            jsonResp.addProperty(Standard.MSG, Message.ARGS_NOT_RECEIVED.toLine());
+            jsonResp.addProperty(JsonStan.MSG, Message.ARGS_NOT_RECEIVED.toLine());
         }
         resp.getWriter().print(jsonResp);
         System.out.println(Message.STATEMENT.toString(getClass(), "responded", jsonResp));

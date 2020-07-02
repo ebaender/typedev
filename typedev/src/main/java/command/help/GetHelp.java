@@ -8,7 +8,7 @@ import java.io.IOException;
 import com.google.gson.JsonObject;
 
 import command.Command;
-import extra.Standard;
+import extra.JsonStan;
 
 public class GetHelp extends Command {
 
@@ -30,7 +30,7 @@ public class GetHelp extends Command {
         } catch (IOException e) {
             message.append("There is no help. May god have mercy on your soul.\n");
         }
-        jsonResp.addProperty(Standard.MSG, message.toString());
+        jsonResp.addProperty(JsonStan.MSG, message.toString());
         return jsonResp;
     }
 

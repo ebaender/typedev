@@ -6,7 +6,7 @@ import com.google.gson.JsonObject;
 
 import command.Command;
 import extra.Message;
-import extra.Standard;
+import extra.JsonStan;
 import user.User;
 
 public class GetUsers extends Command {
@@ -26,7 +26,7 @@ public class GetUsers extends Command {
             message.append(user.getValue().getName() + System.lineSeparator());
         });
         JsonObject jsonResp = new JsonObject();
-        jsonResp.addProperty(Standard.MSG, message.toString());
+        jsonResp.addProperty(JsonStan.MSG, message.toString());
         return jsonResp;
  
     }

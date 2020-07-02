@@ -11,7 +11,7 @@ import org.junit.Test;
 
 import command.user.GetUsers;
 import extra.Message;
-import extra.Standard;
+import extra.JsonStan;
 import extra.TestUser;
 
 public class UsersTest extends CommandTest {
@@ -36,7 +36,7 @@ public class UsersTest extends CommandTest {
     public void usersSingleUserOnline() throws Exception {
         TestUser testUser = TestUser.getInstance(0);
         JsonObject loginResp = testUser.logIn(getUsers());
-        assertThat(loginResp, hasJsonProperty(Standard.MSG, Message.LOGIN_SUCCESS.toLine(testUser.getName())));
+        assertThat(loginResp, hasJsonProperty(JsonStan.MSG, Message.LOGIN_SUCCESS.toLine(testUser.getName())));
         final String EXPECTED_RESPONSE = testUser.getName() + System.lineSeparator();
         assertCommand(getValidKey(), getBaseCommand(), EXPECTED_RESPONSE);
     }
@@ -46,12 +46,12 @@ public class UsersTest extends CommandTest {
         TestUser.instantiateAll();
         for (TestUser testUser : TestUser.getInstancePool()) {
             JsonObject loginResp = testUser.logIn(getUsers());
-            assertThat(loginResp, hasJsonProperty(Standard.MSG, Message.LOGIN_SUCCESS.toLine(testUser.getName())));
+            assertThat(loginResp, hasJsonProperty(JsonStan.MSG, Message.LOGIN_SUCCESS.toLine(testUser.getName())));
         }
         JsonObject usersResp = new GetUsers(getUsers()).execute();
         assertTrue(usersResp != null);
-        assertTrue(usersResp.get(Standard.MSG) != null);
-        String userList = usersResp.get(Standard.MSG).getAsString();
+        assertTrue(usersResp.get(JsonStan.MSG) != null);
+        String userList = usersResp.get(JsonStan.MSG).getAsString();
         for (TestUser testUser : TestUser.getInstancePool()) {
             assertTrue(userList.contains(testUser.getName()));
         }

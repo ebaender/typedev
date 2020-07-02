@@ -14,7 +14,7 @@ import com.google.gson.JsonObject;
 
 import extra.ContextAttribute;
 import extra.Message;
-import extra.Standard;
+import extra.JsonStan;
 import user.User;
 
 @WebServlet(name = "SyncServlet", urlPatterns = { "sync" }, loadOnStartup = 1)
@@ -30,7 +30,7 @@ public class SyncServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String key = req.getParameter(Standard.KEY);
+        String key = req.getParameter(JsonStan.KEY);
         User user = users.get(key);
         JsonObject jsonResp = new JsonObject();
         if (user != null && user.getSession() != null && user.getSession().isLive()) {
@@ -48,7 +48,7 @@ public class SyncServlet extends HttpServlet {
                         userProgress.addProperty("mistakes", sessionUser.getMistakes());
                         sessionProgress.add(userProgress);
                     }
-                    jsonResp.add(Standard.PRG, sessionProgress);
+                    jsonResp.add(JsonStan.PRG, sessionProgress);
                     user.getSession().think();
                 } catch (NumberFormatException e) {
                     System.out.println(getClass() + " could not parse progress string " + progress);

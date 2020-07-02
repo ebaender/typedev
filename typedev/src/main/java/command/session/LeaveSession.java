@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.google.gson.JsonObject;
 
 import command.Command;
-import extra.Standard;
+import extra.JsonStan;
 import session.Session;
 import user.User;
 
@@ -39,7 +39,7 @@ public class LeaveSession extends Command {
             message = "You need to be logged in to leave a session.\n";
         }
         JsonObject jsonResp = new JsonObject();
-        jsonResp.addProperty(Standard.MSG, message);
+        jsonResp.addProperty(JsonStan.MSG, message);
         return jsonResp;
     }
     

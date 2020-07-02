@@ -1,6 +1,6 @@
 package extra;
 
-public class Standard {
+public class JsonStan {
 
     public static final String MSG = "message";
     public static final String KEY = "key";
