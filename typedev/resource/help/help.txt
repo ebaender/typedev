@@ -24,7 +24,7 @@ start / st
 stats / us ([NAME])
     Show stats about yourself or another user.
 language / ul ([NAME])
-    Show a ranked list of your or another users's favorite languages.
+    Show a ranked list of your or another user's favorite languages.
 leaderboard / lb ['victories' | 'topspeed']
     Show a list of highest ranking users for a given category.
 clear / cl
