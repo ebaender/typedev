@@ -60,7 +60,7 @@ public class GetLeaderboard extends Command {
                     message.append(Message.LEADERBOARD_INVALID_CATEGORY.toLine(requestedCategory));
                 }
             } else {
-                message.append(Message.ARGS_NOT_RECEIVED);
+                message.append(Message.ARGS_NOT_RECEIVED.toLine());
             }
         } else {
             message.append(Message.NEED_LOGIN.toLine());
