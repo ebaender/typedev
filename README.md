@@ -2,7 +2,7 @@
 
 ![](images/showcase.gif)
 
-Ein Typing-Test nach dem Prinzip von bekannten Seiten wie [Monkeytype](https://monkeytype.com) oder [Keybr](https://keybr.com) mit kompetitivem Multiplayer und persistentem Leaderboard, speziell für Entwickler mit Codesnippets statt zufällig gewählten Wörtern oder Zitaten und Unix-UX. War ursprünglich ein gemeinsames Universitätsprojekt, entwickelt von Malte Meilung und mir.
+Ein Typing-Test nach dem Prinzip von bekannten Seiten wie [Monkeytype](https://monkeytype.com) oder [Keybr](https://keybr.com) mit kompetitivem Multiplayer und persistentem Leaderboard, speziell für Entwickler mit Codesnippets statt zufällig gewählten Wörtern oder Zitaten und Unix-UX. War ursprünglich ein gemeinsames Universitätsprojekt von Malte Meilung und mir.
 
 # Userdatenbank API
 
