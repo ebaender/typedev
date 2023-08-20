@@ -2,32 +2,96 @@
 
 ![](images/showcase.gif)
 
-### Spielprinzip
+Eine Typing-Test nach dem Prinzip von bekannten Seiten wie typeracer.com or monkeytype.com mit kompetetivem Multiplayer und persistentem Leaderboard, speziell für Entwickler mit Codesnippets statt zufällig gewählten Wörtern oder Zitaten.
+Das Backend wurde von Malte Meiling auf Basis von Node Red und MongoDB entwickelt, das Frontend ist von mir.
 
-Spieler treten gegeneinander in einem Wettrennen des tippens an. Ab Start der Runde muss der anzeigte Text fehler frei eingetippt werden. Der Schnellste tipper gewinnt. Die Besonderheit: bei dem Text handelt es sich um Code-Snippets mit all ihren Klammern, Kommata und verrückten Syntax. Sobald der Sieger feststeht ist die Runde vorbei.
+# Userdatenbank API
 
-### Score System
+## Struktur
 
-Es gibt zwei Scores:
+### request
+parameter username, password und request sowie request spezifische parameter bei update
 
- - Wörter pro Minute
- 
- - anzahl gewonnener Runden
- 
-Für beide gibt es je eine Topliste
+### return
+JSON in form
 
-### Login
+`{statuscode: 400}`
 
-ein Login ist geplant, um das Score system persistent zu gestalten und persönliche bestleistungen zu scpeichern.
+oder
 
-### Code Source Files:
-GO Language: https://github.com/docker/cli/blob/master/cli/cobra.go
-LUA Script: https://pastebin.com/cUzGFJyw
-C: https://github.com/torvalds/linux/blob/master/arch/arm64/kernel/syscall.c
-Rust: https://github.com/starship/starship/blob/master/src/main.rs
-zsh: https://github.com/denysdovhan/spaceship-prompt/blob/master/spaceship.zsh
-Java:
-C++:
-C#:
-Bash:
-JavaScript: einfach unseren eigenen JavaScript code lul ich will company leaks in unserem Spiel
+`{
+	statuscode: 200,
+	username: "foo",
+	wpm: 0,
+	games_won: 0,
+	games_played: 0
+}`
+
+(bei der Abfrage der Nutzerdaten)
+
+## Funktionen
+### registrierung eines Nutzers
+**Methode:** POST
+**parameter:** username, password, register
+
+**example:** `curl -X POST -d username="foo" -d password="foo" -d request="register"`
+
+**return:**
+| statuscode | Bedeutung                            | 
+| :--------: | :----------------------------------: | 
+| 201        | Nutzer wurde erfolgreich registriert | 
+| 406        | Nutzer ist bereits registriert       | 
+
+### authentifizierung eines Nutzers
+**Methode:** POST
+**parameter:** username, password, authentificate
+
+**example:** `curl -X POST -d username="foo" -d password="foo" -d request="authentificate"`
+
+**return:**
+| statuscode | Bedeutung                          |
+| :--------: | :--------------------------------: |
+| 202        | Nutzer erfolgreich authentifiziert, daten werden übermittelt |
+| 401        | falsches password                  |
+| 404        | Nutzer nicht gefunden              |
+
+### abfrage der Daten eines Nutzers
+**Methode:** POST
+**parameter:** username, password, request, requested_user
+
+**example:** `curl -X POST -d username="foo" -d password="foo" -d request="request" -d requested_user="foogirl"`
+
+**return:**
+| statuscode | Bedeutung             |
+| :--------: | :-------------------: |
+| 200        | OK                    |
+| 401        | falsches password     |
+| 404        | Nutzer nicht gefunden |
+| 500        | requested_user nicht gefunden |
+
+### update der Daten eines Nutzers
+**Methode:** POST
+**parameter:** username, password, request, games_played, games_won, wpm
+
+**example:** `curl -X POST -d username="foo" -d password="foo" -d request="update" -d games_played=15 -d games_won=8 -d wpm=46`
+
+**return:**
+| statuscode | Bedeutung             |
+| :--------: | :-------------------: |
+| 201        | daten überschrieben   |
+| 401        | falsches password     |
+| 404        | Nutzer nicht gefunden |
+
+### fehlerhafter request
+
+| statuscode | Bedeutung            |
+| :---------:| :------------------: |
+| 400        | fehlerhafter request |
+
+# Codesnippet Quellen:
+GO: https://github.com/docker/cli/blob/master/cli/cobra.go  
+LUA: https://pastebin.com/cUzGFJyw  
+C: https://github.com/torvalds/linux/blob/master/arch/arm64/kernel/syscall.c  
+Rust: https://github.com/starship/starship/blob/master/src/main.rs  
+zsh: https://github.com/denysdovhan/spaceship-prompt/blob/master/spaceship.zsh  
+JavaScript: einfach unseren eigenen JavaScript code lul ich will company leaks in unserem Spiel  
