@@ -1,5 +1,6 @@
 # typedev
- das Spiel für flinke coder
+
+![](images/showcase.gif)
 
 ### Spielprinzip
 
