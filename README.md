@@ -2,8 +2,7 @@
 
 ![](images/showcase.gif)
 
-Eine Typing-Test nach dem Prinzip von bekannten Seiten wie typeracer.com or monkeytype.com mit kompetetivem Multiplayer und persistentem Leaderboard, speziell für Entwickler mit Codesnippets statt zufällig gewählten Wörtern oder Zitaten.
-Das Backend wurde von Malte Meiling auf Basis von Node Red und MongoDB entwickelt, das Frontend ist von mir.
+Eine Typing-Test nach dem Prinzip von bekannten Seiten wie [Monkeytype](https://monkeytype.com) oder [Keybr](https://keybr.com) mit kompetetivem Multiplayer und persistentem Leaderboard, speziell für Entwickler mit Codesnippets statt zufällig gewählten Wörtern oder Zitaten. War ursprünglich ein gemeinsames Universitätsprojekt, entwickelt von Malte Meilung und mir.
 
 # Userdatenbank API
 
